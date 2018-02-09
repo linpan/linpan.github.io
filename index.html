@@ -290,7 +290,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T19:29:00+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T19:37:00+08:00">
                 2018-02-09
               </time>
             
@@ -300,6 +300,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -353,8 +375,7 @@
 <h4 id="2-RLock锁-重复锁"><a href="#2-RLock锁-重复锁" class="headerlink" title="2.RLock锁(重复锁)"></a>2.RLock锁(重复锁)</h4><p>如果你想让只有拿到锁的线程才能释放该锁，那么应该使用 RLock() 对象。和 Lock() 对象一样，<br>RLock() 对象有两个方法： acquire() 和 release() 。当你需要在类外面保证线程安全，又要在类内使用同样方法的时候 RLock() 就很实用了。</p>
 <ul>
 <li>谁拿到谁释放。如果线程A拿到锁，线程B无法释放这个锁，只有A可以释放；<ul>
-<li>同一线程可以多次拿到该锁，即可以acquire多次；</li>
-<li></li>
+<li>同一线程可以多次拿到该锁，即可以acquire多次；<br>-</li>
 <li>acquire多少次就必须release多少次，只有最后一次release才能改变RLock的状态为unlocked）</li>
 </ul>
 </li>
