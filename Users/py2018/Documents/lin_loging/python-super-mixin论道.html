@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content=",," />
+  <meta name="keywords" content="Hexo, NexT" />
 
 
 
@@ -79,18 +79,17 @@
 
 
 
-<meta name="description" content="基本概念解释几个本章需要的知识点概念  module: 模块，一个.py文件或者以其他文件形式存在的可被导入的就是模块.官方定义：   A module is a file containing Python definitions and statements. The file name is the module name with the suffix .py appended. With">
-<meta name="keywords" content="python,module">
+<meta name="description" content="1. Return Super  class BaseAdder(object):      def add(self, a, b):          return a + b   class NonReturningAdder(BaseAdder):      def add(self, a, b):          super(NonReturningAdder, self).add(a,">
 <meta property="og:type" content="website">
-<meta property="og:title" content="python之漫谈模块加载和路径查找">
-<meta property="og:url" content="http://yoursite.com/Users/py2018/Documents/lin_loging/python之漫谈模块加载和路径查找.html">
+<meta property="og:title" content="python super&amp; mixin论道">
+<meta property="og:url" content="http://yoursite.com/Users/py2018/Documents/lin_loging/python-super-mixin论道.html">
 <meta property="og:site_name" content="python">
-<meta property="og:description" content="基本概念解释几个本章需要的知识点概念  module: 模块，一个.py文件或者以其他文件形式存在的可被导入的就是模块.官方定义：   A module is a file containing Python definitions and statements. The file name is the module name with the suffix .py appended. With">
+<meta property="og:description" content="1. Return Super  class BaseAdder(object):      def add(self, a, b):          return a + b   class NonReturningAdder(BaseAdder):      def add(self, a, b):          super(NonReturningAdder, self).add(a,">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-02T05:59:15.477Z">
+<meta property="og:updated_time" content="2018-03-02T10:09:04.736Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python之漫谈模块加载和路径查找">
-<meta name="twitter:description" content="基本概念解释几个本章需要的知识点概念  module: 模块，一个.py文件或者以其他文件形式存在的可被导入的就是模块.官方定义：   A module is a file containing Python definitions and statements. The file name is the module name with the suffix .py appended. With">
+<meta name="twitter:title" content="python super&amp; mixin论道">
+<meta name="twitter:description" content="1. Return Super  class BaseAdder(object):      def add(self, a, b):          return a + b   class NonReturningAdder(BaseAdder):      def add(self, a, b):          super(NonReturningAdder, self).add(a,">
 
 
 
@@ -120,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/Users/py2018/Documents/lin_loging/python之漫谈模块加载和路径查找.html"/>
+  <link rel="canonical" href="http://yoursite.com/Users/py2018/Documents/lin_loging/python-super-mixin论道.html"/>
 
 
 
 
 
-  <title>python之漫谈模块加载和路径查找 | python</title>
+  <title>python super& mixin论道 | python</title>
   
 
 
@@ -263,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Users/py2018/Documents/lin_loging/python之漫谈模块加载和路径查找.html">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Users/py2018/Documents/lin_loging/python-super-mixin论道.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -280,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python之漫谈模块加载和路径查找</h1>
+          <h1 class="post-title" itemprop="name headline">python super& mixin论道</h1>
         
 
         <div class="post-meta">
@@ -292,7 +291,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-02T10:01:00+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-02T15:48:00+08:00">
                 2018-03-02
               </time>
             
@@ -330,99 +329,96 @@
       
 
       
-        <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>解释几个本章需要的知识点概念</p>
-<p> module: 模块，一个.py文件或者以其他文件形式存在的可被导入的就是模块.官方定义：</p>
-<blockquote>
-<p> A module is a file containing Python definitions and statements. The file name is the module name with the suffix .py appended. Within a module, the module’s name (as a string) is available as the value of the global variable <code>__name__</code>.</p>
-</blockquote>
-<p>package: 包，包含有<strong>init</strong>文件[可空]的文件夹</p>
-<blockquote>
-<p>Packages are a way of structuring Python’s module namespace by using “dotted module names”. For example, the module name A.B designates a submodule named B in a package named A.The <code>__init__.py</code> files are required to make Python treat the directories as containing packages;</p>
-</blockquote>
-<pre><code>sound/                          Top-level package
-      __init__.py               Initialize the sound package
-      formats/                  Subpackage for file format conversions
-              __init__.py
-              wavread.py
-              wavwrite.py
-              aiffread.py
-              aiffwrite.py
-              auread.py
-              auwrite.py
-              ...
-      effects/                  Subpackage for sound effects
-              __init__.py
-              echo.py
-              surround.py
-              reverse.py
-              ...
-      filters/                  Subpackage for filters
-              __init__.py
-              equalizer.py
-              vocoder.py
-              karaoke.py
-              ...
-</code></pre><blockquote>
-<p>Contrarily, when using syntax like import item.subitem.subsubitem, each item except for the last must be a package; the last item can be a module or a package but can’t be a class or function or variable defined in the previous item.</p>
-</blockquote>
-<pre><code>import item.subitem.subsubitem # 除了最后一个其他的必须是一个包，最后项可是模块或者包，但不是前者的类 、函数或者变量。
-</code></pre><p>pathname:路径名, 例如/apps/acls/urls.py<br>dirname：目录名, 例如:/apps/acls/</p>
-<h3 id="如何查找包和模块"><a href="#如何查找包和模块" class="headerlink" title="如何查找包和模块"></a>如何查找包和模块</h3><h4 id="python-执行一个文件时"><a href="#python-执行一个文件时" class="headerlink" title="python 执行一个文件时"></a>python 执行一个文件时</h4><p>  python 在执行文件，无论执行的方式是绝对路径还是相对路径，解释器都会把文件所在的路径加入系统查找路径中， 也就是<code>sys.path</code>列表中。</p>
-<pre><code># apps/acls/urls.py
-import os
-import sys
-print sys.path  # return list
-</code></pre><p>  输出是 [‘apps/acls/’,….]列表</p>
-<p>  解释器执行时，首先搜索 built-in module ，也就是解释器查找模块最先查找的是 built-in module ，其次才会搜索 sys.path 所包含的路径。这样的查找顺序将会引起同名包或模块被遮蔽的问题。</p>
-<p>  场景说明：<br>  文件结构</p>
-<pre><code>├── os.py
-├── test2.py
-├── redis.py
-</code></pre><p>创建一个文件</p>
-<pre><code>#/apps/acls/test_work.py
+        <h3 id="1-Return-Super"><a href="#1-Return-Super" class="headerlink" title="1. Return Super"></a>1. Return Super</h3><p>  class BaseAdder(object):<br>      def add(self, a, b):<br>          return a + b</p>
+<p>  class NonReturningAdder(BaseAdder):<br>      def add(self, a, b):<br>          super(NonReturningAdder, self).add(a, b)<br>          print ‘define!’</p>
+<p>  class ReturningAdder(BaseAdder):<br>      def add(self, a, b):<br>          assert a=5<br>          return super(ReturningAdder, self).add(a, b)</p>
+<p>创建2个实例</p>
+<pre><code>&gt;&gt;&gt; a = NonReturningAdder()
+&gt;&gt;&gt; b = ReturningAdder()
+&gt;&gt;&gt; a.add(3, 5)
+&gt;&gt;&gt; b.add(3,5)
+</code></pre><p>  a.add()没有输出结果，而b.add()输出8，NonReturningAdder类重定义了add 方法，为了能同时实现父类的功能。ReturningAdder 类 使用return 返回父类方法的结果。</p>
+<h3 id="2-Mixin"><a href="#2-Mixin" class="headerlink" title="2. Mixin"></a>2. Mixin</h3><h4 id="2-1-Mixin的概念"><a href="#2-1-Mixin的概念" class="headerlink" title="2.1 Mixin的概念"></a>2.1 Mixin的概念</h4><p>mixin是 mix in的意思，就是混入，可以就任意一个对象的全部或部分属性拷贝到另一个对象上。</p>
+<p>继承，组合都是为了代码复用，Mixin 方式也是一种特殊地多继承(非is-a)，但他看起来像是用组合的方式来实现代码复用， <code>可以把 Mixin 看成是一个个的插件，设计的类需要什么插件就继承相应的 Mixin</code></p>
+<h4 id="2-2-Mixin-设计代码的方式"><a href="#2-2-Mixin-设计代码的方式" class="headerlink" title="2.2 Mixin 设计代码的方式"></a>2.2 Mixin 设计代码的方式</h4><p>代码中的任何单元（package，module，class，function）都要遵循只做一件事，并且把这件事做好的原则， Mixin 也要保证一个 Mixin 只有一个功能，如果有多个功能，写成多个 Mixin。</p>
+<h4 id="2-4-Mixin-在基类的左边"><a href="#2-4-Mixin-在基类的左边" class="headerlink" title="2.4 Mixin 在基类的左边"></a>2.4 Mixin 在基类的左边</h4><ul>
+<li>Mixin 类是单一职责的</li>
+<li>Mixin 类对宿主类一无所知</li>
+<li>没有定义<strong>init</strong>() 方法，并且没有实例属性</li>
+</ul>
+<pre><code>class Question(object):
+    def answer(self):
+        return &quot;Base Answer&quot;
 
-import os
-from redis import Redis
-</code></pre><p>就会出现导入错误 <code>ImportError: cannot import name Redis</code></p>
-<p>由于 os 是 <code>built-in module</code> ，即使在同目录下有同名模块，解释器依然可以找到正确的os模块，而 redis 属于第三方模块，默认安装位置是 python 环境变量中的 site-packages 下，解释器启动之后会将此目录加入 sys.path，按照上面所说的查找顺序，优先在执行文件所在的目录查找，由于其在 sys.path 的首位，因而本地的 redis 被导入。</p>
-<h4 id="交互式环境"><a href="#交互式环境" class="headerlink" title="交互式环境"></a>交互式环境</h4><p>进入交互式执行环境，解释器会自动把当前目录加入 sys.path, 这时当前目录是以相对路径的形式出现在 sys.path 中, 不多解释。</p>
-<h3 id="file-变量"><a href="#file-变量" class="headerlink" title="__file__ 变量"></a><code>__file__</code> 变量</h3><blockquote>
-<p>python doc: <code>__file__</code> is the pathname of the file from which the module was loaded, if it was loaded from a file. 如果一个模块是从文件加载的，<code>__file__</code> 就是该模块的路径名。</p>
-</blockquote>
-<p>顾名思义，当模块以文件的形式出现 <strong>file</strong> 指的是模块文件的路径名，以相对路径执行 <strong>file</strong> 是相对路径，以绝对路径执行 <strong>file</strong> 是绝对路径。</p>
-<pre><code>#/users/projects/py/test.py
-print __file__
+class ExclaimMixin(object):
+    def answer(self):
+        return &quot;{}!&quot;.format(super(ExclaimMixin, self).answer())
 
-# python test.py  相对路径
-  test.py
-# python /users/projects/py/test.py  绝对路径
-/users/projects/py/test.py
-</code></pre><p>推荐使用这种方式获取文件的路径</p>
-<pre><code>import os
-os.path.dirname(os.path.realpath(__file__))
-</code></pre><p>特别说明在前交互式shell的执行并不是以文件的形式加载，所以不存在<strong>file</strong> 这样的属性。执行的话，会报错！</p>
-<h3 id="sys-argv-0"><a href="#sys-argv-0" class="headerlink" title="sys.argv[0]"></a>sys.argv[0]</h3><p>和<code>__file__</code>类似, 用来获取主入口执行文件的变量</p>
-<pre><code>#test.py
-import sys
-print __file__
-print sys.argv[0]
-</code></pre><p>  以上俩个print输出相同的结果，因为主执行文件和<strong>file</strong>所属的模块是同一个。当我们改变入口文件，区别就出现了</p>
-<pre><code>#/abs/test.py
-import sys
-print __file__  # /abs/test.py
-print sys.argv[0] # test2.py
+class ExpressiveQuestion(ExclaimMixin, Question)
+    pass
+</code></pre><p>那么我们执行一下：</p>
+<pre><code>&gt;&gt;&gt; q = ExpressiveQuestion()
+&gt;&gt;&gt; q.answer()
+   &apos;Base Answer!&apos;
+</code></pre><p>如果在ExpressiveQuestion 和 ExclaimMixin 有同名的函数,那么Mixin类中的函数不起作用。优先使用ExpressiveQuestion的方法。</p>
+<pre><code>class UltimateBase(object):
+  def dispatch(self, *args, **kwargs):
+    print &apos;base dispatch&apos;
 
-#test2.py
-import test   # test2.py
-</code></pre><p>总的来说，sys.argv[0] 是获得入口执行文件路径，<code>__file__</code>是获得任意模块文件的路径。</p>
-<h3 id="sys-modules-的作用"><a href="#sys-modules-的作用" class="headerlink" title="sys.modules 的作用"></a>sys.modules 的作用</h3><p>既然python是在 sys.path 中搜索模块的，那载入的模块存放在何处？答案就是 sys.modules，是存放已载入模块的地方。模块一经载入，python 会把这个模块加入 sys.modules 中供下次载入使用，这样可以加速模块的引入，起到缓存的作用。</p>
-<h3 id="from-和-import-语句"><a href="#from-和-import-语句" class="headerlink" title="from 和 import 语句"></a>from 和 import 语句</h3><p>1.python 包的导入顺序是</p>
+class FooMixin(object):
+
+  def dispatch(self, *args, **kwargs):
+    print &apos;perform check A&apos;
+    # FooMixin 下一个是 BarMixin 找 dispatch 方法
+    return super(FooMixin, self).dispatch(*args, **kwargs)
+
+class BarMixin(object):
+
+  def dispatch(self, *args, **kwargs):
+    print &apos;perform check B&apos;
+    # BarMixin 下一个是 UltimateBase 找方法
+    return super(BarMixin, self).dispatch(*args, **kwargs)
+
+class FooBar(FooMixin, BarMixin, UltimateBase):
+  pass
+</code></pre><p>看一下结果是什么：</p>
+<pre><code>&gt;&gt;&gt;FooBar().dispatch()
+  perform check A
+  perform check B
+  base dispatch
+
+&gt;&gt;&gt;print FooBar().__class__.__mro__
+(&lt;class &apos;__main__.FooBar&apos;&gt;, &lt;class &apos;__main__.FooMixin&apos;&gt;, &lt;class &apos;__main__.BarMixin&apos;&gt;, &lt;class &apos;__main__.UltimateBase&apos;&gt;, &lt;type &apos;object&apos;&gt;)
+</code></pre><p>根据MRO顺序 FooBar -&gt; FooMixin -&gt; BarMixin -&gt; UltimateBase- object.</p>
+<p>举个小栗子, 有个 MRO:</p>
+<pre><code>[A, B, C, D, E, object]
+</code></pre><p>下面的调用:</p>
+<pre><code>super(C, A).foo()
+</code></pre><p>super 只会从 C 之后查找，即: 只会在 D 或 E 或 object 中查找 foo 方法。</p>
+<h4 id="小测试"><a href="#小测试" class="headerlink" title="小测试"></a>小测试</h4><pre><code>class Parent(object):
+    def test(self):
+        print(&quot;parent&quot;)
+
+
+class MyMixin(object):
+    def test(self):
+        super(MyMixin, self).test()
+        print(&quot;mixin&quot;)
+
+
+class MyClass(MyMixin, Parent):
+    def test(self):
+        super(MyClass, self).test()
+        print(&quot;self&quot;)
+
+if __name__ == &quot;__main__&quot;:
+    my_obj = MyClass()
+    my_obj.test()
+</code></pre><p>MRO的顺序是</p>
 <blockquote>
-<p>系统包–&gt; 同目录 –&gt; sys.path</p>
+<p> <class '__main__.myclass'="">, <class '__main__.mymixin'="">, <class '__main__.parent'="">, <type 'object'=""></type></class></class></class></p>
 </blockquote>
-<p>因此同名的包，系统包优先级最高 &gt; 同目录 &gt; sys.path，之所以有这样的差别是因为当前执行目录会优先加入sys.path 的首位。</p>
-<p>2.导入时执行</p>
-<p>当导入一个模块时，模块的顶层变量会被执行，包括全局变量，类以及函数的声明，因此在编写模块时一定要注意消除副作用(函数的调用)。</p>
+<p>总结补充：</p>
 
       
     </div>
@@ -437,14 +433,6 @@ import test   # test2.py
     
 
     <footer class="post-footer">
-      
-        <div class="post-tags">
-          
-            <a href="/" rel="tag"># </a>
-          
-            <a href="/" rel="tag"># </a>
-          
-        </div>
       
 
       
@@ -593,7 +581,7 @@ import test   # test2.py
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-number">1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#如何查找包和模块"><span class="nav-number">2.</span> <span class="nav-text">如何查找包和模块</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#python-执行一个文件时"><span class="nav-number">2.1.</span> <span class="nav-text">python 执行一个文件时</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#交互式环境"><span class="nav-number">2.2.</span> <span class="nav-text">交互式环境</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#file-变量"><span class="nav-number">3.</span> <span class="nav-text">__file__ 变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sys-argv-0"><span class="nav-number">4.</span> <span class="nav-text">sys.argv[0]</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sys-modules-的作用"><span class="nav-number">5.</span> <span class="nav-text">sys.modules 的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#from-和-import-语句"><span class="nav-number">6.</span> <span class="nav-text">from 和 import 语句</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Return-Super"><span class="nav-number">1.</span> <span class="nav-text">1. Return Super</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-Mixin"><span class="nav-number">2.</span> <span class="nav-text">2. Mixin</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-Mixin的概念"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Mixin的概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-Mixin-设计代码的方式"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Mixin 设计代码的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-Mixin-在基类的左边"><span class="nav-number">2.3.</span> <span class="nav-text">2.4 Mixin 在基类的左边</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#小测试"><span class="nav-number">2.4.</span> <span class="nav-text">小测试</span></a></li></ol></li></ol></div>
             
 
           </div>
