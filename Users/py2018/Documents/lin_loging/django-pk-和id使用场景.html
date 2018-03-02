@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="pk vs id当查询时，可以使用id/pk作为查询参数 Model.objects.get(id=1) Model.objects.get(pk=1) pk 是primary key的缩写 &amp;gt;&amp;gt;&amp;gt; Blog.objects.get(id__exact=14) # Explicit form &amp;gt;&amp;gt;&amp;gt; Blog.objects.get(id=14) # __exa">
 <meta property="og:type" content="website">
 <meta property="og:title" content="django pk 和id使用场景">
 <meta property="og:url" content="http://yoursite.com/Users/py2018/Documents/lin_loging/django-pk-和id使用场景.html">
 <meta property="og:site_name" content="python">
+<meta property="og:description" content="pk vs id当查询时，可以使用id/pk作为查询参数 Model.objects.get(id=1) Model.objects.get(pk=1) pk 是primary key的缩写 &amp;gt;&amp;gt;&amp;gt; Blog.objects.get(id__exact=14) # Explicit form &amp;gt;&amp;gt;&amp;gt; Blog.objects.get(id=14) # __exa">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-28T06:14:05.749Z">
+<meta property="og:updated_time" content="2018-03-02T01:59:05.455Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="django pk 和id使用场景">
+<meta name="twitter:description" content="pk vs id当查询时，可以使用id/pk作为查询参数 Model.objects.get(id=1) Model.objects.get(pk=1) pk 是primary key的缩写 &amp;gt;&amp;gt;&amp;gt; Blog.objects.get(id__exact=14) # Explicit form &amp;gt;&amp;gt;&amp;gt; Blog.objects.get(id=14) # __exa">
 
 
 
@@ -326,7 +329,23 @@
       
 
       
-        
+        <h2 id="pk-vs-id"><a href="#pk-vs-id" class="headerlink" title="pk vs id"></a>pk vs id</h2><p>当查询时，可以使用id/pk作为查询参数</p>
+<pre><code>Model.objects.get(id=1)
+Model.objects.get(pk=1)
+</code></pre><p>pk 是primary key的缩写</p>
+<pre><code>&gt;&gt;&gt; Blog.objects.get(id__exact=14) # Explicit form
+&gt;&gt;&gt; Blog.objects.get(id=14) # __exact is implied
+&gt;&gt;&gt; Blog.objects.get(pk=14) # pk implies id__exact
+</code></pre><p>上述三个在主键是id的情况下是相等的，但是pk代表primary key的缩写，也就是任何model中都有的主键，<br>那么id呢，大部分时候也是model的主键，所以在这个时候我们可以认为pk和id是完全一样的，</p>
+<blockquote>
+<p>pk更加独立于实际的主键字段，即您不必关心主键字段是否被称为id或object_id或任何.</p>
+</blockquote>
+<p>构建一个Student模型：</p>
+<pre><code>class Student(model.Model):
+    my_id = models.AutoField(primary_key=True)
+    name = models.Charfield(max_length=32)
+</code></pre><p>这个时候，你可以用pk来找，因为django它知道Student的主键是my_id<br>但是，如果你用id去找的话，那就对不起，查无此人。</p>
+
       
     </div>
     
@@ -394,8 +413,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -410,7 +438,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -469,6 +497,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#pk-vs-id"><span class="nav-number">1.</span> <span class="nav-text">pk vs id</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
