@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="python,源码阅读," />
 
 
 
@@ -79,13 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="python">
-<meta property="og:url" content="http://yoursite.com/archives/2018/02/index.html">
+<meta name="description" content="阅读get-pip近日,在安装pip包,无意发现类定义在函数中,决定了解如何使用这一技能 def bootstrap(tmpdir=None):     # Import pip so we can use it to install pip and maybe setuptools too     import pip     from pip.commands.install import I">
+<meta name="keywords" content="python,源码阅读">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python 函数中定义类&#x2F;python class definition in function">
+<meta property="og:url" content="http://yoursite.com/2018/03/15/2018/2018-03-15-python-函数中定义类/index.html">
 <meta property="og:site_name" content="python">
+<meta property="og:description" content="阅读get-pip近日,在安装pip包,无意发现类定义在函数中,决定了解如何使用这一技能 def bootstrap(tmpdir=None):     # Import pip so we can use it to install pip and maybe setuptools too     import pip     from pip.commands.install import I">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-15T10:31:21.503Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python">
+<meta name="twitter:title" content="python 函数中定义类&#x2F;python class definition in function">
+<meta name="twitter:description" content="阅读get-pip近日,在安装pip包,无意发现类定义在函数中,决定了解如何使用这一技能 def bootstrap(tmpdir=None):     # Import pip so we can use it to install pip and maybe setuptools too     import pip     from pip.commands.install import I">
 
 
 
@@ -115,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/2018/02/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/03/15/2018/2018-03-15-python-函数中定义类/"/>
 
 
 
 
 
-  <title>归档 | python</title>
+  <title>python 函数中定义类/python class definition in function | python</title>
   
 
 
@@ -140,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left page-archive">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -244,222 +249,241 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block archive">
-    <div id="posts" class="posts-collapse">
-      <span class="archive-move-on"></span>
+  <div id="posts" class="posts-expand">
+    
 
-      <span class="archive-page-counter">
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/15/2018/2018-03-15-python-函数中定义类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
         
         
+          <h1 class="post-title" itemprop="name headline">python 函数中定义类/python class definition in function</h1>
         
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T17:15:00+08:00">
+                2018-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
-        
-        嗯..! 目前共计 15 篇日志。 继续努力。
-      </span>
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
 
-      
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">源码阅读</span>
+                  </a>
+                </span>
 
-        
-        
-        
-
-        
+                
+                
+              
+            </span>
           
-          <div class="collection-title">
-            <h1 class="archive-year" id="archive-year-2018">2018</h1>
-          </div>
-        
-        
 
-        
+          
+            
+          
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+          
+          
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/02/26/2018/2018-02-26-python-new-init-区别/" itemprop="url">
-              
-                <span itemprop="name">python new init 的 区别</span>
-              
-            </a>
-        
-      </h2>
+          
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-02-26T18:13:00+08:00"
-              content="2018-02-26" >
-          02-26
-        </time>
-      </div>
+          
 
-    </header>
-  </article>
+          
 
+        </div>
+      </header>
+    
 
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/02/26/2018/2018-02-26-python元类及元类编程思想/" itemprop="url">
-              
-                <span itemprop="name">python元类及元编程思想</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-02-26T13:47:00+08:00"
-              content="2018-02-26" >
-          02-26
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
       
 
-        
-        
-        
+      
+        <h3 id="阅读get-pip"><a href="#阅读get-pip" class="headerlink" title="阅读get-pip"></a>阅读get-pip</h3><p>近日,在安装pip包,无意发现类定义在函数中,决定了解如何使用这一技能</p>
+<pre><code>def bootstrap(tmpdir=None):
+    # Import pip so we can use it to install pip and maybe setuptools too
+    import pip
+    from pip.commands.install import InstallCommand
+    from pip.req import InstallRequirement
 
-        
-        
+    # Wrapper to provide default certificate with the lowest priority
+    class CertInstallCommand(InstallCommand):
+        def parse_args(self, args):
+            # If cert isn&apos;t specified in config or environment, we provide our
+            # own certificate through defaults.
+            # This allows user to specify custom cert anywhere one likes:
+            # config, environment variable or argv.
+            if not self.parser.get_default_values().cert:
+                self.parser.defaults[&quot;cert&quot;] = cert_path  # calculated below
+            return super(CertInstallCommand, self).parse_args(args)
 
-        
+    pip.commands_dict[&quot;install&quot;] = CertInstallCommand
+</code></pre><p>写个简单一个简单的例子：</p>
+<ol>
+<li><p>返回一个类实例</p>
+<p>   def func(**args):</p>
+<pre><code>class BindArgs(object):
+    foo = args[&apos;foo&apos;]
+    print &apos;foo is &apos;, foo
+    def __init__(self,args):
+       print &quot; hello i am here&quot;
+return BindArgs(args) #return an instance of the class
+</code></pre><p>  f = func(foo=3)</p>
+<ol>
+<li>用到再实例化</li>
+</ol>
+<p>def func(**args):<br>   class BindArgs(object):</p>
+<pre><code>foo = args[&apos;foo&apos;]
+print &apos;foo is &apos;, foo
+def __init__(self,args):
+   print &quot; hello i am here&quot;
+</code></pre><p>   return BindArgs</p>
+<p>f = func(foo=3)</p>
+<h1 id="真正的实例化"><a href="#真正的实例化" class="headerlink" title="真正的实例化"></a>真正的实例化</h1><p>f(args=”yellow”)</p>
+</li>
+</ol>
+<h4 id="类中类"><a href="#类中类" class="headerlink" title="类中类"></a>类中类</h4><pre><code>#!/usr/bin/env python
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+class Human:
 
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/02/10/2018/2018-02-10-mysqldb警告信息-truncated-incorrect-double-value错误/" itemprop="url">
-              
-                <span itemprop="name">mysqldb警告信息: Truncated incorrect DOUBLE value错误 </span>
-              
-            </a>
-        
-      </h2>
+   def __init__(self):
+      self.name = &apos;Guido&apos;
+      self.head = self.Head()
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-02-10T13:29:00+08:00"
-              content="2018-02-10" >
-          02-10
-        </time>
-      </div>
+   class Head:
+      def talk(self):
+      return &apos;talking...&apos;
 
-    </header>
-  </article>
-
-
+if __name__ == &apos;__main__&apos;:
+    guido = Human()
+    print guido.name
+    print guido.head.talk()
+</code></pre><p>  太简单类, 不解释。</p>
 
       
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-并行世界的线程/" itemprop="url">
-              
-                <span itemprop="name">并行世界的线程</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-02-09T19:37:00+08:00"
-              content="2018-02-09" >
-          02-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
-        
-        
-        
-
-        
-        
-
-        
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h2 class="post-title">
-        
-            <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/" itemprop="url">
-              
-                <span itemprop="name">python操作数据库的规范问题</span>
-              
-            </a>
-        
-      </h2>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2018-02-09T10:16:00+08:00"
-              content="2018-02-09" >
-          02-09
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-      
-
     </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/源码阅读/" rel="tag"># 源码阅读</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/02/2018/2018-03-02-python-super-mixin论道/" rel="next" title="python super& mixin论道">
+                <i class="fa fa-chevron-left"></i> python super& mixin论道
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
 
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -467,6 +491,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -487,8 +515,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -562,6 +599,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#阅读get-pip"><span class="nav-number">1.</span> <span class="nav-text">阅读get-pip</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#真正的实例化"><span class="nav-number"></span> <span class="nav-text">真正的实例化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#类中类"><span class="nav-number">0.1.</span> <span class="nav-text">类中类</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -695,6 +748,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 

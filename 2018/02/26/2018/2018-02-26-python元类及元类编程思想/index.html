@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="什么是元编程 元编程(meta programming)则是对于某类解决方法的抽象  type()来动态的生成一个类, type()实际上调用所属类的call方法(实例方法),因为type的类也是type，所以实际调用的是type.call方法。 type.call方法发现传递给他的self参数已经是一个存在的类, 所以他会把自身的args和kwargs当作参数调用对应self对应类的new和in">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python元类及元类编程思想">
+<meta property="og:title" content="python元类及元编程思想">
 <meta property="og:url" content="http://yoursite.com/2018/02/26/2018/2018-02-26-python元类及元类编程思想/index.html">
 <meta property="og:site_name" content="python">
+<meta property="og:description" content="什么是元编程 元编程(meta programming)则是对于某类解决方法的抽象  type()来动态的生成一个类, type()实际上调用所属类的call方法(实例方法),因为type的类也是type，所以实际调用的是type.call方法。 type.call方法发现传递给他的self参数已经是一个存在的类, 所以他会把自身的args和kwargs当作参数调用对应self对应类的new和in">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-26T05:47:35.459Z">
+<meta property="og:updated_time" content="2018-03-14T09:41:33.520Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python元类及元类编程思想">
+<meta name="twitter:title" content="python元类及元编程思想">
+<meta name="twitter:description" content="什么是元编程 元编程(meta programming)则是对于某类解决方法的抽象  type()来动态的生成一个类, type()实际上调用所属类的call方法(实例方法),因为type的类也是type，所以实际调用的是type.call方法。 type.call方法发现传递给他的self参数已经是一个存在的类, 所以他会把自身的args和kwargs当作参数调用对应self对应类的new和in">
 
 
 
@@ -122,7 +125,7 @@
 
 
 
-  <title>python元类及元类编程思想 | python</title>
+  <title>python元类及元编程思想 | python</title>
   
 
 
@@ -276,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python元类及元类编程思想</h1>
+          <h1 class="post-title" itemprop="name headline">python元类及元编程思想</h1>
         
 
         <div class="post-meta">
@@ -326,7 +329,13 @@
       
 
       
-        
+        <h2 id="什么是元编程"><a href="#什么是元编程" class="headerlink" title="什么是元编程"></a>什么是元编程</h2><blockquote>
+<p>元编程(meta programming)则是对于某类解决方法的抽象</p>
+</blockquote>
+<p>type()来动态的生成一个类, type()实际上调用所属类的<strong>call</strong>方法(实例方法),因为type的类也是type，所以实际调用的是type.<strong>call</strong>方法。</p>
+<p>type.<strong>call</strong>方法发现传递给他的self参数已经是一个存在的类, 所以他会把自身的args和kwargs当作参数调用对应self对应类的<strong>new</strong>和<strong>init</strong>方法,</p>
+<p>综上:<br>type.<strong>call</strong>函数是根据传递给它的第一个参数来判断，是创建一个新的类，还是根据现有的类创建一个新的对象。</p>
+
       
     </div>
     
@@ -414,8 +423,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -430,7 +448,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -441,7 +459,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -489,6 +507,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是元编程"><span class="nav-number">1.</span> <span class="nav-text">什么是元编程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

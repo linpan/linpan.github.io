@@ -79,13 +79,17 @@
 
 
 
+<meta name="description" content="前提 安装 nginx, tree tcping xz  python ,virtualenv 部署Django项目 安装虚拟环境virtualenv pip install virtualenv   创建虚拟管理目录 virtualenv rabbitcd rabbit  把django项目复制到rabbit目录下并激活虚拟路径[root@vultr rabbit]# source  ./bin">
 <meta property="og:type" content="website">
-<meta property="og:title" content="python">
-<meta property="og:url" content="http://yoursite.com/tags/hexo/index.html">
+<meta property="og:title" content="django nginx uswgi 生产环境部署 centos">
+<meta property="og:url" content="http://yoursite.com/Users/py2018/Documents/lin_loging/django-nginx-uswgi-生产环境部署-centos.html">
 <meta property="og:site_name" content="python">
+<meta property="og:description" content="前提 安装 nginx, tree tcping xz  python ,virtualenv 部署Django项目 安装虚拟环境virtualenv pip install virtualenv   创建虚拟管理目录 virtualenv rabbitcd rabbit  把django项目复制到rabbit目录下并激活虚拟路径[root@vultr rabbit]# source  ./bin">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-12T09:43:39.097Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python">
+<meta name="twitter:title" content="django nginx uswgi 生产环境部署 centos">
+<meta name="twitter:description" content="前提 安装 nginx, tree tcping xz  python ,virtualenv 部署Django项目 安装虚拟环境virtualenv pip install virtualenv   创建虚拟管理目录 virtualenv rabbitcd rabbit  把django项目复制到rabbit目录下并激活虚拟路径[root@vultr rabbit]# source  ./bin">
 
 
 
@@ -115,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/hexo/"/>
+  <link rel="canonical" href="http://yoursite.com/Users/py2018/Documents/lin_loging/django-nginx-uswgi-生产环境部署-centos.html"/>
 
 
 
 
 
-  <title>标签: hexo | python</title>
+  <title>django nginx uswgi 生产环境部署 centos | python</title>
   
 
 
@@ -140,7 +144,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -244,54 +248,163 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>hexo<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Users/py2018/Documents/lin_loging/django-nginx-uswgi-生产环境部署-centos.html">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2016/11/16/Failed building wheel for pylibmc/" itemprop="url">
-              
-                <span itemprop="name">hello hexo markdown</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">django nginx uswgi 生产环境部署 centos</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-11-16T18:11:25+08:00"
-              content="2016-11-16" >
-          11-16
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T11:39:00+08:00">
+                2018-03-09
+              </time>
+            
 
-    </header>
-  </article>
+            
 
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前提"><a href="#前提" class="headerlink" title="前提"></a>前提</h1><p> 安装 nginx, tree tcping xz  python ,virtualenv</p>
+<h3 id="部署Django项目"><a href="#部署Django项目" class="headerlink" title="部署Django项目"></a>部署Django项目</h3><ol>
+<li>安装虚拟环境virtualenv<blockquote>
+<p>pip install virtualenv</p>
+</blockquote>
+</li>
+<li>创建虚拟管理目录<blockquote>
+<p>virtualenv rabbit<br>cd rabbit</p>
+<ol>
+<li>把django项目复制到rabbit目录下并激活虚拟路径<br>[root@vultr rabbit]# source  ./bin/activate<br>(rabbit) [root@vultr rabbit]#</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<p>[root@vultr rabbit]出现虚拟文件名rabbit,出现意味这激活成功。</p>
+<ol>
+<li><p>安装依赖包</p>
+<blockquote>
+<p>pip install django==1.11.8<br>pip install baidu-aip 或者<br>pip -r requirments.txt<br>然后进入Django项目ocr目录下<br>python manager.py runserver</p>
+</blockquote>
+</li>
+<li><p>服务器服务器设置<br>添加端口</p>
+</li>
+</ol>
+<blockquote>
+<p>iptables -I INPUT 5 -p tcp -m state –state NEW -m tcp –dport 80 -j ACCEPT</p>
+</blockquote>
+<pre><code>-A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+-A INPUT -p icmp -j ACCEPT
+-A INPUT -i lo -j ACCEPT
+-A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+-A INPUT -j REJECT --reject-with icmp-host-prohibited
+-A FORWARD -j REJECT --reject-with icmp-host-prohibited
+</code></pre><ol>
+<li><p>uswgi部署<br>把uWSGI安装到你的virtualenv中<br>测试了把 allow_hosts 设置ip<br>tcping 测试是否开启这个端口<br>{yum install python-devel,yum install gcc, yum install iptables}</p>
+</li>
+<li><p>nginx 部署</p>
+</li>
+</ol>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -299,6 +412,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -319,8 +436,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -394,6 +520,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前提"><span class="nav-number">1.</span> <span class="nav-text">前提</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#部署Django项目"><span class="nav-number">1.0.1.</span> <span class="nav-text">部署Django项目</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -527,6 +669,10 @@
   
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
