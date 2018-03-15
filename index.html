@@ -382,31 +382,29 @@
             return super(CertInstallCommand, self).parse_args(args)
 
     pip.commands_dict[&quot;install&quot;] = CertInstallCommand
-</code></pre><p>写个简单一个简单的例子：</p>
-<ol>
-<li><p>返回一个类实例</p>
-<p>   def func(**args):</p>
-<pre><code>class BindArgs(object):
-    foo = args[&apos;foo&apos;]
-    print &apos;foo is &apos;, foo
-    def __init__(self,args):
-       print &quot; hello i am here&quot;
-return BindArgs(args) #return an instance of the class
-</code></pre><p>  f = func(foo=3)</p>
-<ol>
-<li>用到再实例化</li>
-</ol>
-<p>def func(**args):<br>   class BindArgs(object):</p>
-<pre><code>foo = args[&apos;foo&apos;]
-print &apos;foo is &apos;, foo
-def __init__(self,args):
-   print &quot; hello i am here&quot;
-</code></pre><p>   return BindArgs</p>
-<p>f = func(foo=3)</p>
-<h1 id="真正的实例化"><a href="#真正的实例化" class="headerlink" title="真正的实例化"></a>真正的实例化</h1><p>f(args=”yellow”)</p>
-</li>
-</ol>
-<h4 id="类中类"><a href="#类中类" class="headerlink" title="类中类"></a>类中类</h4><pre><code>#!/usr/bin/env python
+</code></pre><p>写个简单一个简单的例子：<br>返回一个类实例</p>
+<pre><code> def func(**args):
+   class BindArgs(object):
+       foo = args[&apos;foo&apos;]
+       print &apos;foo is &apos;, foo
+       def __init__(self,args):
+          print &quot; hello i am here&quot;
+   return BindArgs(args) #return an instance of the class
+
+f = func(foo=3)
+</code></pre><p>用到再实例化,当实例化事,init才真正的执行。</p>
+<pre><code>def func(**args):
+   class BindArgs(object):
+       foo = args[&apos;foo&apos;]
+       print &apos;foo is &apos;, foo
+       def __init__(self,args):
+          print &quot; hello i am here&quot;
+   return BindArgs
+
+f = func(foo=3)
+
+f(args=&quot;yellow&quot;)
+</code></pre><h4 id="类中类"><a href="#类中类" class="headerlink" title="类中类"></a>类中类</h4><pre><code>#!/usr/bin/env python
 
 class Human:
 
