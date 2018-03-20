@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="模块汇总1. getpassUtilities to get a password and/or the current user name获得输入密码及当前用户名 2. pexpectpexpect 是linux下expect的python封装，通过pexpect我们可以实现对ssh、ftp、password、telnet等命令进行自动交互，无需人工达到自动化需求参考文章 3. tree输出目录">
-<meta property="og:type" content="article">
-<meta property="og:title" content="python 我遇到过的模块">
-<meta property="og:url" content="http://yoursite.com/2018/03/16/2018/2018-03-16-python-我遇到过的模块/index.html">
+<meta name="description" content="import time from itertools import count  def buzzergen(period):     nexttime = time.time() + period     for i in count():         now = time.time()         tosleep = nexttime - now         if tosleep">
+<meta property="og:type" content="website">
+<meta property="og:title" content="灵活地Timer定时器">
+<meta property="og:url" content="http://yoursite.com/Users/py2018/Documents/lin_loging/灵活地timer定时器.html">
 <meta property="og:site_name" content="python">
-<meta property="og:description" content="模块汇总1. getpassUtilities to get a password and/or the current user name获得输入密码及当前用户名 2. pexpectpexpect 是linux下expect的python封装，通过pexpect我们可以实现对ssh、ftp、password、telnet等命令进行自动交互，无需人工达到自动化需求参考文章 3. tree输出目录">
+<meta property="og:description" content="import time from itertools import count  def buzzergen(period):     nexttime = time.time() + period     for i in count():         now = time.time()         tosleep = nexttime - now         if tosleep">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-19T10:51:21.089Z">
+<meta property="og:updated_time" content="2018-03-19T09:06:43.394Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python 我遇到过的模块">
-<meta name="twitter:description" content="模块汇总1. getpassUtilities to get a password and/or the current user name获得输入密码及当前用户名 2. pexpectpexpect 是linux下expect的python封装，通过pexpect我们可以实现对ssh、ftp、password、telnet等命令进行自动交互，无需人工达到自动化需求参考文章 3. tree输出目录">
+<meta name="twitter:title" content="灵活地Timer定时器">
+<meta name="twitter:description" content="import time from itertools import count  def buzzergen(period):     nexttime = time.time() + period     for i in count():         now = time.time()         tosleep = nexttime - now         if tosleep">
 
 
 
@@ -119,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/03/16/2018/2018-03-16-python-我遇到过的模块/"/>
+  <link rel="canonical" href="http://yoursite.com/Users/py2018/Documents/lin_loging/灵活地timer定时器.html"/>
 
 
 
 
 
-  <title>python 我遇到过的模块 | python</title>
+  <title>灵活地Timer定时器 | python</title>
   
 
 
@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/2018/2018-03-16-python-我遇到过的模块/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/Users/py2018/Documents/lin_loging/灵活地timer定时器.html">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -279,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">python 我遇到过的模块</h1>
+          <h1 class="post-title" itemprop="name headline">灵活地Timer定时器</h1>
         
 
         <div class="post-meta">
@@ -291,8 +291,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T17:34:00+08:00">
-                2018-03-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-19T17:05:00+08:00">
+                2018-03-19
               </time>
             
 
@@ -329,9 +329,21 @@
       
 
       
-        <h3 id="模块汇总"><a href="#模块汇总" class="headerlink" title="模块汇总"></a>模块汇总</h3><h4 id="1-getpass"><a href="#1-getpass" class="headerlink" title="1. getpass"></a>1. getpass</h4><p>Utilities to get a password and/or the current user name<br>获得输入密码及当前用户名</p>
-<h4 id="2-pexpect"><a href="#2-pexpect" class="headerlink" title="2. pexpect"></a>2. pexpect</h4><p>pexpect 是linux下expect的python封装，通过pexpect我们可以实现对ssh、ftp、password、telnet等命令进行自动交互，无需人工达到自动化需求<br><a href="http://python.jqlinux.com/pythonchang-yong-di-san-fang-3001-nei-zhi-mo-kuai/pythonzhi-pexpect-xiang-jie.html" target="_blank" rel="noopener">参考文章</a></p>
-<h3 id="3-tree"><a href="#3-tree" class="headerlink" title="3. tree"></a>3. tree</h3><p>输出目录结构层次</p>
+        <pre><code>import time
+from itertools import count
+
+def buzzergen(period):
+    nexttime = time.time() + period
+    for i in count():
+        now = time.time()
+        tosleep = nexttime - now
+        if tosleep &gt; 0:
+            time.sleep(tosleep)
+            nexttime += period
+        else:
+            nexttime = now + period
+        yield i, nexttime
+</code></pre><p><a href="https://stackoverflow.com/questions/510348/how-can-i-make-a-time-delay-in-python?rq=1" target="_blank" rel="noopener">https://stackoverflow.com/questions/510348/how-can-i-make-a-time-delay-in-python?rq=1</a></p>
 
       
     </div>
@@ -352,26 +364,6 @@
       
       
 
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2018/03/16/2018/2018-03-16-stmt的含义/" rel="next" title="stmt的含义">
-                <i class="fa fa-chevron-left"></i> stmt的含义
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/03/16/2018/2018-03-16-postgresql-技能/" rel="prev" title="postgrsql 遇上两个with上下午管理器">
-                postgrsql 遇上两个with上下午管理器 <i class="fa fa-chevron-right"></i>
-              </a>
-            
-          </div>
-        </div>
       
 
       
@@ -420,17 +412,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            文章目录
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            站点概览
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -504,22 +487,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#模块汇总"><span class="nav-number">1.</span> <span class="nav-text">模块汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-getpass"><span class="nav-number">1.1.</span> <span class="nav-text">1. getpass</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-pexpect"><span class="nav-number">1.2.</span> <span class="nav-text">2. pexpect</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-tree"><span class="nav-number">2.</span> <span class="nav-text">3. tree</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
