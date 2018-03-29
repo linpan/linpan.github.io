@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="python">
 <meta property="og:description" content="postgrsql 遇上with有关pg的连接及关闭问题, 使用2个with上下午管理器, 完全避免完了关闭游标、连接。 def _run_stmt(self, stmt):      with psycopg2.connect(**self._connect_args) as conn:          with conn.cursor() as cur:              cur.e">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-16T10:19:07.386Z">
+<meta property="og:updated_time" content="2018-03-23T04:01:52.679Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="postgrsql 遇上两个with上下午管理器">
 <meta name="twitter:description" content="postgrsql 遇上with有关pg的连接及关闭问题, 使用2个with上下午管理器, 完全避免完了关闭游标、连接。 def _run_stmt(self, stmt):      with psycopg2.connect(**self._connect_args) as conn:          with conn.cursor() as cur:              cur.e">
@@ -334,8 +334,24 @@
      with psycopg2.connect(**self._connect_args) as conn:
          with conn.cursor() as cur:
              cur.execute(stmt)
-</code></pre><p>其实, 在pg官方英文材料也给出了这中方案。</p>
+</code></pre><p>其实, 在pg官方英文材料也给出了这中方案</p>
+<h3 id="with-上下文管理器"><a href="#with-上下文管理器" class="headerlink" title="with 上下文管理器"></a>with 上下文管理器</h3><p>基本用法：</p>
+<pre><code>with A() as a, B() as b, C() as c:
+    doSomething(a,b,c)
+</code></pre><p>可以读写文件这样写：</p>
+<pre><code>from __future__ import with_statement
 
+with open(&quot;out.txt&quot;,&quot;wt&quot;), open(&quot;in.txt&quot;) as file_out, file_in:
+    for line in file_in:
+        file_out.write(line)
+</code></pre><p>或者提高一下阅读行：</p>
+<pre><code>from __future__ import with_statement
+
+with open(&quot;out.txt&quot;,&quot;wt&quot;) as file_out:
+    with open(&quot;in.txt&quot;) as file_in:
+        for line in file_in:
+            file_out.write(line)
+</code></pre>
       
     </div>
     
@@ -448,7 +464,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">24</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -470,7 +486,7 @@
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
@@ -517,7 +533,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#postgrsql-遇上with"><span class="nav-number">1.</span> <span class="nav-text">postgrsql 遇上with</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#postgrsql-遇上with"><span class="nav-number">1.</span> <span class="nav-text">postgrsql 遇上with</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#with-上下文管理器"><span class="nav-number">2.</span> <span class="nav-text">with 上下文管理器</span></a></li></ol></div>
             
 
           </div>
