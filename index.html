@@ -259,6 +259,195 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/03/2018/2018-04-03-postgresql-懒得说序列-sequeue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/03/2018/2018-04-03-postgresql-懒得说序列-sequeue/" itemprop="url">Postgresql 懒得说序列 Sequeue</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-03T12:05:00+08:00">
+                2018-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="PostgreSQL-序列（Sequence）"><a href="#PostgreSQL-序列（Sequence）" class="headerlink" title="PostgreSQL - 序列（Sequence）"></a>PostgreSQL - 序列（Sequence）</h3><p>PostgreSQL 中的序列是一个<code>数据库对象</code>，本质上是一个<code>自增器</code>。因此，序列在其他同类型数据库软件中以 autoincrment 值的形式存在。</p>
+<p>场景需求：<br>在一张表需要非随机，唯一标实符的场景下，Sequence 非常有用。</p>
+<p>Sequence 对象中包含当前值，和一些独特属性，例如如何递增（或者递减）。实际上，Sequence 是不能被直接访问到的；他们需要通过 PostgreSQL 中的相关函数(setval等等)来操作他们。</p>
+<h3 id="创建序列"><a href="#创建序列" class="headerlink" title="创建序列"></a>创建序列</h3><p>序列创建语法：</p>
+<pre><code>CREATE SEQUEUE sequeuename
+[INCREMENT increment]   -- 自增数, 默认1
+[MINVALUE minvalue]     -- 最小值
+[MAXVALUE maxvalue]     -- 最大值
+[START start]           -- 设置起始值
+[CACHE cache]           -- 是否预先缓存
+[CYCLE]                 -- 是否达到最大值后,回到最小值
+</code></pre><p>Sequence 使用的是整型数值，因此它的取值范围[ -9223372036854775808 to 9223372036854775807]之间(Postgresql9.5官方文档)；现在我们创建一个序列范例：</p>
+<pre><code>CREATE SEQUENCE &quot;reg_num_2017a_serial&quot;
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+</code></pre><h3 id="查看序列"><a href="#查看序列" class="headerlink" title="查看序列"></a>查看序列</h3><p>psql 的 \d 命令输出一个数据库对象，包括 Sequence表，视图和索引。你还可以使用 \ds 命令只查看当前数据库的所有序列。</p>
+<pre><code>py2018=# \ds
+             List of relations
+Schema |          Name          |   Type   |  Owner
+--------+------------------------+----------+----------
+public | activities_id_seq      | sequence | postgres
+public | antique_details_id_seq | sequence | postgres
+public | antiques_id_seq        | sequence | postgres
+public | bid_records_id_seq     | sequence | postgres
+public | buyers_id_seq          | sequence | postgres
+public | contracts_id_seq       | sequence | postgres
+public | countries_id_seq       | sequence | postgres
+public | identity_types_id_seq  | sequence | postgres
+public | `reg_nums_id_seq`      | sequence | postgres
+public | sellers_id_seq         | sequence | postgres
+public | sub_activities_id_seq  | sequence | postgres
+public | transactions_id_seq    | sequence | postgres
+(12 rows)
+</code></pre><p>  Sequence 就像表和视图一样，拥有自己的结构，只不过它的结构是固定的:</p>
+<pre><code>py2018=# \d reg_nums_id_seq
+                      Sequence &quot;public.reg_nums_id_seq&quot;
+  Type  | Start | Minimum |       Maximum       | Increment | Cycles? | Cache
+--------+-------+---------+---------------------+-----------+---------+-------
+ bigint | 60828 |       1 | 9223372036854775807 |         1 | no      |     1
+Owned by: public.reg_nums.id
+</code></pre><h3 id="序列的基本方法"><a href="#序列的基本方法" class="headerlink" title="序列的基本方法"></a>序列的基本方法</h3><p> Sequence 的函数：</p>
+<ul>
+<li>nextval(‘sequence_name’): 将当前值设置成递增后的值，并返回</li>
+<li>currval(‘sequence_name’): 返回当前值</li>
+<li>setval(‘sequence_name’, n, b=true): 设置当前值；b 默认设置 true，下一次调用 nextval() 时，直接返回 n，如果设置 false，则返回 n+increment:</li>
+</ul>
+<p><code>extval()</code> 函数要求一个序列名（必须由单引号包围）为第一个参数。 需要注意的是，当你第一次调用 nextval() 将会返回序列的初始值，即 START；因为他没有调用递增的方法。</p>
+<p>Sequence 一般作为表的唯一标识符字段的默认值使用（这是序列的最常见的场景）；看个例子：</p>
+<pre><code>py2018=# CREATE TABLE shipments (id integer DEFAULT nextval(&apos;shipments_ship_id_seq&apos;) PRIMARY KEY,
+customer_id integer, isbn text, ship_date timestamp);
+CREATE TABLE
+py2018=# \d shipments
+                                    Table &quot;public.shipments&quot;
+Column    |            Type             |                          Modifiers
+-------------+-----------------------------+-------------------------------------------------------------
+id          | integer                     | not null default nextval(&apos;shipments_ship_id_seq&apos;::regclass)
+customer_id | integer                     |
+isbn        | text                        |
+ship_date   | timestamp without time zone |
+Indexes:
+&quot;shipments_pkey&quot; PRIMARY KEY, btree (id)
+</code></pre><p>这张表中的 id 字段的默认值将被设置成 shipments_ship_id_seq 的 nextval() 值。如果插入值的时候，没有指定 id 的值，将会自动选择 nextval(‘shipments_ship_id_seq’) 的值。</p>
+<p>注意： id 字段的默认值并不是强制使用的。用户仍然可以手动插入值，这样潜在地造成与未来的序列值冲突的风险。这个可以通过 trigger 来防止这个问题，后续将详细介绍。</p>
+<p>为了防止同一个序列同时被多个被多个用户访问导致错误，序列的当前值与 session 关联。两个用户可能在两个不同的会话访问同一个序列，但是调用 currval() 时，只会返回同一会话下的当前值。</p>
+<h3 id="序列删除"><a href="#序列删除" class="headerlink" title="序列删除"></a>序列删除</h3><p>基本语法：</p>
+<pre><code>DROP SEQUENCE seq_name[, ...]
+</code></pre><p>来删除一个或者多个序列。命令中的 seq_name 是序列名，不须被引号包围；如果是多个序列，可以使用逗号隔开。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/29/2018/2018-03-29-模块路径导入引用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -723,15 +912,16 @@ replacedStr = re.sub(&quot;(?P&lt;number&gt;\d+)&quot;, add_num_100, s_num);
           
             <h3 id="赋值-assignment"><a href="#赋值-assignment" class="headerlink" title="赋值(assignment)"></a>赋值(assignment)</h3><p>一个东西, 多个名称。</p>
 <blockquote>
-<p>a=b 赋值<br> a,b 都是指向一个内存地址的.</p>
-<blockquote>
-<blockquote>
-<p>a =[‘python’, ‘love’, ‘world’]<br>b =a<br>print id(a)  # 4517718024<br>print id(b)  # 4517718024<br>a is b</p>
-<pre><code>#true
-</code></pre></blockquote>
+<p>a=b 赋值</p>
 </blockquote>
-</blockquote>
-<p>如果b发送变化,必然a也发送改变</p>
+<p> a,b 都是指向一个内存地址的.</p>
+<pre><code>&gt;&gt;&gt; a =[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;]
+&gt;&gt;&gt; b =a
+&gt;&gt;&gt; print id(a)  # 4517718024
+&gt;&gt;&gt; print id(b)  # 4517718024
+&gt;&gt;&gt; a is b
+ #true
+</code></pre><p>如果b发送变化,必然a也发送改变</p>
 <pre><code>&gt;&gt;&gt; b.append(&apos;changed&apos;)
 &gt;&gt;&gt; a
 #[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;, &apos;changed&apos;]
@@ -741,9 +931,9 @@ replacedStr = re.sub(&quot;(?P&lt;number&gt;\d+)&quot;, add_num_100, s_num);
 <blockquote>
 <p>a =[1,2,3,[5,6]]</p>
 <p>compound objects (objects that contain other objects, like lists or class instances):</p>
+</blockquote>
 <p>比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：<br>而对于数字、字符串以及其它“原子”类型，没有拷贝一说，产生的都是原对象的引用。</p>
-<h4 id="不可变对象"><a href="#不可变对象" class="headerlink" title="不可变对象"></a>不可变对象</h4></blockquote>
-<p>浅拷贝会创建一个新的对象，然后把生成的新对象赋值给新变量。注意这句话的意思，上面这个例子中1，2，3这三个int型对象并没有创建新的，新的对象是指copy创建了一个新的列表对象，这样a和b这两个变量指向的列表对象就不是同一个，但和两个列表对象里面的元素依然是按引用传递的，所以a列表中的对象1和b列表中的对象1是同一个。 但是这时修改a列表的不可变对象，b列表不会受到影响<br>：</p>
+<h4 id="不可变对象"><a href="#不可变对象" class="headerlink" title="不可变对象"></a>不可变对象</h4><p>浅拷贝会创建一个新的对象，然后把生成的新对象赋值给新变量。注意这句话的意思，上面这个例子中1，2，3这三个int型对象并没有创建新的，新的对象是指copy创建了一个新的列表对象，这样a和b这两个变量指向的列表对象就不是同一个，但和两个列表对象里面的元素依然是按引用传递的，所以a列表中的对象1和b列表中的对象1是同一个。 但是这时修改a列表的不可变对象，b列表不会受到影响<br>：</p>
 <h4 id="可变对象"><a href="#可变对象" class="headerlink" title="可变对象"></a>可变对象</h4><p>可变对象例如 a = [1,2,[3,]]<br>由于浅拷贝时，对于对象中的元素，浅拷贝只会使用原始元素的引用（内存地址），所以如果对象中的元素是可变对象，浅拷贝就没辙了。比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：</p>
 <pre><code>&gt;&gt;&gt; a = [1,2,[3,]]
 &gt;&gt;&gt; b = copy.copy(a)
@@ -1274,133 +1464,11 @@ with open(&quot;out.txt&quot;,&quot;wt&quot;) as file_out:
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/2018/2018-03-16-python-我遇到过的模块/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/16/2018/2018-03-16-python-我遇到过的模块/" itemprop="url">python 我遇到过的模块</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T17:34:00+08:00">
-                2018-03-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="模块汇总"><a href="#模块汇总" class="headerlink" title="模块汇总"></a>模块汇总</h3><h4 id="1-getpass"><a href="#1-getpass" class="headerlink" title="1. getpass"></a>1. getpass</h4><p>Utilities to get a password and/or the current user name<br>获得输入密码及当前用户名</p>
-<h4 id="2-pexpect"><a href="#2-pexpect" class="headerlink" title="2. pexpect"></a>2. pexpect</h4><p>pexpect 是linux下expect的python封装，通过pexpect我们可以实现对ssh、ftp、password、telnet等命令进行自动交互，无需人工达到自动化需求<br><a href="http://python.jqlinux.com/pythonchang-yong-di-san-fang-3001-nei-zhi-mo-kuai/pythonzhi-pexpect-xiang-jie.html" target="_blank" rel="noopener">参考文章</a></p>
-<h3 id="3-tree"><a href="#3-tree" class="headerlink" title="3. tree"></a>3. tree</h3><p>输出目录结构层次</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1446,7 +1514,7 @@ with open(&quot;out.txt&quot;,&quot;wt&quot;) as file_out:
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1468,7 +1536,7 @@ with open(&quot;out.txt&quot;,&quot;wt&quot;) as file_out:
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

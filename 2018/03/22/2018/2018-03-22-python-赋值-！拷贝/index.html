@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="赋值(assignment)一个东西, 多个名称。  a=b 赋值 a,b 都是指向一个内存地址的.   a =[‘python’, ‘love’, ‘world’]b =aprint id(a)  # 4517718024print id(b)  # 4517718024a is b #true    如果b发送变化,必然a也发送改变 &amp;gt;&amp;gt;&amp;gt; b.append(&amp;apos;ch">
+<meta name="description" content="赋值(assignment)一个东西, 多个名称。  a=b 赋值   a,b 都是指向一个内存地址的. &amp;gt;&amp;gt;&amp;gt; a =[&amp;apos;python&amp;apos;, &amp;apos;love&amp;apos;, &amp;apos;world&amp;apos;] &amp;gt;&amp;gt;&amp;gt; b =a &amp;gt;&amp;gt;&amp;gt; print id(a)  # 4517718024 &amp;gt;&amp;gt;&amp;gt; pri">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python 赋值 =！拷贝">
 <meta property="og:url" content="http://yoursite.com/2018/03/22/2018/2018-03-22-python-赋值-！拷贝/index.html">
 <meta property="og:site_name" content="python">
-<meta property="og:description" content="赋值(assignment)一个东西, 多个名称。  a=b 赋值 a,b 都是指向一个内存地址的.   a =[‘python’, ‘love’, ‘world’]b =aprint id(a)  # 4517718024print id(b)  # 4517718024a is b #true    如果b发送变化,必然a也发送改变 &amp;gt;&amp;gt;&amp;gt; b.append(&amp;apos;ch">
+<meta property="og:description" content="赋值(assignment)一个东西, 多个名称。  a=b 赋值   a,b 都是指向一个内存地址的. &amp;gt;&amp;gt;&amp;gt; a =[&amp;apos;python&amp;apos;, &amp;apos;love&amp;apos;, &amp;apos;world&amp;apos;] &amp;gt;&amp;gt;&amp;gt; b =a &amp;gt;&amp;gt;&amp;gt; print id(a)  # 4517718024 &amp;gt;&amp;gt;&amp;gt; pri">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-22T09:56:59.125Z">
+<meta property="og:updated_time" content="2018-04-03T05:25:30.639Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python 赋值 =！拷贝">
-<meta name="twitter:description" content="赋值(assignment)一个东西, 多个名称。  a=b 赋值 a,b 都是指向一个内存地址的.   a =[‘python’, ‘love’, ‘world’]b =aprint id(a)  # 4517718024print id(b)  # 4517718024a is b #true    如果b发送变化,必然a也发送改变 &amp;gt;&amp;gt;&amp;gt; b.append(&amp;apos;ch">
+<meta name="twitter:description" content="赋值(assignment)一个东西, 多个名称。  a=b 赋值   a,b 都是指向一个内存地址的. &amp;gt;&amp;gt;&amp;gt; a =[&amp;apos;python&amp;apos;, &amp;apos;love&amp;apos;, &amp;apos;world&amp;apos;] &amp;gt;&amp;gt;&amp;gt; b =a &amp;gt;&amp;gt;&amp;gt; print id(a)  # 4517718024 &amp;gt;&amp;gt;&amp;gt; pri">
 
 
 
@@ -331,15 +331,16 @@
       
         <h3 id="赋值-assignment"><a href="#赋值-assignment" class="headerlink" title="赋值(assignment)"></a>赋值(assignment)</h3><p>一个东西, 多个名称。</p>
 <blockquote>
-<p>a=b 赋值<br> a,b 都是指向一个内存地址的.</p>
-<blockquote>
-<blockquote>
-<p>a =[‘python’, ‘love’, ‘world’]<br>b =a<br>print id(a)  # 4517718024<br>print id(b)  # 4517718024<br>a is b</p>
-<pre><code>#true
-</code></pre></blockquote>
+<p>a=b 赋值</p>
 </blockquote>
-</blockquote>
-<p>如果b发送变化,必然a也发送改变</p>
+<p> a,b 都是指向一个内存地址的.</p>
+<pre><code>&gt;&gt;&gt; a =[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;]
+&gt;&gt;&gt; b =a
+&gt;&gt;&gt; print id(a)  # 4517718024
+&gt;&gt;&gt; print id(b)  # 4517718024
+&gt;&gt;&gt; a is b
+ #true
+</code></pre><p>如果b发送变化,必然a也发送改变</p>
 <pre><code>&gt;&gt;&gt; b.append(&apos;changed&apos;)
 &gt;&gt;&gt; a
 #[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;, &apos;changed&apos;]
@@ -349,9 +350,9 @@
 <blockquote>
 <p>a =[1,2,3,[5,6]]</p>
 <p>compound objects (objects that contain other objects, like lists or class instances):</p>
+</blockquote>
 <p>比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：<br>而对于数字、字符串以及其它“原子”类型，没有拷贝一说，产生的都是原对象的引用。</p>
-<h4 id="不可变对象"><a href="#不可变对象" class="headerlink" title="不可变对象"></a>不可变对象</h4></blockquote>
-<p>浅拷贝会创建一个新的对象，然后把生成的新对象赋值给新变量。注意这句话的意思，上面这个例子中1，2，3这三个int型对象并没有创建新的，新的对象是指copy创建了一个新的列表对象，这样a和b这两个变量指向的列表对象就不是同一个，但和两个列表对象里面的元素依然是按引用传递的，所以a列表中的对象1和b列表中的对象1是同一个。 但是这时修改a列表的不可变对象，b列表不会受到影响<br>：</p>
+<h4 id="不可变对象"><a href="#不可变对象" class="headerlink" title="不可变对象"></a>不可变对象</h4><p>浅拷贝会创建一个新的对象，然后把生成的新对象赋值给新变量。注意这句话的意思，上面这个例子中1，2，3这三个int型对象并没有创建新的，新的对象是指copy创建了一个新的列表对象，这样a和b这两个变量指向的列表对象就不是同一个，但和两个列表对象里面的元素依然是按引用传递的，所以a列表中的对象1和b列表中的对象1是同一个。 但是这时修改a列表的不可变对象，b列表不会受到影响<br>：</p>
 <h4 id="可变对象"><a href="#可变对象" class="headerlink" title="可变对象"></a>可变对象</h4><p>可变对象例如 a = [1,2,[3,]]<br>由于浅拷贝时，对于对象中的元素，浅拷贝只会使用原始元素的引用（内存地址），所以如果对象中的元素是可变对象，浅拷贝就没辙了。比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：</p>
 <pre><code>&gt;&gt;&gt; a = [1,2,[3,]]
 &gt;&gt;&gt; b = copy.copy(a)
@@ -485,7 +486,7 @@ False
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -507,7 +508,7 @@ False
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

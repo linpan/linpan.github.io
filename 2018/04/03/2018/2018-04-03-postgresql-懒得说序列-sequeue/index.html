@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据库,postgres," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="PostgreSQL - 序列（Sequence）PostgreSQL 中的序列是一个数据库对象，本质上是一个自增器。因此，序列在其他同类型数据库软件中以 autoincrment 值的形式存在。 场景需求：在一张表需要非随机，唯一标实符的场景下，Sequence 非常有用。 Sequence 对象中包含当前值，和一些独特属性，例如如何递增（或者递减）。实际上，Sequence 是不能被直接访问到">
+<meta name="keywords" content="数据库,postgres">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Postgresql 懒得说序列 Sequeue">
+<meta property="og:url" content="http://yoursite.com/2018/04/03/2018/2018-04-03-postgresql-懒得说序列-sequeue/index.html">
+<meta property="og:site_name" content="python">
+<meta property="og:description" content="PostgreSQL - 序列（Sequence）PostgreSQL 中的序列是一个数据库对象，本质上是一个自增器。因此，序列在其他同类型数据库软件中以 autoincrment 值的形式存在。 场景需求：在一张表需要非随机，唯一标实符的场景下，Sequence 非常有用。 Sequence 对象中包含当前值，和一些独特属性，例如如何递增（或者递减）。实际上，Sequence 是不能被直接访问到">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-03T05:26:55.488Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Postgresql 懒得说序列 Sequeue">
+<meta name="twitter:description" content="PostgreSQL - 序列（Sequence）PostgreSQL 中的序列是一个数据库对象，本质上是一个自增器。因此，序列在其他同类型数据库软件中以 autoincrment 值的形式存在。 场景需求：在一张表需要非随机，唯一标实符的场景下，Sequence 非常有用。 Sequence 对象中包含当前值，和一些独特属性，例如如何递增（或者递减）。实际上，Sequence 是不能被直接访问到">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/04/03/2018/2018-04-03-postgresql-懒得说序列-sequeue/"/>
+
+
+
+
+
+  <title>Postgresql 懒得说序列 Sequeue | python</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">python</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/03/2018/2018-04-03-postgresql-懒得说序列-sequeue/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Postgresql 懒得说序列 Sequeue</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-03T12:05:00+08:00">
+                2018-04-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="PostgreSQL-序列（Sequence）"><a href="#PostgreSQL-序列（Sequence）" class="headerlink" title="PostgreSQL - 序列（Sequence）"></a>PostgreSQL - 序列（Sequence）</h3><p>PostgreSQL 中的序列是一个<code>数据库对象</code>，本质上是一个<code>自增器</code>。因此，序列在其他同类型数据库软件中以 autoincrment 值的形式存在。</p>
+<p>场景需求：<br>在一张表需要非随机，唯一标实符的场景下，Sequence 非常有用。</p>
+<p>Sequence 对象中包含当前值，和一些独特属性，例如如何递增（或者递减）。实际上，Sequence 是不能被直接访问到的；他们需要通过 PostgreSQL 中的相关函数(setval等等)来操作他们。</p>
+<h3 id="创建序列"><a href="#创建序列" class="headerlink" title="创建序列"></a>创建序列</h3><p>序列创建语法：</p>
+<pre><code>CREATE SEQUEUE sequeuename
+[INCREMENT increment]   -- 自增数, 默认1
+[MINVALUE minvalue]     -- 最小值
+[MAXVALUE maxvalue]     -- 最大值
+[START start]           -- 设置起始值
+[CACHE cache]           -- 是否预先缓存
+[CYCLE]                 -- 是否达到最大值后,回到最小值
+</code></pre><p>Sequence 使用的是整型数值，因此它的取值范围[ -9223372036854775808 to 9223372036854775807]之间(Postgresql9.5官方文档)；现在我们创建一个序列范例：</p>
+<pre><code>CREATE SEQUENCE &quot;reg_num_2017a_serial&quot;
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+</code></pre><h3 id="查看序列"><a href="#查看序列" class="headerlink" title="查看序列"></a>查看序列</h3><p>psql 的 \d 命令输出一个数据库对象，包括 Sequence表，视图和索引。你还可以使用 \ds 命令只查看当前数据库的所有序列。</p>
+<pre><code>py2018=# \ds
+             List of relations
+Schema |          Name          |   Type   |  Owner
+--------+------------------------+----------+----------
+public | activities_id_seq      | sequence | postgres
+public | antique_details_id_seq | sequence | postgres
+public | antiques_id_seq        | sequence | postgres
+public | bid_records_id_seq     | sequence | postgres
+public | buyers_id_seq          | sequence | postgres
+public | contracts_id_seq       | sequence | postgres
+public | countries_id_seq       | sequence | postgres
+public | identity_types_id_seq  | sequence | postgres
+public | `reg_nums_id_seq`      | sequence | postgres
+public | sellers_id_seq         | sequence | postgres
+public | sub_activities_id_seq  | sequence | postgres
+public | transactions_id_seq    | sequence | postgres
+(12 rows)
+</code></pre><p>  Sequence 就像表和视图一样，拥有自己的结构，只不过它的结构是固定的:</p>
+<pre><code>py2018=# \d reg_nums_id_seq
+                      Sequence &quot;public.reg_nums_id_seq&quot;
+  Type  | Start | Minimum |       Maximum       | Increment | Cycles? | Cache
+--------+-------+---------+---------------------+-----------+---------+-------
+ bigint | 60828 |       1 | 9223372036854775807 |         1 | no      |     1
+Owned by: public.reg_nums.id
+</code></pre><h3 id="序列的基本方法"><a href="#序列的基本方法" class="headerlink" title="序列的基本方法"></a>序列的基本方法</h3><p> Sequence 的函数：</p>
+<ul>
+<li>nextval(‘sequence_name’): 将当前值设置成递增后的值，并返回</li>
+<li>currval(‘sequence_name’): 返回当前值</li>
+<li>setval(‘sequence_name’, n, b=true): 设置当前值；b 默认设置 true，下一次调用 nextval() 时，直接返回 n，如果设置 false，则返回 n+increment:</li>
+</ul>
+<p><code>extval()</code> 函数要求一个序列名（必须由单引号包围）为第一个参数。 需要注意的是，当你第一次调用 nextval() 将会返回序列的初始值，即 START；因为他没有调用递增的方法。</p>
+<p>Sequence 一般作为表的唯一标识符字段的默认值使用（这是序列的最常见的场景）；看个例子：</p>
+<pre><code>py2018=# CREATE TABLE shipments (id integer DEFAULT nextval(&apos;shipments_ship_id_seq&apos;) PRIMARY KEY,
+customer_id integer, isbn text, ship_date timestamp);
+CREATE TABLE
+py2018=# \d shipments
+                                    Table &quot;public.shipments&quot;
+Column    |            Type             |                          Modifiers
+-------------+-----------------------------+-------------------------------------------------------------
+id          | integer                     | not null default nextval(&apos;shipments_ship_id_seq&apos;::regclass)
+customer_id | integer                     |
+isbn        | text                        |
+ship_date   | timestamp without time zone |
+Indexes:
+&quot;shipments_pkey&quot; PRIMARY KEY, btree (id)
+</code></pre><p>这张表中的 id 字段的默认值将被设置成 shipments_ship_id_seq 的 nextval() 值。如果插入值的时候，没有指定 id 的值，将会自动选择 nextval(‘shipments_ship_id_seq’) 的值。</p>
+<p>注意： id 字段的默认值并不是强制使用的。用户仍然可以手动插入值，这样潜在地造成与未来的序列值冲突的风险。这个可以通过 trigger 来防止这个问题，后续将详细介绍。</p>
+<p>为了防止同一个序列同时被多个被多个用户访问导致错误，序列的当前值与 session 关联。两个用户可能在两个不同的会话访问同一个序列，但是调用 currval() 时，只会返回同一会话下的当前值。</p>
+<h3 id="序列删除"><a href="#序列删除" class="headerlink" title="序列删除"></a>序列删除</h3><p>基本语法：</p>
+<pre><code>DROP SEQUENCE seq_name[, ...]
+</code></pre><p>来删除一个或者多个序列。命令中的 seq_name 是序列名，不须被引号包围；如果是多个序列，可以使用逗号隔开。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/数据库/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/postgres/" rel="tag"># postgres</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/29/2018/2018-03-29-模块路径导入引用/" rel="next" title="模块路径导入引用">
+                <i class="fa fa-chevron-left"></i> 模块路径导入引用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Hiro</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">25</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.zuopiezi.org" title="zuopiezi" target="_blank">zuopiezi</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#PostgreSQL-序列（Sequence）"><span class="nav-number">1.</span> <span class="nav-text">PostgreSQL - 序列（Sequence）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建序列"><span class="nav-number">2.</span> <span class="nav-text">创建序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看序列"><span class="nav-number">3.</span> <span class="nav-text">查看序列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序列的基本方法"><span class="nav-number">4.</span> <span class="nav-text">序列的基本方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#序列删除"><span class="nav-number">5.</span> <span class="nav-text">序列删除</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hiro</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
