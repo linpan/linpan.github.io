@@ -259,6 +259,1033 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/28/2018/2018-04-28-docker-基本操作/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/28/2018/2018-04-28-docker-基本操作/" itemprop="url">docker 基本操作</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-28T15:39:00+08:00">
+                2018-04-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="查找centos镜像"><a href="#查找centos镜像" class="headerlink" title="查找centos镜像"></a>查找centos镜像</h3><pre><code>&gt; docker search centos
+</code></pre><h3 id="拉centos7镜像"><a href="#拉centos7镜像" class="headerlink" title="拉centos7镜像"></a>拉centos7镜像</h3><p>大约200M</p>
+<pre><code>&gt; docker pull centos:latest
+</code></pre><h3 id="查看镜像允许状态"><a href="#查看镜像允许状态" class="headerlink" title="查看镜像允许状态"></a>查看镜像允许状态</h3><pre><code>&gt; docker images centos
+</code></pre><h3 id="编辑Dockerfile文件及构建镜像"><a href="#编辑Dockerfile文件及构建镜像" class="headerlink" title="编辑Dockerfile文件及构建镜像"></a>编辑Dockerfile文件及构建镜像</h3><p>完成基本安装库及依赖, systemctl在文件内部无法使用。<br>在Dockerfile目录下执行,自动加载Dockerfile文件</p>
+<blockquote>
+<p>docker build -t your-like-name .</p>
+</blockquote>
+<pre><code>FROM          docker.io/centos:latest
+MAINTAINER    big-fucking-rocket
+
+# alpha version
+LABEL version=&quot;0.1.1&quot;
+
+
+
+# install base lib
+RUN yum -y install gcc make vim \
+  libevent-devel \
+  zlib-devel \
+  python-devel\
+  wget \
+  openssl \
+  python-pip \
+  libmemcached-devel.x86_64 \
+  libpq-dev \
+  curl \
+  git \
+  supervisor
+
+RUN yum -y install httpd; yum clean all; systemctl enable httpd.service
+
+# related get-pip.py
+RUN cd /tmp &amp;&amp; wget  https://bootstrap.pypa.io/get-pip.py \
+    &amp;&amp; python get-pip.py
+
+# pip and virtualenv
+RUN pip install --upgrade pip
+RUN pip install virtualenv
+RUN virtualenv auction_live
+
+#  psycopg2 Library
+RUN pip install psycopg2-binary
+
+# install nginx
+# set up the yum repository
+RUN cd /etc/yum.repos.d/ &amp;&amp; \
+echo &apos;[nginx]&apos; &gt;&gt; ./nginx.repo &amp;&amp; \
+echo &apos;name=nginx repo&apos; &gt;&gt; ./nginx.repo &amp;&amp; \
+echo &apos;baseurl=http://nginx.org/packages/centos/7/$basearch/&apos; &gt;&gt; ./nginx.repo &amp;&amp; \
+echo &apos;gpgcheck=0&apos; &gt;&gt; ./nginx.repo &amp;&amp; \
+echo &apos;enabled=1&apos; &gt;&gt; ./nginx.repo &amp;&amp; \
+
+# force update repo &amp; install nginx
+yum list | grep nginx &amp;&amp; yum -y install nginx
+
+# install uwsgi now because it takes a little while
+RUN pip install uwsgi
+
+
+#  install memcached
+RUN yum -y install memcached
+
+# install redis
+#RUN cd /tmp/ &amp;&amp; wget http://download.redis.io/releases/redis-stable.tar.gz &amp;&amp; \
+#tar xzf redis-stable.tar.gz &amp;&amp; \
+#cd redis-stable &amp;&amp; make &amp;&amp; make install
+#cp -r /redis-stable /usr/local/redis
+
+#RUN yum install epel-release
+RUN yum install redis
+
+# install postgresql
+RUN yum -y install https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
+
+RUN yum -y install postgresql96-server
+# init
+# RUN /usr/pgsql-9.6/bin/postgresql96-setup initdb
+
+#RUN echo &quot;listen_addresses = &apos;*&apos;&quot; &gt;&gt; /var/lib/pgsql/9.6/data/postgresql.conf
+#RUN echo &quot;PORT = 5432&quot; &gt;&gt; /var/lib/pgsql/9.6/data/postgresql.conf
+#RUN echo &quot;local   all             all                                     trust&quot; &gt;&gt; #/var/lib/pgsql/9.6/data/pg_hba.conf
+#RUN echo &quot;host    all             all             127.0.0.1/32            ident&quot; &gt;&gt; #/var/lib/pgsql/9.6/data/pg_hba.conf
+#RUN echo &quot;host    all             all             ::1/128                 ident&quot; &gt;&gt; #/var/lib/pgsql/9.6/data/pg_hba.conf
+#RUN echo &quot;host    all             all         0.0.0.0/0            trust&quot; &gt;&gt; # /var/lib/pgsql/9.6/data/pg_hba.conf
+
+
+# configure systemd
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
+systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+rm -f /lib/systemd/system/multi-user.target.wants/*;\
+rm -f /etc/systemd/system/*.wants/*;\
+rm -f /lib/systemd/system/local-fs.target.wants/*; \
+rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
+rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
+rm -f /lib/systemd/system/basic.target.wants/*;\
+rm -f /lib/systemd/system/anaconda.target.wants/*;
+
+# port
+EXPOSE  5432 6379 7000 8000-9000
+
+CMD [&quot;/usr/sbin/init&quot;]
+</code></pre><h3 id="查看编译的镜像"><a href="#查看编译的镜像" class="headerlink" title="查看编译的镜像"></a>查看编译的镜像</h3><pre><code>&gt; docker images
+</code></pre><h3 id="启动镜像进入容器"><a href="#启动镜像进入容器" class="headerlink" title="启动镜像进入容器"></a>启动镜像进入容器</h3><pre><code># 普通模式
+docker  run  -t  -i  jdk8/centos  /bin/bash
+# 可以使用systemctl命令
+docker  run  -t  -i  jdk8/centos   /usr/sbin/init
+# 给容器别名 指定端口启动
+docker run -tid --name eoa    -p 6380:6379 -p 8082:8080 -p 9082:9081 centos7/eoa    /usr/sbin/init
+</code></pre><h3 id="查看允许的容器"><a href="#查看允许的容器" class="headerlink" title="查看允许的容器"></a>查看允许的容器</h3><pre><code>&gt; docker ps
+</code></pre><h3 id="退出容器"><a href="#退出容器" class="headerlink" title="退出容器"></a>退出容器</h3><pre><code>exit
+或者 ctrl+p+q
+</code></pre><h3 id="再次进入允许的容器"><a href="#再次进入允许的容器" class="headerlink" title="再次进入允许的容器"></a>再次进入允许的容器</h3><p>如果想进入独立的环境可以使用另一种进入容器的方式：<br>      docker exec -it <id> bash<br>      docker exec -it  8e185ef88c14 bash 或者<br>      docker exec -it  8e bash  镜像id的前2位</id></p>
+<h3 id="文件拷贝"><a href="#文件拷贝" class="headerlink" title="文件拷贝"></a>文件拷贝</h3><p>把文件从容器拷贝到宿主机：</p>
+<pre><code>docker cp 容器名：要拷贝的文件在容器里面的路径        要拷贝到宿主机的相应路径
+</code></pre><p>把文件从宿主机拷贝到容器：</p>
+<pre><code>docker cp 要拷贝的文件路径 容器名：要拷贝到容器里面对应的路径
+docker cp   ./nginx-1.12.2.tar.gz   7db885ebfe04:/usr/local/
+</code></pre><h3 id="容器停止、删除、退出"><a href="#容器停止、删除、退出" class="headerlink" title="容器停止、删除、退出"></a>容器停止、删除、退出</h3><pre><code>docker stop [NAME]/[CONTAINER ID]:将容器退出。
+
+docker kill [NAME]/[CONTAINER ID] :强制停止一个容器。
+
+docker rm [NAME]/[CONTAINER ID]:不能够删除一个正在运行的容器，会报错。需要先停止容器。
+</code></pre><h3 id="用commit命令创建镜像"><a href="#用commit命令创建镜像" class="headerlink" title="用commit命令创建镜像"></a>用commit命令创建镜像</h3><p>进入容器可以继续安装其他的软件、服务及配置等,然后保存提交</p>
+<p>要想利用现有的容器制作成镜像：先退出该容器，不要在容器中，然后，</p>
+<blockquote>
+<p>docker commit   当前容器的ID   要保存镜像的名称</p>
+</blockquote>
+<p>如：docker commit 614122c0aabb aoct/apache2</p>
+<h3 id="查看镜像信息"><a href="#查看镜像信息" class="headerlink" title="查看镜像信息"></a>查看镜像信息</h3><p>使用docker inspect命令查看新创建的镜像的详细信息</p>
+<blockquote>
+<p>docker inspect your-CONTAINER</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/26/2018/2018-04-26-dockerfiles-django-uwsgi-nginx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/26/2018/2018-04-26-dockerfiles-django-uwsgi-nginx/" itemprop="url">dockerfiles:django-uwsgi-nginx</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T16:44:00+08:00">
+                2018-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code># Copyright 2013 Thatcher Peskens
+#
+# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+FROM ubuntu:16.04
+
+MAINTAINER Dockerfiles
+
+# Install required packages and remove the apt packages cache when done.
+
+RUN apt-get update &amp;&amp; \
+    apt-get upgrade -y &amp;&amp; \
+    apt-get install -y \
+    git \
+    python3 \
+    python3-dev \
+    python3-setuptools \
+    python3-pip \
+    nginx \
+    supervisor \
+    sqlite3 &amp;&amp; \
+    pip3 install -U pip setuptools &amp;&amp; \
+   rm -rf /var/lib/apt/lists/*
+
+# install uwsgi now because it takes a little while
+RUN pip3 install uwsgi
+
+# setup all the configfiles
+RUN echo &quot;daemon off;&quot; &gt;&gt; /etc/nginx/nginx.conf
+COPY nginx-app.conf /etc/nginx/sites-available/default
+COPY supervisor-app.conf /etc/supervisor/conf.d/
+
+# COPY requirements.txt and RUN pip install BEFORE adding the rest of your code, this will cause Docker&apos;s caching mechanism
+# to prevent re-installing (all your) dependencies when you made a change a line or two in your app.
+
+COPY app/requirements.txt /home/docker/code/app/
+RUN pip3 install -r /home/docker/code/app/requirements.txt
+
+# add (the rest of) our code
+COPY . /home/docker/code/
+
+# install django, normally you would remove this step because your project would already
+# be installed in the code/app/ directory
+RUN django-admin.py startproject website /home/docker/code/app/
+
+EXPOSE 80
+CMD [&quot;supervisord&quot;, &quot;-n&quot;]
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/26/2018/2018-04-26-pylibmc-安装zlib-h错误/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/26/2018/2018-04-26-pylibmc-安装zlib-h错误/" itemprop="url">pylibmc 安装zlib.h错误</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T12:02:00+08:00">
+                2018-04-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/异常问题/" itemprop="url" rel="index">
+                    <span itemprop="name">异常问题</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="问题抛出"><a href="#问题抛出" class="headerlink" title="问题抛出"></a>问题抛出</h3><pre><code>src/_pylibmcmodule.c:36:20: fatal error: zlib.h: No such file or directory
+#  include &lt;zlib.h&gt;
+                  ^
+compilation terminated.
+error: command &apos;gcc&apos; failed with exit status 1
+
+----------------------------------------
+Command &quot;/the-big-fucking-rocket/bin/python -u -c &quot;import setuptools, tokenize;__file__=&apos;/tmp/pip-install-CaJmCs/pylibmc/setup.py&apos;;f=getattr(tokenize, &apos;open&apos;, open)(__file__);code=f.read().replace(&apos;\r\n&apos;, &apos;\n&apos;);f.close();exec(compile(code, __file__, &apos;exec&apos;))&quot; install --record /tmp/pip-record-DcuGLB/install-record.txt --single-version-externally-managed --compile --install-headers /the-big-fucking-rocket/include/site/python2.7/pylibmc&quot; failed with error code 1 in /tmp/pip-install-CaJmCs/pylibmc/
+</code></pre><h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><blockquote>
+<p>yum install zlib-devel</p>
+</blockquote>
+<p>这里是centos系统的zlib包,不同系统的(zlib-*)不同,例如apt-get install zlib-dev</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/20/2018/2018-04-20-py3-与py2的差异/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/20/2018/2018-04-20-py3-与py2的差异/" itemprop="url">py3 与py2的差异</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-20T10:36:00+08:00">
+                2018-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="python3-与-python2的改进地方"><a href="#python3-与-python2的改进地方" class="headerlink" title="python3 与 python2的改进地方"></a>python3 与 python2的改进地方</h2><p><a href="http://python3porting.com/differences.html" target="_blank" rel="noopener">http://python3porting.com/differences.html</a></p>
+<h3 id="apply"><a href="#apply" class="headerlink" title="apply()"></a>apply()</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>apply()函数用于当函数参数已经存在于一个元组或字典中时，间接地调用函数.<br>apply()内建函数自py2.3以后被移除，因为可以直接调用函数。</p>
+<h3 id="buffer"><a href="#buffer" class="headerlink" title="buffer()"></a>buffer()</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>buffer() –&gt; memoryview(),他们并不完全兼容，</p>
+<p>下面代码在py2,py3都可以允许：</p>
+<pre><code>&gt;&gt;&gt; import sys
+&gt;&gt;&gt; if sys.version_info &gt; (3,): # 确定py的版本号
+...     buffer = memoryview
+&gt;&gt;&gt; b = buffer(&apos;yay!&apos;.encode())
+&gt;&gt;&gt; len(b)
+4
+</code></pre><h3 id="callable"><a href="#callable" class="headerlink" title="callable()"></a>callable()</h3><blockquote>
+<p>2to3 fixer ☑ six support ☑</p>
+</blockquote>
+<p>callable()在py3.0移除，然后在py3.2再次加进来，如果在python3.1使用不可以callable的对象需要抓起TypeError错误。<br>如果判断是否可调用函数，可以通过下列方法：</p>
+<pre><code>&gt;&gt;&gt; def afunction():
+...     pass
+
+&gt;&gt;&gt; any(&quot;__call__&quot; in klass.__dict__ for
+...     klass in type(afunction).__mro__)
+True
+
+&gt;&gt;&gt; import collections
+&gt;&gt;&gt; isinstance(afunction, collections.Callable)
+True
+</code></pre><p>如果没有引用2to3兼容包的情况下，可以使用<code>hasattr</code>函数</p>
+<pre><code>&gt;&gt;&gt; hasattr(bool, &apos;__call__&apos;)
+True
+</code></pre><p>six模块定义了可调函数,为py3使用。</p>
+<h3 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h3><blockquote>
+<p>2to3 fixer ☐ six support ☐</p>
+</blockquote>
+<p>在py2有两者类的类型 新样式和旧样式, 在py3剔除了旧样式。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/19/2018/2018-04-19-pro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/19/2018/2018-04-19-pro/" itemprop="url">@pro</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-19T19:20:00+08:00">
+                2018-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Django: @cached_property on models</p>
+<p><a href="https://medium.com/@fdemmer/django-cached-property-on-models-f4673de33990" target="_blank" rel="noopener">https://medium.com/@fdemmer/django-cached-property-on-models-f4673de33990</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/11/2018/2018-04-11-python-property函数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/11/2018/2018-04-11-python-property函数/" itemprop="url">python 内置函数property</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-11T09:47:00+08:00">
+                2018-04-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>属性函数（property）有以下作用：</p>
+<blockquote>
+<p>将类方法转换为只读属性<br> 重新实现一个属性的setter和getter方法</p>
+</blockquote>
+<p>Property 源代码：</p>
+<pre><code>class Property:
+    def __init__(self,fget=None,fset=None,fdel=None):
+        self.fget = fget
+        self.fset = fset
+        self.fdel = fdel
+
+    def __get__(self,instance,cls):
+        if self.fget is not None:
+            return self.fget(instance)
+
+    def __set__(self,instance,value):
+        if self.fset is not None:
+            self.fset(instance,value)
+
+    def __delete__(self,instance):
+        if self.fdel is not None:
+            self.fdel(instance)
+
+    def getter(self,fn):
+        self.fget = fn
+
+    def setter(self,fn):
+        self.fset = fn
+
+    def deler(self,fn):
+        self.fdel = fn
+</code></pre><p>简单例子：</p>
+<pre><code>class Foo:
+    def __init__(self,val):
+        self.__NAME=val #将所有的数据属性都隐藏起来
+
+    def getname(self): #get
+        return self.__NAME #obj.name访问的是self.__NAME(这也是真实值的存放位置)
+
+    def setname(self,value): #set
+        if not isinstance(value,str):  #在设定值之前进行类型检查
+            raise TypeError(&apos;%s must be str&apos; %value)
+        self.__NAME=value #通过类型检查后,将值value存放到真实的位置self.__NAME
+
+    def delname(self): #delete
+        raise TypeError(&apos;Can not delete&apos;)
+
+    name=property(getname,setname,delname) #最后把方法变成属性
+</code></pre><p>  高级用法：<br>  @property 类属性装饰器。常见案例不再举例子。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/03/2018/2018-04-03-postgresql-懒得说序列-sequeue/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -559,916 +1586,11 @@ sys.path.append(&apos;..&apos;)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/28/2018/2018-03-28-python-dunder-method/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/28/2018/2018-03-28-python-dunder-method/" itemprop="url">python:Dunder method 特殊函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-28T11:57:00+08:00">
-                2018-03-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p> dunder method</p>
-<p> An alias for double underscore, “<strong>“. Specially useful in the Python computer language, in which names like “</strong>init__” are common. Coined as a speech shorthand.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/23/2018/2018-03-23-pyhtontips-re-sub-高级用法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/23/2018/2018-03-23-pyhtontips-re-sub-高级用法/" itemprop="url">pyhtontips:re.sub 高级用法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-23T12:02:00+08:00">
-                2018-03-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>用正则实现：-3000 变成’-3,000’ and 45000 变成 ‘45,000’</p>
-<blockquote>
-<p> re.sub(“^(-?\d+)(\d{3})”, ‘\g<1>,\g<2>‘, your_string)</2></1></p>
-</blockquote>
-<p>注明：\g<1> 为命名的组</1></p>
-<h3 id="repl-参数分析"><a href="#repl-参数分析" class="headerlink" title="repl 参数分析"></a>repl 参数分析</h3><blockquote>
-<p>re.sub(pattern, repl, string)</p>
-</blockquote>
-<p>repl，就是replacement，被替换，的字符串的意思。<br>repl可以是<code>字符串</code>，也可以是<code>函数</code>。<br>如果repl是字符串的话，其中的任何反斜杠转义字符，都会被处理的。<br>即：</p>
-<ul>
-<li>\n：会被处理为对应的换行符；</li>
-<li>\r：会被处理为回车符；</li>
-<li>其他不能识别的转移字符，则只是被识别为普通的字符：<br>比如\j，会被处理为j这个字母本身；</li>
-<li>反斜杠加g以及中括号内一个名字，即：\g<name>，对应着命了名的组，named group</name></li>
-</ul>
-<p>当repl 参数是函数时</p>
-<pre><code>s_num = &quot;hello 123 world 456&quot;;
-
-def add_num_100(matched):
-     s= matched.group(&quot;number&quot;);
-     int_s = int(s);
-     added_vaule = int_s + 111;
-     return str(added_vaule);
-
-
-replacedStr = re.sub(&quot;(?P&lt;number&gt;\d+)&quot;, add_num_100, s_num);
-</code></pre><p>对于简单的逻辑无需单独起行写个函数，直接使用lambda函数实现。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/22/2018/2018-03-22-python-赋值-！拷贝/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/22/2018/2018-03-22-python-赋值-！拷贝/" itemprop="url">python 赋值 =！拷贝</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-22T17:11:00+08:00">
-                2018-03-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="赋值-assignment"><a href="#赋值-assignment" class="headerlink" title="赋值(assignment)"></a>赋值(assignment)</h3><p>一个东西, 多个名称。</p>
-<blockquote>
-<p>a=b 赋值</p>
-</blockquote>
-<p> a,b 都是指向一个内存地址的.</p>
-<pre><code>&gt;&gt;&gt; a =[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;]
-&gt;&gt;&gt; b =a
-&gt;&gt;&gt; print id(a)  # 4517718024
-&gt;&gt;&gt; print id(b)  # 4517718024
-&gt;&gt;&gt; a is b
- #true
-</code></pre><p>如果b发送变化,必然a也发送改变</p>
-<pre><code>&gt;&gt;&gt; b.append(&apos;changed&apos;)
-&gt;&gt;&gt; a
-#[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;, &apos;changed&apos;]
-</code></pre><p>在Python中，用一个变量给另一个变量赋值，其实就是给当前内存中的对象增加一个“tag”而已, 并没有创建新的对象。</p>
-<h3 id="浅拷贝-deepcopy"><a href="#浅拷贝-deepcopy" class="headerlink" title="浅拷贝(deepcopy)"></a>浅拷贝(deepcopy)</h3><p>在阐述引用、浅拷贝和深拷贝前，首先需要要了解 Python 的世界里，一切皆对象，每个对象各包含一个 idendity(身份id)、type（类型） 和 value（值）。</p>
-<p>注意：浅拷贝和深拷贝的不同仅仅是对组合对象来说，所谓的组合对象就是包含了其它对象的对象，如列表，类实例。</p>
-<blockquote>
-<p>a =[1,2,3,[5,6]]</p>
-<p>compound objects (objects that contain other objects, like lists or class instances):</p>
-</blockquote>
-<p>比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：<br>而对于数字、字符串以及其它“原子”类型，没有拷贝一说，产生的都是原对象的引用。</p>
-<h4 id="不可变对象"><a href="#不可变对象" class="headerlink" title="不可变对象"></a>不可变对象</h4><p>浅拷贝会创建一个新的对象，然后把生成的新对象赋值给新变量。注意这句话的意思，上面这个例子中1，2，3这三个int型对象并没有创建新的，新的对象是指copy创建了一个新的列表对象，这样a和b这两个变量指向的列表对象就不是同一个，但和两个列表对象里面的元素依然是按引用传递的，所以a列表中的对象1和b列表中的对象1是同一个。 但是这时修改a列表的不可变对象，b列表不会受到影响<br>：</p>
-<h4 id="可变对象"><a href="#可变对象" class="headerlink" title="可变对象"></a>可变对象</h4><p>可变对象例如 a = [1,2,[3,]]<br>由于浅拷贝时，对于对象中的元素，浅拷贝只会使用原始元素的引用（内存地址），所以如果对象中的元素是可变对象，浅拷贝就没辙了。比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：</p>
-<pre><code>&gt;&gt;&gt; a = [1,2,[3,]]
-&gt;&gt;&gt; b = copy.copy(a)
-&gt;&gt;&gt; a is b
-False
-&gt;&gt;&gt; a[2].append(4)
-&gt;&gt;&gt; a
-[1, 2, [3, 4]]
-&gt;&gt;&gt; b
-[1, 2, [3, 4]]
-</code></pre><h3 id="深拷贝deepcopy"><a href="#深拷贝deepcopy" class="headerlink" title="深拷贝deepcopy"></a>深拷贝deepcopy</h3><p>所谓“深拷贝”，是指创建一个新的对象，然后递归的拷贝原对象所包含的子对象。新建了一个新对象，完整的在内存中复制原有对象,<br>对于这个问题，又引入了深拷贝机制，这时不仅创建了新的对象，连对象中的元素都是新的，深拷贝都会重新生成一份，<code>而不是简单的使用原始元素的引用（内存地址）</code>。注意了，对象中的元素，不可变对象还是使用引用，因为没有重新生成的必要，变量改动时会自动生成另一个不可变对象，然后改变引用的地址。但可变对象的内容是可变的，改动后不会产生新的对象，也不会改变引用地址，所以需要重新生成。</p>
-<h3 id="其他情况"><a href="#其他情况" class="headerlink" title="其他情况"></a>其他情况</h3><p>而对于数字、字符串以及其它“原子”类型，没有拷贝一说，产生的都是原对象的引用</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li><p>Python中对象的赋值都是进行对象引用（内存地址）传递</p>
-</li>
-<li><p>使用copy.copy()，可以进行对象的浅拷贝，它复制了对象，但对于对象中的元素，依然使用原始的引用.</p>
-</li>
-<li>如果需要复制一个容器对象，以及它里面的所有元素（包含元素的子元素），可以使用copy.deepcopy()进行深拷贝</li>
-<li>非容器类型（如数字、字符串、和其他’原子’类型的对象）不存在拷贝。<br>只包含原子类型对象的元组变量不存在拷贝。</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/22/2018/2018-03-22-postgreql-api接口库-pgwrapper/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/22/2018/2018-03-22-postgreql-api接口库-pgwrapper/" itemprop="url">pgwrapper:简单便捷访问pg数据库 </a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-22T16:51:00+08:00">
-                2018-03-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>使用psycopg2库,需要写sql语言, 原始的操作过程, 期间会遇到各种问题。<code>pgwrap</code>提供更高级的封闭api接口。更少的代码、更简洁的代码实现数据库操作.</p>
-<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><pre><code>&gt;&gt;&gt; import pgwrap
-&gt;&gt;&gt; db = pgwrap.connection(url=&apos;postgres://localhost&apos;)
-&gt;&gt;&gt; with db.cursor() as c:
-...     c.query(&apos;select version()&apos;)
-[[&apos;PostgreSQL...&apos;]]
-&gt;&gt;&gt; v = db.query_one(&apos;select version()&apos;)
-&gt;&gt;&gt; v
-[&apos;PostgreSQL...&apos;]
-&gt;&gt;&gt; v.items()
-[(&apos;version&apos;, &apos;PostgreSQL...&apos;)]
-&gt;&gt;&gt; v[&apos;version&apos;]
-&apos;PostgreSQL...&apos;
-</code></pre><h3 id="SQL-API-接口列表"><a href="#SQL-API-接口列表" class="headerlink" title="SQL API 接口列表"></a>SQL API 接口列表</h3><h2 id="SQL-API"><a href="#SQL-API" class="headerlink" title="SQL API"></a>SQL API</h2><p>The cursor class also provides a simple Python API for common SQL<br>operations.  The basic methods provides are:</p>
-<pre><code>select          - single table select (with corresponding select_one,
-                  select_dict methods)
-join            - two table join (with corresponding join_one,
-                  join_dict methods)
-insert          - SQL insert
-update          - SQL update
-delete          - SQL delete
-</code></pre><p>The methods can be parameterised to customise the associated query<br>(see db module for detail):</p>
-<pre><code>where           - &apos;where&apos; clause as dict (column operators can be
-                  specified using the colunm__operator format)
-
-                  where = {&apos;name&apos;:&apos;abc&apos;,&apos;status__in&apos;:(1,2,3)}
-
-columns         - list of columns to be returned - these can
-                  be real columns or expressions. If spefified
-                  as a tuple the column is explicitly named
-                  using the AS operator
-
-                  columns = (&apos;name&apos;,(&apos;status &gt; 1&apos;,&apos;updated&apos;))
-
-order           - sort order as list (use &apos;column__desc&apos; to
-                  reverse order)
-
-                  order = (&apos;name__desc&apos;,)
-
-limit           - row limit (int)
-
-offset          - offset (int)
-
-on              - join columns (as tuple)
-
-values          - insert data as dict
-
-returning       - columns to return (string)
-
-
-#### 基本操作例子
-
-    &gt;&gt;&gt; db.create_table(&apos;t1&apos;,&apos;id serial,name text,count int&apos;)
-    &gt;&gt;&gt; db.create_table(&apos;t2&apos;,&apos;id serial,t1_id int,value text&apos;)
-    &gt;&gt;&gt; db.log = sys.stdout
-    &gt;&gt;&gt; db.insert(&apos;t1&apos;,{&apos;name&apos;:&apos;abc&apos;,&apos;count&apos;:0},returning=&apos;id,name&apos;)
-    INSERT INTO t1 (name) VALUES (&apos;abc&apos;) RETURNING id,name
-    [1, &apos;abc&apos;]
-    &gt;&gt;&gt; db.insert(&apos;t2&apos;,{&apos;t1_id&apos;:1,&apos;value&apos;:&apos;t2&apos;})
-    INSERT INTO t2 (t1_id,value) VALUES (1,&apos;t2&apos;)
-    1
-    &gt;&gt;&gt; db.select(&apos;t1&apos;)
-    SELECT * FROM t1
-    [[1, &apos;abc&apos;, 0]]
-    &gt;&gt;&gt; db.select_one(&apos;t1&apos;,where={&apos;name&apos;:&apos;abc&apos;},columns=(&apos;name&apos;,&apos;count&apos;))
-    SELECT name, count FROM t1 WHERE name = &apos;abc&apos;
-    [&apos;abc&apos;, 0]
-    &gt;&gt;&gt; db.join((&apos;t1&apos;,&apos;t2&apos;),columns=(&apos;t1.id&apos;,&apos;t2.value&apos;))
-    SELECT t1.id, t2.value FROM t1 JOIN t2 ON t1.id = t2.t1_id
-    [[1, &apos;t2&apos;]]
-    &gt;&gt;&gt; db.insert(&apos;t1&apos;,{&apos;name&apos;:&apos;abc&apos;},returning=&apos;id&apos;)
-    INSERT INTO t1 (name) VALUES (&apos;abc&apos;) RETURNING id
-    [2]
-    &gt;&gt;&gt; db.update(&apos;t1&apos;,{&apos;name&apos;:&apos;xyz&apos;},where={&apos;name&apos;:&apos;abc&apos;})
-    UPDATE t1 SET name = &apos;xyz&apos; WHERE name = &apos;abc&apos;
-    2
-    &gt;&gt;&gt; db.update(&apos;t1&apos;,{&apos;count__func&apos;:&apos;count + 1&apos;},where={&apos;count__lt&apos;:10},returning=&quot;id,count&quot;)
-    UPDATE t1 SET count = count + 1 WHERE count &lt; 10 RETURNING id,count
-    [[1, 1]]
-
-  更多详细的用法,请阅读官方文档。
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/21/2018/2018-03-21-python-字典数据的插入/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/21/2018/2018-03-21-python-字典数据的插入/" itemprop="url">python 字典数据的插入</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-21T18:39:00+08:00">
-                2018-03-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="以字典形式数据插入数据库"><a href="#以字典形式数据插入数据库" class="headerlink" title="以字典形式数据插入数据库"></a>以字典形式数据插入数据库</h3><p>以字典的形式,把控起来还是比较方便的. 举个例：<br>    d = {‘k1’: ‘v1’, ‘k2’: ‘v2’}</p>
-<pre><code>insert = &apos;insert into table (%s) values %s&apos;
-l = [(c, v) for c, v in d.items()]
-columns = &apos;,&apos;.join([t[0] for t in l])
-values = tuple([t[1] for t in l])
-cursor = conn.cursor()
-print cursor.mogrify(insert, ([AsIs(columns)] + [values]))
-
-keys = d.keys()
-columns = &apos;,&apos;.join(keys)
-values = &apos;,&apos;.join([&apos;%({})s&apos;.format(k) for k in keys])
-insert = &apos;insert into table ({0}) values ({1})&apos;.format(columns, values)
-print cursor.mogrify(insert, d)
-</code></pre><p>参考文章来源：</p>
-<p><a href="https://stackoverflow.com/questions/39203050/psycopg2-insert-python-dictionary-in-postgres-database/39203051#39203051" target="_blank" rel="noopener">https://stackoverflow.com/questions/39203050/psycopg2-insert-python-dictionary-in-postgres-database/39203051#39203051</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/2018/2018-03-16-postgresql-技能/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/16/2018/2018-03-16-postgresql-技能/" itemprop="url">postgrsql 遇上两个with上下午管理器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T18:14:00+08:00">
-                2018-03-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="postgrsql-遇上with"><a href="#postgrsql-遇上with" class="headerlink" title="postgrsql 遇上with"></a>postgrsql 遇上with</h3><p>有关pg的连接及关闭问题, 使用2个with上下午管理器, 完全避免完了关闭游标、连接。</p>
-<pre><code>def _run_stmt(self, stmt):
-     with psycopg2.connect(**self._connect_args) as conn:
-         with conn.cursor() as cur:
-             cur.execute(stmt)
-</code></pre><p>其实, 在pg官方英文材料也给出了这中方案</p>
-<h3 id="with-上下文管理器"><a href="#with-上下文管理器" class="headerlink" title="with 上下文管理器"></a>with 上下文管理器</h3><p>基本用法：</p>
-<pre><code>with A() as a, B() as b, C() as c:
-    doSomething(a,b,c)
-</code></pre><p>可以读写文件这样写：</p>
-<pre><code>from __future__ import with_statement
-
-with open(&quot;out.txt&quot;,&quot;wt&quot;), open(&quot;in.txt&quot;) as file_out, file_in:
-    for line in file_in:
-        file_out.write(line)
-</code></pre><p>或者提高一下阅读行：</p>
-<pre><code>from __future__ import with_statement
-
-with open(&quot;out.txt&quot;,&quot;wt&quot;) as file_out:
-    with open(&quot;in.txt&quot;) as file_in:
-        for line in file_in:
-            file_out.write(line)
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1514,7 +1636,7 @@ with open(&quot;out.txt&quot;,&quot;wt&quot;) as file_out:
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1525,7 +1647,7 @@ with open(&quot;out.txt&quot;,&quot;wt&quot;) as file_out:
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1536,7 +1658,7 @@ with open(&quot;out.txt&quot;,&quot;wt&quot;) as file_out:
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-count">16</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
