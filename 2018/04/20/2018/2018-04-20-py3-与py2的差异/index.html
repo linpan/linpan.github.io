@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="python3 与 python2的改进地方http://python3porting.com/differences.html apply() 2to3 fixer ☑ six support ☐  apply()函数用于当函数参数已经存在于一个元组或字典中时，间接地调用函数.apply()内建函数自py2.3以后被移除，因为可以直接调用函数。 buffer() 2to3 fixer ☑ six">
+<meta name="description" content="apply() 2to3 fixer ☑ six support ☐  apply()函数用于当函数参数已经存在于一个元组或字典中时，间接地调用函数.apply()内建函数自py2.3以后被移除，因为可以直接调用函数。 buffer() 2to3 fixer ☑ six support ☐  buffer() –&amp;gt; memoryview(),他们并不完全兼容， 下面代码在py2,py3都可以">
 <meta property="og:type" content="article">
-<meta property="og:title" content="py3 与py2的差异">
+<meta property="og:title" content="第一期: py3 与py2的差异">
 <meta property="og:url" content="http://yoursite.com/2018/04/20/2018/2018-04-20-py3-与py2的差异/index.html">
 <meta property="og:site_name" content="python">
-<meta property="og:description" content="python3 与 python2的改进地方http://python3porting.com/differences.html apply() 2to3 fixer ☑ six support ☐  apply()函数用于当函数参数已经存在于一个元组或字典中时，间接地调用函数.apply()内建函数自py2.3以后被移除，因为可以直接调用函数。 buffer() 2to3 fixer ☑ six">
+<meta property="og:description" content="apply() 2to3 fixer ☑ six support ☐  apply()函数用于当函数参数已经存在于一个元组或字典中时，间接地调用函数.apply()内建函数自py2.3以后被移除，因为可以直接调用函数。 buffer() 2to3 fixer ☑ six support ☐  buffer() –&amp;gt; memoryview(),他们并不完全兼容， 下面代码在py2,py3都可以">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-23T03:33:46.891Z">
+<meta property="og:updated_time" content="2018-05-29T10:09:48.569Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="py3 与py2的差异">
-<meta name="twitter:description" content="python3 与 python2的改进地方http://python3porting.com/differences.html apply() 2to3 fixer ☑ six support ☐  apply()函数用于当函数参数已经存在于一个元组或字典中时，间接地调用函数.apply()内建函数自py2.3以后被移除，因为可以直接调用函数。 buffer() 2to3 fixer ☑ six">
+<meta name="twitter:title" content="第一期: py3 与py2的差异">
+<meta name="twitter:description" content="apply() 2to3 fixer ☑ six support ☐  apply()函数用于当函数参数已经存在于一个元组或字典中时，间接地调用函数.apply()内建函数自py2.3以后被移除，因为可以直接调用函数。 buffer() 2to3 fixer ☑ six support ☐  buffer() –&amp;gt; memoryview(),他们并不完全兼容， 下面代码在py2,py3都可以">
 
 
 
@@ -125,7 +125,7 @@
 
 
 
-  <title>py3 与py2的差异 | python</title>
+  <title>第一期: py3 与py2的差异 | python</title>
   
 
 
@@ -279,7 +279,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">py3 与py2的差异</h1>
+          <h1 class="post-title" itemprop="name headline">第一期: py3 与py2的差异</h1>
         
 
         <div class="post-meta">
@@ -329,8 +329,7 @@
       
 
       
-        <h2 id="python3-与-python2的改进地方"><a href="#python3-与-python2的改进地方" class="headerlink" title="python3 与 python2的改进地方"></a>python3 与 python2的改进地方</h2><p><a href="http://python3porting.com/differences.html" target="_blank" rel="noopener">http://python3porting.com/differences.html</a></p>
-<h3 id="apply"><a href="#apply" class="headerlink" title="apply()"></a>apply()</h3><blockquote>
+        <h3 id="apply"><a href="#apply" class="headerlink" title="apply()"></a>apply()</h3><blockquote>
 <p>2to3 fixer ☑ six support ☐</p>
 </blockquote>
 <p>apply()函数用于当函数参数已经存在于一个元组或字典中时，间接地调用函数.<br>apply()内建函数自py2.3以后被移除，因为可以直接调用函数。</p>
@@ -367,6 +366,90 @@ True
 <p>2to3 fixer ☐ six support ☐</p>
 </blockquote>
 <p>在py2有两者类的类型 新样式和旧样式, 在py3剔除了旧样式。</p>
+<h3 id="Comparisions"><a href="#Comparisions" class="headerlink" title="Comparisions"></a>Comparisions</h3><blockquote>
+<p>2to3 fixer ☐ six support ☐</p>
+</blockquote>
+<p>不要使用 cmp() 函数， <code>__cmp__</code> 已经不再被支持。因此排序请使用 <code>__lt__</code>、 <code>__eq__</code> 和 <code>__hash__</code> 这些更有意义的比较。（现有的 cmp() 函数使用可以修改为 (a &gt; b) - (a &lt; b)，等价于 cmp(a, b) 。）</p>
+<pre><code>def cmp(a, b):
+    return (a &gt; b) - (a &lt; b)
+</code></pre><h3 id="coerce-and-coerece"><a href="#coerce-and-coerece" class="headerlink" title="coerce() and __coerece__"></a>coerce() and <code>__coerece__</code></h3><blockquote>
+<p>2to3 fixer ☐ six support ☐</p>
+</blockquote>
+<p>python3 正式被移除了</p>
+<h3 id="Dictionary-方法"><a href="#Dictionary-方法" class="headerlink" title="Dictionary 方法"></a>Dictionary 方法</h3><blockquote>
+<p>2to3 fixer ☐ six support ☐</p>
+</blockquote>
+<p>python2 字典有<code>iterkeys()</code> 、<code>itervalue()</code> 、<code>iteritems()</code> 方法, 返回类型是迭代器<br>python 3 变成了 <code>keys</code> <code>values</code> <code>items</code> 方法了。 ‘has_key’被移除。<br>如果做到py2 py3的兼容,使用try/except</p>
+<pre><code>&gt;&gt;&gt; d = {&apos;key1&apos;: &apos;value1&apos;,
+...      &apos;key2&apos;: &apos;value2&apos;,
+...      &apos;key3&apos;: &apos;value3&apos;,
+... }
+
+&gt;&gt;&gt; try:
+...     values = d.itervalues()
+... except AttributeError:
+...     values = d.values()
+
+&gt;&gt;&gt; isinstance(values, list)
+False
+
+&gt;&gt;&gt; for value in values:
+...     print(value)
+value3
+value2
+value1
+</code></pre><h3 id="except"><a href="#except" class="headerlink" title="except"></a>except</h3><blockquote>
+<p>2to3 fixer ☐ six support ☐</p>
+</blockquote>
+<p>python 2.6 之前的版本是</p>
+<pre><code>except (Exception1, Exception2), target:
+</code></pre><p>python 2.6 - python 3.x 以更简洁的表达</p>
+<pre><code>except (Exception1, Exception2) as target:
+</code></pre><h3 id="Exception-object"><a href="#Exception-object" class="headerlink" title="Exception object"></a>Exception object</h3><blockquote>
+<p>2to3 fixer ☐ six support ☐</p>
+</blockquote>
+<p>在 py2 异常对象是可迭代对象和可索引的</p>
+<pre><code>&gt;&gt;&gt; e = Exception(&apos;arg1&apos;, &apos;arg2&apos;)
+&gt;&gt;&gt; e[1]
+&apos;arg2&apos;
+&gt;&gt;&gt; for a in e:
+...   print a
+...
+arg1
+arg2
+</code></pre><p>在 py3 必须使用args属性, 此属性也可以在py2支持</p>
+<pre><code>&gt;&gt;&gt; e = Exception(&apos;arg1&apos;, &apos;arg2&apos;)
+&gt;&gt;&gt; e.args[1]
+&apos;arg2&apos;
+&gt;&gt;&gt; for a in e.args:
+...   print a
+...
+arg1
+arg2
+</code></pre><h3 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h3><blockquote>
+<p>2to3 fixer ☐ six support ☐</p>
+</blockquote>
+<p>py2,exec 是语句</p>
+<pre><code>&gt;&gt;&gt; g_dict={}
+&gt;&gt;&gt; l_dict={}
+&gt;&gt;&gt; exec &quot;v = 3&quot; in g_dict, l_dict
+&gt;&gt;&gt; l_dict[&apos;v&apos;]
+3
+</code></pre><p>py3, exec 是函数,类似print与print()</p>
+<pre><code>&gt;&gt;&gt; g_dict={}
+&gt;&gt;&gt; l_dict={}
+&gt;&gt;&gt; exec(&quot;v = 3&quot;, g_dict, l_dict)
+&gt;&gt;&gt; l_dict[&apos;v&apos;]
+3
+</code></pre><h3 id="execfile"><a href="#execfile" class="headerlink" title="execfile"></a>execfile</h3><p>execfile() 函数可以用来执行一个文件。</p>
+<blockquote>
+<p>2to3 fixer ☐ six support ☐</p>
+</blockquote>
+<p>execfile 在py2 是语句,  在py3被抛弃,你可以通过exce来实现</p>
+<blockquote>
+<p>exec(open(‘hello.py’).read())</p>
+</blockquote>
+<p>此方法适合python任何版本。</p>
 
       
     </div>
@@ -391,8 +474,8 @@ True
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/19/2018/2018-04-19-pro/" rel="next" title="@pro">
-                <i class="fa fa-chevron-left"></i> @pro
+              <a href="/2018/04/11/2018/2018-04-11-python-property函数/" rel="next" title="python 内置函数property">
+                <i class="fa fa-chevron-left"></i> python 内置函数property
               </a>
             
           </div>
@@ -480,7 +563,7 @@ True
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -549,7 +632,7 @@ True
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#python3-与-python2的改进地方"><span class="nav-number">1.</span> <span class="nav-text">python3 与 python2的改进地方</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#apply"><span class="nav-number">1.1.</span> <span class="nav-text">apply()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#buffer"><span class="nav-number">1.2.</span> <span class="nav-text">buffer()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#callable"><span class="nav-number">1.3.</span> <span class="nav-text">callable()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Classes"><span class="nav-number">1.4.</span> <span class="nav-text">Classes</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#apply"><span class="nav-number">1.</span> <span class="nav-text">apply()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#buffer"><span class="nav-number">2.</span> <span class="nav-text">buffer()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#callable"><span class="nav-number">3.</span> <span class="nav-text">callable()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Classes"><span class="nav-number">4.</span> <span class="nav-text">Classes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Comparisions"><span class="nav-number">5.</span> <span class="nav-text">Comparisions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#coerce-and-coerece"><span class="nav-number">6.</span> <span class="nav-text">coerce() and __coerece__</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dictionary-方法"><span class="nav-number">7.</span> <span class="nav-text">Dictionary 方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#except"><span class="nav-number">8.</span> <span class="nav-text">except</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exception-object"><span class="nav-number">9.</span> <span class="nav-text">Exception object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#exec"><span class="nav-number">10.</span> <span class="nav-text">exec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#execfile"><span class="nav-number">11.</span> <span class="nav-text">execfile</span></a></li></ol></div>
             
 
           </div>

@@ -259,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/26/2018/2018-02-26-python-new-init-区别/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/23/2018/2018-03-23-pyhtontips-re-sub-高级用法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -278,7 +278,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/26/2018/2018-02-26-python-new-init-区别/" itemprop="url">python new init 的 区别</a></h1>
+                <a class="post-title-link" href="/2018/03/23/2018/2018-03-23-pyhtontips-re-sub-高级用法/" itemprop="url">pyhtontips:re.sub 高级用法</a></h1>
         
 
         <div class="post-meta">
@@ -290,8 +290,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-26T18:13:00+08:00">
-                2018-02-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-23T12:02:00+08:00">
+                2018-03-23
               </time>
             
 
@@ -330,37 +330,396 @@
       
         
           
-            <h2 id="构造与初始化"><a href="#构造与初始化" class="headerlink" title="构造与初始化"></a>构造与初始化</h2><p><code>__init__</code> 实例方法</p>
-<p>构造方法是我们使用频率最高的魔法方法了，几乎在我们定义类的时候，都会去定义构造方法，目的是初始化对象。</p>
-<pre><code>class T(ojbect):
-  def __init__(self,count):
-    self.count = count
+            <h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>用正则实现：-3000 变成’-3,000’ and 45000 变成 ‘45,000’</p>
+<blockquote>
+<p> re.sub(“^(-?\d+)(\d{3})”, ‘\g<1>,\g<2>‘, your_string)</2></1></p>
+</blockquote>
+<p>注明：\g<1> 为命名的组</1></p>
+<h3 id="repl-参数分析"><a href="#repl-参数分析" class="headerlink" title="repl 参数分析"></a>repl 参数分析</h3><blockquote>
+<p>re.sub(pattern, repl, string)</p>
+</blockquote>
+<p>repl，就是replacement，被替换，的字符串的意思。<br>repl可以是<code>字符串</code>，也可以是<code>函数</code>。<br>如果repl是字符串的话，其中的任何反斜杠转义字符，都会被处理的。<br>即：</p>
+<ul>
+<li>\n：会被处理为对应的换行符；</li>
+<li>\r：会被处理为回车符；</li>
+<li>其他不能识别的转移字符，则只是被识别为普通的字符：<br>比如\j，会被处理为j这个字母本身；</li>
+<li>反斜杠加g以及中括号内一个名字，即：\g<name>，对应着命了名的组，named group</name></li>
+</ul>
+<p>当repl 参数是函数时</p>
+<pre><code>s_num = &quot;hello 123 world 456&quot;;
 
-t = T(50)
-</code></pre><p><code>__new__</code> 静态类方法<br>一般不常见，它会在对象实例化事第一个被调用的，它和<code>__init__</code>区别是：</p>
-<ol>
-<li><strong>new</strong> 的第一个参数是cls，而<strong>init</strong>的第一个参数是self</li>
-<li><strong>new</strong> 返回值是一个实例，而<strong>init</strong>没有返回值(<strong>init</strong> 只能返回 None 值，否则报错)，只做初始化操作</li>
-<li><strong>new</strong> 返回一个实例对象</li>
-</ol>
-<p>一般我们不会去重写该方法，除非你确切知道怎么做，什么时候你会去关心它呢，它作为构造函数用于创建对象，是一个工厂函数，专用于生产实例对象。著名的设计模式之一，单例模式，就可以通过此方法来实现。在自己写框架级的代码时，可能你会用到它，我们也可以从开源代码中找到它的应用场景</p>
-<pre><code>class T(object):
-    def __init__(self, count):
-        print(&apos;init invoked&apos;)
-        self.count = count
-
-    def __new__(cls, count):
-        print(&apos;cls&apos;, cls)
-        self = super(T, cls).__new__(cls)
-        print(self)
-        return self
+def add_num_100(matched):
+     s= matched.group(&quot;number&quot;);
+     int_s = int(s);
+     added_vaule = int_s + 111;
+     return str(added_vaule);
 
 
-t = T(50)
-</code></pre><p>输出结果：</p>
-<pre><code>cls &lt;class &apos;__main__.T&apos;&gt; # __new__
-&lt;__main__.T object at 0x103d28470&gt;
-init invoked  # __init__
+replacedStr = re.sub(&quot;(?P&lt;number&gt;\d+)&quot;, add_num_100, s_num);
+</code></pre><p>对于简单的逻辑无需单独起行写个函数，直接使用lambda函数实现。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/22/2018/2018-03-22-python-赋值-！拷贝/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/22/2018/2018-03-22-python-赋值-！拷贝/" itemprop="url">python 赋值 =！拷贝</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-22T17:11:00+08:00">
+                2018-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="赋值-assignment"><a href="#赋值-assignment" class="headerlink" title="赋值(assignment)"></a>赋值(assignment)</h3><p>一个东西, 多个名称。</p>
+<blockquote>
+<p>a=b 赋值</p>
+</blockquote>
+<p> a,b 都是指向一个内存地址的.</p>
+<pre><code>&gt;&gt;&gt; a =[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;]
+&gt;&gt;&gt; b =a
+&gt;&gt;&gt; print id(a)  # 4517718024
+&gt;&gt;&gt; print id(b)  # 4517718024
+&gt;&gt;&gt; a is b
+ #true
+</code></pre><p>如果b发送变化,必然a也发送改变</p>
+<pre><code>&gt;&gt;&gt; b.append(&apos;changed&apos;)
+&gt;&gt;&gt; a
+#[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;, &apos;changed&apos;]
+</code></pre><p>在Python中，用一个变量给另一个变量赋值，其实就是给当前内存中的对象增加一个“tag”而已, 并没有创建新的对象。</p>
+<h3 id="浅拷贝-deepcopy"><a href="#浅拷贝-deepcopy" class="headerlink" title="浅拷贝(deepcopy)"></a>浅拷贝(deepcopy)</h3><p>在阐述引用、浅拷贝和深拷贝前，首先需要要了解 Python 的世界里，一切皆对象，每个对象各包含一个 idendity(身份id)、type（类型） 和 value（值）。</p>
+<p>注意：浅拷贝和深拷贝的不同仅仅是对组合对象来说，所谓的组合对象就是包含了其它对象的对象，如列表，类实例。</p>
+<blockquote>
+<p>a =[1,2,3,[5,6]]</p>
+<p>compound objects (objects that contain other objects, like lists or class instances):</p>
+</blockquote>
+<p>比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：<br>而对于数字、字符串以及其它“原子”类型，没有拷贝一说，产生的都是原对象的引用。</p>
+<h4 id="不可变对象"><a href="#不可变对象" class="headerlink" title="不可变对象"></a>不可变对象</h4><p>浅拷贝会创建一个新的对象，然后把生成的新对象赋值给新变量。注意这句话的意思，上面这个例子中1，2，3这三个int型对象并没有创建新的，新的对象是指copy创建了一个新的列表对象，这样a和b这两个变量指向的列表对象就不是同一个，但和两个列表对象里面的元素依然是按引用传递的，所以a列表中的对象1和b列表中的对象1是同一个。 但是这时修改a列表的不可变对象，b列表不会受到影响<br>：</p>
+<h4 id="可变对象"><a href="#可变对象" class="headerlink" title="可变对象"></a>可变对象</h4><p>可变对象例如 a = [1,2,[3,]]<br>由于浅拷贝时，对于对象中的元素，浅拷贝只会使用原始元素的引用（内存地址），所以如果对象中的元素是可变对象，浅拷贝就没辙了。比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：</p>
+<pre><code>&gt;&gt;&gt; a = [1,2,[3,]]
+&gt;&gt;&gt; b = copy.copy(a)
+&gt;&gt;&gt; a is b
+False
+&gt;&gt;&gt; a[2].append(4)
+&gt;&gt;&gt; a
+[1, 2, [3, 4]]
+&gt;&gt;&gt; b
+[1, 2, [3, 4]]
+</code></pre><h3 id="深拷贝deepcopy"><a href="#深拷贝deepcopy" class="headerlink" title="深拷贝deepcopy"></a>深拷贝deepcopy</h3><p>所谓“深拷贝”，是指创建一个新的对象，然后递归的拷贝原对象所包含的子对象。新建了一个新对象，完整的在内存中复制原有对象,<br>对于这个问题，又引入了深拷贝机制，这时不仅创建了新的对象，连对象中的元素都是新的，深拷贝都会重新生成一份，<code>而不是简单的使用原始元素的引用（内存地址）</code>。注意了，对象中的元素，不可变对象还是使用引用，因为没有重新生成的必要，变量改动时会自动生成另一个不可变对象，然后改变引用的地址。但可变对象的内容是可变的，改动后不会产生新的对象，也不会改变引用地址，所以需要重新生成。</p>
+<h3 id="其他情况"><a href="#其他情况" class="headerlink" title="其他情况"></a>其他情况</h3><p>而对于数字、字符串以及其它“原子”类型，没有拷贝一说，产生的都是原对象的引用</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><p>Python中对象的赋值都是进行对象引用（内存地址）传递</p>
+</li>
+<li><p>使用copy.copy()，可以进行对象的浅拷贝，它复制了对象，但对于对象中的元素，依然使用原始的引用.</p>
+</li>
+<li>如果需要复制一个容器对象，以及它里面的所有元素（包含元素的子元素），可以使用copy.deepcopy()进行深拷贝</li>
+<li>非容器类型（如数字、字符串、和其他’原子’类型的对象）不存在拷贝。<br>只包含原子类型对象的元组变量不存在拷贝。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/22/2018/2018-03-22-postgreql-api接口库-pgwrapper/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/22/2018/2018-03-22-postgreql-api接口库-pgwrapper/" itemprop="url">pgwrapper:简单便捷访问pg数据库 </a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-22T16:51:00+08:00">
+                2018-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>使用psycopg2库,需要写sql语言, 原始的操作过程, 期间会遇到各种问题。<code>pgwrap</code>提供更高级的封闭api接口。更少的代码、更简洁的代码实现数据库操作.</p>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><pre><code>&gt;&gt;&gt; import pgwrap
+&gt;&gt;&gt; db = pgwrap.connection(url=&apos;postgres://localhost&apos;)
+&gt;&gt;&gt; with db.cursor() as c:
+...     c.query(&apos;select version()&apos;)
+[[&apos;PostgreSQL...&apos;]]
+&gt;&gt;&gt; v = db.query_one(&apos;select version()&apos;)
+&gt;&gt;&gt; v
+[&apos;PostgreSQL...&apos;]
+&gt;&gt;&gt; v.items()
+[(&apos;version&apos;, &apos;PostgreSQL...&apos;)]
+&gt;&gt;&gt; v[&apos;version&apos;]
+&apos;PostgreSQL...&apos;
+</code></pre><h3 id="SQL-API-接口列表"><a href="#SQL-API-接口列表" class="headerlink" title="SQL API 接口列表"></a>SQL API 接口列表</h3><h2 id="SQL-API"><a href="#SQL-API" class="headerlink" title="SQL API"></a>SQL API</h2><p>The cursor class also provides a simple Python API for common SQL<br>operations.  The basic methods provides are:</p>
+<pre><code>select          - single table select (with corresponding select_one,
+                  select_dict methods)
+join            - two table join (with corresponding join_one,
+                  join_dict methods)
+insert          - SQL insert
+update          - SQL update
+delete          - SQL delete
+</code></pre><p>The methods can be parameterised to customise the associated query<br>(see db module for detail):</p>
+<pre><code>where           - &apos;where&apos; clause as dict (column operators can be
+                  specified using the colunm__operator format)
+
+                  where = {&apos;name&apos;:&apos;abc&apos;,&apos;status__in&apos;:(1,2,3)}
+
+columns         - list of columns to be returned - these can
+                  be real columns or expressions. If spefified
+                  as a tuple the column is explicitly named
+                  using the AS operator
+
+                  columns = (&apos;name&apos;,(&apos;status &gt; 1&apos;,&apos;updated&apos;))
+
+order           - sort order as list (use &apos;column__desc&apos; to
+                  reverse order)
+
+                  order = (&apos;name__desc&apos;,)
+
+limit           - row limit (int)
+
+offset          - offset (int)
+
+on              - join columns (as tuple)
+
+values          - insert data as dict
+
+returning       - columns to return (string)
+
+
+#### 基本操作例子
+
+    &gt;&gt;&gt; db.create_table(&apos;t1&apos;,&apos;id serial,name text,count int&apos;)
+    &gt;&gt;&gt; db.create_table(&apos;t2&apos;,&apos;id serial,t1_id int,value text&apos;)
+    &gt;&gt;&gt; db.log = sys.stdout
+    &gt;&gt;&gt; db.insert(&apos;t1&apos;,{&apos;name&apos;:&apos;abc&apos;,&apos;count&apos;:0},returning=&apos;id,name&apos;)
+    INSERT INTO t1 (name) VALUES (&apos;abc&apos;) RETURNING id,name
+    [1, &apos;abc&apos;]
+    &gt;&gt;&gt; db.insert(&apos;t2&apos;,{&apos;t1_id&apos;:1,&apos;value&apos;:&apos;t2&apos;})
+    INSERT INTO t2 (t1_id,value) VALUES (1,&apos;t2&apos;)
+    1
+    &gt;&gt;&gt; db.select(&apos;t1&apos;)
+    SELECT * FROM t1
+    [[1, &apos;abc&apos;, 0]]
+    &gt;&gt;&gt; db.select_one(&apos;t1&apos;,where={&apos;name&apos;:&apos;abc&apos;},columns=(&apos;name&apos;,&apos;count&apos;))
+    SELECT name, count FROM t1 WHERE name = &apos;abc&apos;
+    [&apos;abc&apos;, 0]
+    &gt;&gt;&gt; db.join((&apos;t1&apos;,&apos;t2&apos;),columns=(&apos;t1.id&apos;,&apos;t2.value&apos;))
+    SELECT t1.id, t2.value FROM t1 JOIN t2 ON t1.id = t2.t1_id
+    [[1, &apos;t2&apos;]]
+    &gt;&gt;&gt; db.insert(&apos;t1&apos;,{&apos;name&apos;:&apos;abc&apos;},returning=&apos;id&apos;)
+    INSERT INTO t1 (name) VALUES (&apos;abc&apos;) RETURNING id
+    [2]
+    &gt;&gt;&gt; db.update(&apos;t1&apos;,{&apos;name&apos;:&apos;xyz&apos;},where={&apos;name&apos;:&apos;abc&apos;})
+    UPDATE t1 SET name = &apos;xyz&apos; WHERE name = &apos;abc&apos;
+    2
+    &gt;&gt;&gt; db.update(&apos;t1&apos;,{&apos;count__func&apos;:&apos;count + 1&apos;},where={&apos;count__lt&apos;:10},returning=&quot;id,count&quot;)
+    UPDATE t1 SET count = count + 1 WHERE count &lt; 10 RETURNING id,count
+    [[1, 1]]
+
+  更多详细的用法,请阅读官方文档。
 </code></pre>
           
         
@@ -409,7 +768,7 @@ init invoked  # __init__
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/26/2018/2018-02-26-python元类及元类编程思想/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/21/2018/2018-03-21-python-字典数据的插入/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -428,7 +787,7 @@ init invoked  # __init__
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/26/2018/2018-02-26-python元类及元类编程思想/" itemprop="url">python元类及元编程思想</a></h1>
+                <a class="post-title-link" href="/2018/03/21/2018/2018-03-21-python-字典数据的插入/" itemprop="url">python 字典数据的插入</a></h1>
         
 
         <div class="post-meta">
@@ -440,8 +799,8 @@ init invoked  # __init__
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-26T13:47:00+08:00">
-                2018-02-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-21T18:39:00+08:00">
+                2018-03-21
               </time>
             
 
@@ -480,12 +839,21 @@ init invoked  # __init__
       
         
           
-            <h2 id="什么是元编程"><a href="#什么是元编程" class="headerlink" title="什么是元编程"></a>什么是元编程</h2><blockquote>
-<p>元编程(meta programming)则是对于某类解决方法的抽象</p>
-</blockquote>
-<p>type()来动态的生成一个类, type()实际上调用所属类的<strong>call</strong>方法(实例方法),因为type的类也是type，所以实际调用的是type.<strong>call</strong>方法。</p>
-<p>type.<strong>call</strong>方法发现传递给他的self参数已经是一个存在的类, 所以他会把自身的args和kwargs当作参数调用对应self对应类的<strong>new</strong>和<strong>init</strong>方法,</p>
-<p>综上:<br>type.<strong>call</strong>函数是根据传递给它的第一个参数来判断，是创建一个新的类，还是根据现有的类创建一个新的对象。</p>
+            <h3 id="以字典形式数据插入数据库"><a href="#以字典形式数据插入数据库" class="headerlink" title="以字典形式数据插入数据库"></a>以字典形式数据插入数据库</h3><p>以字典的形式,把控起来还是比较方便的. 举个例：<br>    d = {‘k1’: ‘v1’, ‘k2’: ‘v2’}</p>
+<pre><code>insert = &apos;insert into table (%s) values %s&apos;
+l = [(c, v) for c, v in d.items()]
+columns = &apos;,&apos;.join([t[0] for t in l])
+values = tuple([t[1] for t in l])
+cursor = conn.cursor()
+print cursor.mogrify(insert, ([AsIs(columns)] + [values]))
+
+keys = d.keys()
+columns = &apos;,&apos;.join(keys)
+values = &apos;,&apos;.join([&apos;%({})s&apos;.format(k) for k in keys])
+insert = &apos;insert into table ({0}) values ({1})&apos;.format(columns, values)
+print cursor.mogrify(insert, d)
+</code></pre><p>参考文章来源：</p>
+<p><a href="https://stackoverflow.com/questions/39203050/psycopg2-insert-python-dictionary-in-postgres-database/39203051#39203051" target="_blank" rel="noopener">https://stackoverflow.com/questions/39203050/psycopg2-insert-python-dictionary-in-postgres-database/39203051#39203051</a></p>
 
           
         
@@ -534,7 +902,7 @@ init invoked  # __init__
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/10/2018/2018-02-10-mysqldb警告信息-truncated-incorrect-double-value错误/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/2018/2018-03-16-postgresql-技能/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -553,7 +921,7 @@ init invoked  # __init__
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/10/2018/2018-02-10-mysqldb警告信息-truncated-incorrect-double-value错误/" itemprop="url">mysqldb警告信息: Truncated incorrect DOUBLE value错误 </a></h1>
+                <a class="post-title-link" href="/2018/03/16/2018/2018-03-16-postgresql-技能/" itemprop="url">postgrsql 遇上两个with上下午管理器</a></h1>
         
 
         <div class="post-meta">
@@ -565,8 +933,8 @@ init invoked  # __init__
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-10T13:29:00+08:00">
-                2018-02-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T18:14:00+08:00">
+                2018-03-16
               </time>
             
 
@@ -605,7 +973,29 @@ init invoked  # __init__
       
         
           
-            
+            <h3 id="postgrsql-遇上with"><a href="#postgrsql-遇上with" class="headerlink" title="postgrsql 遇上with"></a>postgrsql 遇上with</h3><p>有关pg的连接及关闭问题, 使用2个with上下午管理器, 完全避免完了关闭游标、连接。</p>
+<pre><code>def _run_stmt(self, stmt):
+     with psycopg2.connect(**self._connect_args) as conn:
+         with conn.cursor() as cur:
+             cur.execute(stmt)
+</code></pre><p>其实, 在pg官方英文材料也给出了这中方案</p>
+<h3 id="with-上下文管理器"><a href="#with-上下文管理器" class="headerlink" title="with 上下文管理器"></a>with 上下文管理器</h3><p>基本用法：</p>
+<pre><code>with A() as a, B() as b, C() as c:
+    doSomething(a,b,c)
+</code></pre><p>可以读写文件这样写：</p>
+<pre><code>from __future__ import with_statement
+
+with open(&quot;out.txt&quot;,&quot;wt&quot;), open(&quot;in.txt&quot;) as file_out, file_in:
+    for line in file_in:
+        file_out.write(line)
+</code></pre><p>或者提高一下阅读行：</p>
+<pre><code>from __future__ import with_statement
+
+with open(&quot;out.txt&quot;,&quot;wt&quot;) as file_out:
+    with open(&quot;in.txt&quot;) as file_in:
+        for line in file_in:
+            file_out.write(line)
+</code></pre>
           
         
       
@@ -653,7 +1043,7 @@ init invoked  # __init__
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-并行世界的线程/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/2018/2018-03-16-python-我遇到过的模块/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -672,7 +1062,7 @@ init invoked  # __init__
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-并行世界的线程/" itemprop="url">并行世界的线程</a></h1>
+                <a class="post-title-link" href="/2018/03/16/2018/2018-03-16-python-我遇到过的模块/" itemprop="url">python 我遇到过的模块</a></h1>
         
 
         <div class="post-meta">
@@ -684,8 +1074,250 @@ init invoked  # __init__
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T19:37:00+08:00">
-                2018-02-09
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T17:34:00+08:00">
+                2018-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="模块汇总"><a href="#模块汇总" class="headerlink" title="模块汇总"></a>模块汇总</h3><h4 id="1-getpass"><a href="#1-getpass" class="headerlink" title="1. getpass"></a>1. getpass</h4><p>Utilities to get a password and/or the current user name<br>获得输入密码及当前用户名</p>
+<h4 id="2-pexpect"><a href="#2-pexpect" class="headerlink" title="2. pexpect"></a>2. pexpect</h4><p>pexpect 是linux下expect的python封装，通过pexpect我们可以实现对ssh、ftp、password、telnet等命令进行自动交互，无需人工达到自动化需求<br><a href="http://python.jqlinux.com/pythonchang-yong-di-san-fang-3001-nei-zhi-mo-kuai/pythonzhi-pexpect-xiang-jie.html" target="_blank" rel="noopener">参考文章</a></p>
+<h3 id="3-tree"><a href="#3-tree" class="headerlink" title="3. tree"></a>3. tree</h3><p>输出目录结构层次</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/2018/2018-03-16-stmt的含义/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/16/2018/2018-03-16-stmt的含义/" itemprop="url">stmt的含义</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T11:33:00+08:00">
+                2018-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="stmt"><a href="#stmt" class="headerlink" title="stmt"></a>stmt</h3><p>stmt == statement的缩写,通用写法。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/15/2018/2018-03-15-python-函数中定义类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/15/2018/2018-03-15-python-函数中定义类/" itemprop="url">python 函数中定义类/python class definition in function</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T17:15:00+08:00">
+                2018-03-15
               </time>
             
 
@@ -709,6 +1341,17 @@ init invoked  # __init__
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/python/" itemprop="url" rel="index">
                     <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">源码阅读</span>
                   </a>
                 </span>
 
@@ -746,229 +1389,64 @@ init invoked  # __init__
       
         
           
-            <h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><h3 id="实现线程的流程"><a href="#实现线程的流程" class="headerlink" title="实现线程的流程"></a>实现线程的流程</h3><p>使用threading模块实现一个新的线程，需要下面3步：</p>
-<ul>
-<li>覆盖 <strong>init</strong>(self [,args]) 方法，可以添加额外的参数</li>
-<li>最后，需要覆盖 run(self, [,args]) 方法来实现线程要做的事情</li>
-<li>当你创建了新的 Thread 子类的时候，你可以实例化这个类，调用 start() 方法来启动它。线程启动之后将会执行 run() 方法。</li>
-</ul>
-<p><code>join（）</code> 阻塞主线程直到所有线程完成。<br>其实创建一个进程的流程一样的。</p>
-<h3 id="线程锁"><a href="#线程锁" class="headerlink" title="线程锁"></a>线程锁</h3><p>四种方式实现线程同步</p>
-<h4 id="1-Lock锁"><a href="#1-Lock锁" class="headerlink" title="1.Lock锁"></a>1.Lock锁</h4><ul>
-<li>锁有两种状态： locked（被某一线程拿到）和unlocked（可用状态）</li>
-<li>我们有两个方法来操作锁： acquire() 和 release()<br>需要遵循以下规则：先申请，后释放</li>
-<li>如果状态是unlocked， 可以调用 acquire() 将状态改为locked</li>
-<li>如果状态是locked， acquire() 会被block直到另一线程调用 release() 释放锁</li>
-<li>如果状态是unlocked， 调用 release() 将导致 RuntimError 异常</li>
-<li>如果状态是locked， 可以调用 release() 将状态改为unlocked</li>
-</ul>
-<p>当然锁也有负面作用</p>
-<blockquote>
-<p>尽管理论上行得通，但是锁的策略不仅会导致有害的僵持局面。还会对应用程序的其他方面产生负面影响。这是一种保守的方法，经常会引起不必要的开销，也会限制程序的可扩展性和可读性。更重要的是，有时候需要对多进程共享的内存分配优先级，使用锁可能和这种优先级冲突。最后，从实践的经验来看，使用锁的应用将对debug带来不小的麻烦。所以，最好使用其他可选的方法确保同步读取共享内存，避免竞争条件。</p>
-</blockquote>
-<h4 id="2-RLock锁-重复锁"><a href="#2-RLock锁-重复锁" class="headerlink" title="2.RLock锁(重复锁)"></a>2.RLock锁(重复锁)</h4><p>如果你想让只有拿到锁的线程才能释放该锁，那么应该使用 RLock() 对象。和 Lock() 对象一样，<br>RLock() 对象有两个方法： acquire() 和 release() 。当你需要在类外面保证线程安全，又要在类内使用同样方法的时候 RLock() 就很实用了。</p>
-<ul>
-<li>谁拿到谁释放。如果线程A拿到锁，线程B无法释放这个锁，只有A可以释放；<ul>
-<li>同一线程可以多次拿到该锁，即可以acquire多次；<br>-</li>
-<li>acquire多少次就必须release多少次，只有最后一次release才能改变RLock的状态为unlocked）</li>
-</ul>
-</li>
-</ul>
-<h4 id="3-Condition-条件"><a href="#3-Condition-条件" class="headerlink" title="3.Condition 条件"></a>3.Condition 条件</h4><p>其中某些线程在等待某一条件发生，其他的线程会在该条件发生的时候进行通知。一旦条件发生，线程会拿到共享资源的唯一权限</p>
-<h4 id="4-Event-事件"><a href="#4-Event-事件" class="headerlink" title="4. Event 事件"></a>4. Event 事件</h4><p>事件是线程之间用于通讯的对象。有的线程等待信号，有的线程发出信号。基本上事件对象都会维护一个内部变量，可以通过 set() 方法设置为 true ，也可以通过 clear() 方法设置为 false 。 wait() 方法将会阻塞线程，直到内部变量为 true 。</p>
+            <h3 id="阅读get-pip"><a href="#阅读get-pip" class="headerlink" title="阅读get-pip"></a>阅读get-pip</h3><p>近日,在安装pip包,无意发现类定义在函数中,决定了解如何使用这一技能</p>
+<pre><code>def bootstrap(tmpdir=None):
+    # Import pip so we can use it to install pip and maybe setuptools too
+    import pip
+    from pip.commands.install import InstallCommand
+    from pip.req import InstallRequirement
 
-          
-        
-      
-    </div>
-    
-    
-    
+    # Wrapper to provide default certificate with the lowest priority
+    class CertInstallCommand(InstallCommand):
+        def parse_args(self, args):
+            # If cert isn&apos;t specified in config or environment, we provide our
+            # own certificate through defaults.
+            # This allows user to specify custom cert anywhere one likes:
+            # config, environment variable or argv.
+            if not self.parser.get_default_values().cert:
+                self.parser.defaults[&quot;cert&quot;] = cert_path  # calculated below
+            return super(CertInstallCommand, self).parse_args(args)
 
-    
+    pip.commands_dict[&quot;install&quot;] = CertInstallCommand
+</code></pre><p>写个简单一个简单的例子：<br>返回一个类实例</p>
+<pre><code> def func(**args):
+   class BindArgs(object):
+       foo = args[&apos;foo&apos;]
+       print &apos;foo is &apos;, foo
+       def __init__(self,args):
+          print &quot; hello i am here&quot;
+   return BindArgs(args) #return an instance of the class
 
-    
+f = func(foo=3)
+</code></pre><p>用到再实例化,当实例化事,init才真正的执行。</p>
+<pre><code>def func(**args):
+   class BindArgs(object):
+       foo = args[&apos;foo&apos;]
+       print &apos;foo is &apos;, foo
+       def __init__(self,args):
+          print &quot; hello i am here&quot;
+   return BindArgs
 
-    
+f = func(foo=3)
 
-    <footer class="post-footer">
-      
+f(args=&quot;yellow&quot;)
+</code></pre><h4 id="类中类"><a href="#类中类" class="headerlink" title="类中类"></a>类中类</h4><pre><code>#!/usr/bin/env python
 
-      
+class Human:
 
-      
+   def __init__(self):
+      self.name = &apos;Guido&apos;
+      self.head = self.Head()
 
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
+   class Head:
+      def talk(self):
+      return &apos;talking...&apos;
 
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/" itemprop="url">python操作数据库的规范问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T10:16:00+08:00">
-                2018-02-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/数据库规范/" itemprop="url" rel="index">
-                    <span itemprop="name">数据库规范</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/数据库规范/mysql/" itemprop="url" rel="index">
-                    <span itemprop="name">mysql</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="sql-语句的规范化书写"><a href="#sql-语句的规范化书写" class="headerlink" title="sql 语句的规范化书写"></a>sql 语句的规范化书写</h2><h2 id="字段"><a href="#字段" class="headerlink" title="字段"></a>字段</h2><p>禁止使用mysql内部保留关键词作为字段名称。例如 更新数据库某个字段为空,必然报错</p>
-<blockquote>
-<p>UPDATE user_preference SET use =’’  WHERE id=’3’</p>
-</blockquote>
-<p>当然在可视化命令执行，<code>use</code>会特别强调处理，解决方案是规范sql语言的书写，尤其用python写mysql语句，</p>
-<blockquote>
-<p>UPDATE user_preference SET ’use‘ =’’  WHERE id=’3’</p>
-</blockquote>
-<p>所以以后凡是字段都在使用``(与单引号差别很大的！)</p>
-<h2 id="字段的值"><a href="#字段的值" class="headerlink" title="字段的值"></a>字段的值</h2><ul>
-<li>如何给字段赋予空值（‘’）</li>
-<li>如何给字段格式加上引号</li>
-</ul>
-<p>第一个问题解决是:</p>
-<pre><code>&gt;&gt;&gt; query = &quot;update roles set name=%s&quot; % (&apos;&apos;)
-# 报错：update roles set name=
-</code></pre><p>符合python风格的书写是用双引号包含，这样内部的单引号不会转义了。</p>
-<pre><code>query = &quot;update roles set name=%s&quot; % (“‘’”)
-</code></pre><p>第二个问题是占位符<code>%s</code>需要加上引号</p>
-<pre><code>&gt;&gt;&gt; query = &quot;update roles set name=‘%s’&quot; # 或者
-&gt;&gt;&gt; query = ’update roles set name=“%s”&apos; # 单引号与双引号的区别
-</code></pre><h2 id="引号问题"><a href="#引号问题" class="headerlink" title="引号问题"></a>引号问题</h2><p>比如‘hero’s pens’ 在插入、更新中无法引号无法匹配，解决方式（推荐）</p>
-<blockquote>
-<p>字段内部的单引号不转义 需要double ‘’引号</p>
-</blockquote>
-<p>用python替换：</p>
-<pre><code>&gt;&gt;&gt; s = &quot;hero&apos;s pens&quot;.replace(&quot;&apos;&quot;, &quot;&apos;&apos;&quot;)
-   &quot;hero&apos;&apos;s pens&quot;
-</code></pre><p>如果遇到单个引号，字符串要用双引号，你也会明白python 有单引号、双引号存在的意义了。</p>
-<h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><p>conn.commit() 最好插入、更新多条再提交 </p>
+if __name__ == &apos;__main__&apos;:
+    guido = Human()
+    print guido.name
+    print guido.head.talk()
+</code></pre><p>  太简单类, 不解释。</p>
 
           
         
@@ -1008,7 +1486,7 @@ init invoked  # __init__
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1054,7 +1532,7 @@ init invoked  # __init__
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

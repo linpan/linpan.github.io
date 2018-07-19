@@ -259,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/05/2018/2018-05-05-python-zipfile-文件压缩/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/19/2018/2018-07-19-python模块-itertools/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -278,7 +278,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/05/2018/2018-05-05-python-zipfile-文件压缩/" itemprop="url">python Zipfile 文件压缩</a></h1>
+                <a class="post-title-link" href="/2018/07/19/2018/2018-07-19-python模块-itertools/" itemprop="url">python模块:itertools</a></h1>
         
 
         <div class="post-meta">
@@ -290,8 +290,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-05T11:42:00+08:00">
-                2018-05-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-19T11:22:00+08:00">
+                2018-07-19
               </time>
             
 
@@ -300,28 +300,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -352,32 +330,617 @@
       
         
           
-            <h3 id="知识点："><a href="#知识点：" class="headerlink" title="知识点："></a>知识点：</h3><ul>
-<li>临时文件的自动创建及自动销毁 写入临时文件的是file-like 对象<br>-ZipFile wirte方法的参数filename,要压缩的文件名</li>
-<li>arcname 重新指定在压缩包的文件路径<br>如果不指定arcname 压缩的文件包括文件的整个路径.我们可以通过arcname重新调整文件的压缩结构。</li>
+            <h3 id="accumulate-iterable-func"><a href="#accumulate-iterable-func" class="headerlink" title="accumulate (iterable, [,func])"></a>accumulate (iterable, [,func])</h3><p>创建迭代对象，返回求和的值（默认求和）或者指定含有2个参数的func参数，如果iterable为空，结果为空。<br>特别适合累积利息的求和</p>
+<pre><code>import operator
+data = [1, 2, 3, 4, 5]
+result = itertools.accumulate(data, operator.mul)
+for each in result:
+    print(each)
+</code></pre><p>mul乘法接受2个参数, 计算的结果作为一个参数参与下面的计算。演示过程：</p>
+<pre><code>operator.mul(1, 2)
+2
+operator.mul(2, 3)
+6
+operator.mul(6, 4)
+24
+operator.mul(24, 5)
+120
+</code></pre><p>当然我们可以自定义函数</p>
+<pre><code>cashflows = [1000, -90, -90, -90, -90]
+list(accumulate(cashflows, lambda bal, _: bal*1.05))
+# _ 接受变量,无名变量表示。
+[1000, 960.0, 918.0, 873.9000000000001, 827.5950000000001]
+</code></pre><h3 id="chain-iterables"><a href="#chain-iterables" class="headerlink" title="chain(*iterables)"></a>chain(*iterables)</h3><p>可以把一组迭代对象串联起来，形成一个更大的迭代器, 类似 “拼接”起来迭代对象的元素。</p>
+<pre><code>colors = [&apos;red&apos;, &apos;orange&apos;, &apos;yellow&apos;, &apos;green&apos;, &apos;blue&apos;]
+shapes = [&apos;circle&apos;, &apos;triangle&apos;, &apos;square&apos;, &apos;pentagon&apos;]
+result = itertools.chain(colors, shapes)
+for each in result:
+print(each)
+</code></pre><h3 id="groupby-iterable-key-None"><a href="#groupby-iterable-key-None" class="headerlink" title="groupby(iterable, key=None)"></a>groupby(iterable, key=None)</h3><p>分组, key可以指定自定义分组的函数</p>
+<pre><code>robots = [{
+&apos;name&apos;: &apos;blaster&apos;,
+&apos;faction&apos;: &apos;autobot&apos;
+}, {
+&apos;name&apos;: &apos;galvatron&apos;,
+&apos;faction&apos;: &apos;decepticon&apos;
+}, {
+&apos;name&apos;: &apos;jazz&apos;,
+&apos;faction&apos;: &apos;autobot&apos;
+}, {
+&apos;name&apos;: &apos;metroplex&apos;,
+&apos;faction&apos;: &apos;autobot&apos;
+}, {
+&apos;name&apos;: &apos;megatron&apos;,
+&apos;faction&apos;: &apos;decepticon&apos;
+}, {
+&apos;name&apos;: &apos;starcream&apos;,
+&apos;faction&apos;: &apos;decepticon&apos;
+}]
+for key, group in itertools.groupby(bots, key=lambda x: x[&apos;faction&apos;]):
+print(key)
+print(list(group))
+</code></pre><h3 id="zip-longest-iterables-fillvalue-None"><a href="#zip-longest-iterables-fillvalue-None" class="headerlink" title="zip_longest(*iterables, fillvalue=None)"></a>zip_longest(*iterables, fillvalue=None)</h3><p>组合每个迭代器的元素, 如果迭代器的长度不够，填充默认值。</p>
+<pre><code>colors = [&apos;red&apos;, &apos;orange&apos;, &apos;yellow&apos;, &apos;green&apos;, &apos;blue&apos;,]
+data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,]
+for each in itertools.zip_longest(colors, data, fillvalue=None):
+print(each)
+# 输出结构
+(&apos;red&apos;, 1)
+(&apos;orange&apos;, 2)
+(&apos;yellow&apos;, 3)
+(&apos;green&apos;, 4)
+(&apos;blue&apos;, 5)
+(None, 6)
+(None, 7)
+(None, 8)
+(None, 9)
+(None, 10)
+</code></pre><h3 id="imap-在py3被丢弃"><a href="#imap-在py3被丢弃" class="headerlink" title="imap 在py3被丢弃"></a>imap 在py3被丢弃</h3><p>imap函数存在py2000系列中。</p>
+<h3 id="组合生成器"><a href="#组合生成器" class="headerlink" title="组合生成器"></a>组合生成器</h3><p>这部分都是数学基本组合排列知识点</p>
+<h4 id="product-笛卡尔乘积"><a href="#product-笛卡尔乘积" class="headerlink" title="product 笛卡尔乘积"></a>product 笛卡尔乘积</h4><pre><code>product(&apos;ABCD&apos;, repeat=2)
+#AA AB AC AD BA BB BC BD CA CB CC CD DA DB DC DD
+</code></pre><h4 id="permutations-排列公式"><a href="#permutations-排列公式" class="headerlink" title="permutations 排列公式"></a>permutations 排列公式</h4><p>与上面的区别 就是没有重复元素排列.</p>
+<pre><code>permutations(&apos;ABCD&apos;, 2)
+#AB AC AD BA BC BD CA CB CD DA DB DC
+</code></pre><h3 id="combinations-组合公式"><a href="#combinations-组合公式" class="headerlink" title="combinations 组合公式"></a>combinations 组合公式</h3><pre><code>combinations(&apos;ABCD&apos;, 2)
+#AB AC AD BC BD CD
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/02/2018/2018-07-02-pathlib-让你的路更平坦/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/02/2018/2018-07-02-pathlib-让你的路更平坦/" itemprop="url">pathlib 让你的路更平坦</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-02T17:07:00+08:00">
+                2018-07-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="pathlib-简介"><a href="#pathlib-简介" class="headerlink" title="pathlib 简介"></a>pathlib 简介</h3><p><code>pathlib</code> 库完全面对对象的编程方式, 在python 3.4+以后已经成为标准库，基本上可以代替os.path来处理路径。对于字符串的低级别路径处理，您还可以使用os.path模块。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/12/2018/2018-06-12-argparse-小节笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/12/2018/2018-06-12-argparse-小节笔记/" itemprop="url">argparse 小节笔记</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-12T10:20:00+08:00">
+                2018-06-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="可选参数-和位置参数"><a href="#可选参数-和位置参数" class="headerlink" title="可选参数 和位置参数"></a>可选参数 和位置参数</h3><p>可选参数 <code>Optional argument</code><br>可选参数将由-前缀标识,例如 ‘-foo’ ‘–foo’</p>
+<pre><code>&gt;&gt;&gt; parser.add_argument(&apos;-f&apos;, &apos;--foo&apos;)
+</code></pre><p>位置参数 <code>Positional arguments</code><br>剩下的即为位置参数,且位置参数都是必须的(required)</p>
+<pre><code>&gt;&gt;&gt; parser.add_argument(&apos;bar&apos;)
+</code></pre><p>官方文档例子prog.py<br>    import argparse</p>
+<pre><code>parser =argparse.ArgumentParser(description=&apos;Process some integers.&apos;)
+parser.add_argument(&apos;integers&apos;, metavar=&apos;N&apos;, type=int, nargs=&apos;+&apos;,
+                help=&apos;an integer for the accumulator&apos;)
+parser.add_argument(&apos;--sum&apos;, dest=&apos;accumulate&apos;, action=&apos;store_const&apos;,
+                const=sum, default=max,
+                help=&apos;sum the integers (default: find the max)&apos;)
+
+args = parser.parse_args()
+print(args.accumulate(args.integers))
+</code></pre><p><code>integers</code>是位置参数,在执行的适合不 ‘integers’</p>
+<p><code>--sum</code> 是可选参数，</p>
+<p><code>dest</code>是目标参数的名称, dest允许设置自定义属性名字(属性别名)</p>
+<p><code>const</code> 接受参数 或者回调函数, 这是接受sum回调函数。</p>
+<p><code>type</code> 接受参数的类型(默认是string类型),  type属性还可以接收一个回调函数，这个回调函数接收一个命令行参数并返回转换类型之后的值</p>
+<p><code>defualt</code>默认参数</p>
+<p><code>choices</code> 参数默认范围</p>
+<p><code>nargs</code> 参数个人 （+ ？*）<br><code>action</code> action参数指定了参数是如何被处理的<br><code>help</code>  help=’…’，指定帮助提示信息。</p>
+<pre><code>&gt;&gt;&gt; python prog 1 2 4 5
+### Namespace(accumulate=&lt;built-in function max&gt;, t=[1243])
+&gt;&gt;&gt; python prog 1 2 4 5 --sum
+### 10
+</code></pre><h3 id="长参短参"><a href="#长参短参" class="headerlink" title="长参短参"></a>长参短参</h3><pre><code>parser.add_argument(&apos;-h&apos;,&apos;--help&apos;,type = int,choices = [0,1,2],default = 0,help = &apos;this is arg3&apos;)
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/11/2018/2018-06-11-修改mac终端默认打开路径/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/11/2018/2018-06-11-修改mac终端默认打开路径/" itemprop="url">修改mac终端默认打开路径</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-11T19:32:00+08:00">
+                2018-06-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h3><p>有时候我们希望默认终端打开指定的路径,避免每一次都cd一下。</p>
+<pre><code>cd ~ #进入～根目录
+vim .bash_profile 
+cd /hiro/workdirs/ # 指定进入的目录
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/07/2018/2018-06-07-tabnanny-检测文件缩进/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/07/2018/2018-06-07-tabnanny-检测文件缩进/" itemprop="url">tabnanny 检测文件缩进</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-07T12:14:00+08:00">
+                2018-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="源代码路径-Lib-tabnanny-py"><a href="#源代码路径-Lib-tabnanny-py" class="headerlink" title="源代码路径 Lib/tabnanny.py"></a>源代码路径 Lib/tabnanny.py</h3><ol>
+<li>该模板是脚本, 在IDE下的用法,可以使用check()函数<br> import tabnanny<br> tabnanny.check(file)</li>
+</ol>
+<ol>
+<li><p>在终端使用方法：</p>
+<p>   python  -m tabnanny -v  -qfile_or_path</p>
+<h1 id="v-如果作为脚本调用，则由-v选项递增，-打印详情信息，"><a href="#v-如果作为脚本调用，则由-v选项递增，-打印详情信息，" class="headerlink" title="-v 如果作为脚本调用，则由-v选项递增， 打印详情信息，"></a>-v 如果作为脚本调用，则由-v选项递增， 打印详情信息，</h1><h1 id="q-文件名包括空格等特殊情况的"><a href="#q-文件名包括空格等特殊情况的" class="headerlink" title="-q 文件名包括空格等特殊情况的"></a>-q 文件名包括空格等特殊情况的</h1><blockquote>
+<p>注意：<code>-m</code> 模块作为脚本执行 run library module as a script (terminates option list)</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="源代码内容分析"><a href="#源代码内容分析" class="headerlink" title="源代码内容分析"></a>源代码内容分析</h3><ol>
+<li><p>可以返回 空</p>
+<blockquote>
+<p>return</p>
+</blockquote>
+</li>
+<li><p>os.path<br>使用isfile()、islink()、normcase()、isdir()方法</p>
+<p> os.path.abspath(path) #返回绝对路径<br> os.path.basename(path) #返回文件名<br> os.path.commonprefix(list) #返回list(多个路径)中，所有path共有的最长的路径。<br> os.path.dirname(path) #返回文件路径<br> os.path.exists(path)  #路径存在则返回True,路径损坏返回False<br> os.path.lexists  #路径存在则返回True,路径损坏也返回True<br> os.path.expanduser(path)  #把path中包含的”~”和”~user”转换成用户目录<br> os.path.expandvars(path)  #根据环境变量的值替换path中包含的”$name”和”${name}”<br> os.path.getatime(path)  #返回最后一次进入此path的时间。<br> os.path.getmtime(path)  #返回在此path下最后一次修改的时间。<br> os.path.getctime(path)  #返回path的大小<br> os.path.getsize(path)  #返回文件大小，如果文件不存在就返回错误<br> os.path.isabs(path)  #判断是否为绝对路径</p>
+<ul>
+<li>os.path.isfile(path)  #判断路径是否为文件</li>
+<li>os.path.isdir(path)  #判断路径是否为目录</li>
+<li>os.path.islink(path)  #判断路径是否为链接<br>os.path.ismount(path)  #判断路径是否为挂载点（）<br>os.path.join(path1[, path2[, …]])  #把目录和文件名合成一个路径</li>
+<li>os.path.normcase(path)  #转换path的大小写和(不同系统平台斜杠不一样)斜杠<br>os.path.normpath(path)  #规范path字符串形式<br>os.path.realpath(path)  #返回path的真实路径<br>os.path.relpath(path[, start])  #从start开始计算相对路径<br>os.path.samefile(path1, path2)  #判断目录或文件是否相同<br>os.path.sameopenfile(fp1, fp2)  #判断fp1和fp2是否指向同一文件<br>os.path.samestat(stat1, stat2)  #判断stat tuple stat1和stat2是否指向同一个文件<br>os.path.split(path)  #把路径分割成dirname和basename，返回一个元组<br>os.path.splitdrive(path)   #一般用在windows下，返回驱动器名和路径组成的元组<br>os.path.splitext(path)  #分割路径，返回路径名和文件扩展名的元组<br>os.path.splitunc(path)  #把路径分割为加载点与文件<br>os.path.walk(path, visit, arg)  #遍历path，进入每个目录都调用visit函数，visit函数必须有<br>3个参数(arg, dirname, names)，dirname表示当前目录的目录名，names代表当前目录下的所有<br>文件名，args则为walk的第三个参数<br>os.path.supports_unicode_filenames  #设置是否支持unicode路径名</li>
 </ul>
-<pre><code>def get():
-    pic_path = &apos;/Users/py2018/antique_images&apos;
-    zip_file_name = &apos;img&apos;
-    zip_filename = &apos;%s.zip&apos; % zip_file_name
-    try:
-        with tempfile.SpooledTemporaryFile() as tmp:
-            with ZipFile(&apos;/Users/py2018/here.zip&apos;, &apos;w&apos;) as archive:
-
-                for root, dirs, files in os.walk(pic_path):
-                    for file in files:
-                        zip_path = os.path.join(&apos;abc&apos;, file)
-
-                        archive.write(os.path.join(root, file), zip_path )
-            tmp.seek(0)
-            tmp.read()
-
-    except Exception as e:
-        print e
-</code></pre><h3 id="补充点："><a href="#补充点：" class="headerlink" title="补充点："></a>补充点：</h3><p> 创建临时的目录 （using  the context manager）</p>
-<blockquote>
-<p>tempfile.TemporaryDirectory()</p>
-</blockquote>
+</li>
+<li><p>flag 标志<br> verbose = 0 # 通过+1 实现真逻辑</p>
+</li>
+</ol>
 
           
         
@@ -426,7 +989,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/02/2018/2018-05-02-kivy语言：if-else/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/06/2018/2018-06-06-与众不同/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -445,7 +1008,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/05/02/2018/2018-05-02-kivy语言：if-else/" itemprop="url">kivy语言：if-else</a></h1>
+                <a class="post-title-link" href="/2018/06/06/2018/2018-06-06-与众不同/" itemprop="url">与众不同</a></h1>
         
 
         <div class="post-meta">
@@ -457,8 +1020,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-02T19:46:00+08:00">
-                2018-05-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-06T17:08:00+08:00">
+                2018-06-06
               </time>
             
 
@@ -497,93 +1060,87 @@
       
         
           
-            <pre><code>from kivy.config import Config
-Config.set(&apos;graphics&apos;,&apos;width&apos;,&apos;400&apos;)
-Config.set(&apos;graphics&apos;, &apos;width&apos;, &apos;300&apos;)
+            <pre><code>Think Different
 
-from kivy.lang import Builder
-from kivy.uix.widget import Widget
-from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import BooleanProperty, NumericProperty
-from kivy.clock import Clock
-from kivy.app import App
+Here’s to the crazy ones.
 
+向那些疯狂的家伙们致敬，
 
-Builder.load_string(&apos;&apos;&apos;
-#:kivy 1.8.0
+The misfits.
 
-&lt;KivyTimer&gt;:
-    BoxLayout:
-        orientation: &apos;vertical&apos;
-        pos: root.pos
-        size: root.size
+他们特立独行，
 
-        Label:
-            text: str(root.left_time)
-            font_size: 100
+The rebels.
 
-        BoxLayout:
-            orientation: &apos;horizontal&apos;
-            size_hint: 1.0, 0.3
+他们桀骜不驯，
 
-            Button:
-                text: &apos;+1 minute&apos;
-                font_size: 16
-                on_press: root.on_command(&apos;+1 minute&apos;)
+The troublemakers.
 
-            Button:
-                text: &apos;Stop&apos; if root.is_countdown else &apos;Start&apos;
-                font_size: 16
-                on_press: root.on_command(&apos;start/stop&apos;)
+他们惹是生非，
 
-            Button:
-                text: &apos;Reset&apos;
-                font_size: 16
-                on_press: root.on_command(&apos;reset&apos;)
-&apos;&apos;&apos;)
+The round pegs in the square holes.
 
+他们格格不入，
 
+The ones who see things differently.
 
-class KivyTimer(Widget):
-    is_countdown = BooleanProperty(False)
-    left_time = NumericProperty(0)
+他们用与众不同的眼光看待事物，
 
-    def on_command(self, command):
-        if command == &apos;+1 minute&apos;:
-            self.left_time += 60
-        elif command == &apos;start/stop&apos;:
-            if self.is_countdown:
-                self.stop_timer()
-            elif self.left_time &gt; 0:
-                self.start_timer()
-        elif command == &apos;reset&apos;:
-            self.stop_timer()
-            self.left_time = 0
+They’re not fond of rules.
 
-    def on_countdown(self, dt):
-        self.left_time -= 1
-        if self.left_time == 0:
-            self.is_countdown = False
-            return False
+他们不喜欢墨守成规，
 
-    def start_timer(self):
-        self.is_countdown = False
-        Clock.schedule_interval(self.on_countdown, 1.0)
+And they have no respect for the status quo.
 
-    def stop_timer(self):
-        self.is_countdown = False
+他们也不愿安于现状。
 
-        Clock.unschedule(self.on_countdown)
+You can quote them, disagree with them, glorify or vilify them.
 
+你可以赞美他们，引用他们，反对他们，质疑他们，颂扬或是诋毁他们，
 
-class KivyTimerApp(App):
-    def build(self):
-        return KivyTimer()
+About the only thing you can’t do is ignore them.
 
+但唯独不能漠视他们。
 
+Because they change things.
 
-if __name__ == &apos;__main__&apos;:
-    KivyTimerApp().run()
+因为他们改变了事物。
+
+They invent. They imagine. They heal. They explore. They create. They inspire.
+
+他们发明，他们想象，他们治愈，他们探索，他们创造，他们启迪，
+
+They push the human race forward.
+
+他们推动人类向前发展。
+
+Maybe they have to be crazy.
+
+也许，他们必须要疯狂。
+
+How else can you stare at an empty canvas and see a work of art?
+
+你能盯着白纸，就看到美妙的画作么？
+
+Or sit in silence and hear a song that’s never been written?
+
+你能静静坐着，就谱出动听的歌曲么？
+
+Or gaze at a red planet and see a laboratory on wheels?
+
+你能凝视火星，就想到神奇的太空轮么？
+
+We make tools for these kinds of people.
+
+我们为这些家伙制造良机。
+
+While some see them as the crazy ones, we see genius.
+
+或许他们是别人眼里的疯子，但他们却是我们眼中的天才。
+
+Because the people who are crazy enough to think they can change the world, are the ones who do.
+
+因为只有那些疯狂到以为自己能够改变世界的人，才能真正地改变世界。
 </code></pre>
           
         
@@ -632,7 +1189,7 @@ if __name__ == &apos;__main__&apos;:
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/28/2018/2018-04-28-docker-基本操作/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/06/2018/2018-06-06-python-技术词汇/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -651,7 +1208,7 @@ if __name__ == &apos;__main__&apos;:
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/04/28/2018/2018-04-28-docker-基本操作/" itemprop="url">docker 基本操作</a></h1>
+                <a class="post-title-link" href="/2018/06/06/2018/2018-06-06-python-技术词汇/" itemprop="url">python 技术词汇</a></h1>
         
 
         <div class="post-meta">
@@ -663,8 +1220,8 @@ if __name__ == &apos;__main__&apos;:
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-28T15:39:00+08:00">
-                2018-04-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-06T15:54:00+08:00">
+                2018-06-06
               </time>
             
 
@@ -703,139 +1260,7 @@ if __name__ == &apos;__main__&apos;:
       
         
           
-            <h3 id="查找centos镜像"><a href="#查找centos镜像" class="headerlink" title="查找centos镜像"></a>查找centos镜像</h3><pre><code>&gt; docker search centos
-</code></pre><h3 id="拉centos7镜像"><a href="#拉centos7镜像" class="headerlink" title="拉centos7镜像"></a>拉centos7镜像</h3><p>大约200M</p>
-<pre><code>&gt; docker pull centos:latest
-</code></pre><h3 id="查看镜像允许状态"><a href="#查看镜像允许状态" class="headerlink" title="查看镜像允许状态"></a>查看镜像允许状态</h3><pre><code>&gt; docker images centos
-</code></pre><h3 id="编辑Dockerfile文件及构建镜像"><a href="#编辑Dockerfile文件及构建镜像" class="headerlink" title="编辑Dockerfile文件及构建镜像"></a>编辑Dockerfile文件及构建镜像</h3><p>完成基本安装库及依赖, systemctl在文件内部无法使用。<br>在Dockerfile目录下执行,自动加载Dockerfile文件</p>
-<blockquote>
-<p>docker build -t your-like-name .</p>
-</blockquote>
-<pre><code>FROM          docker.io/centos:latest
-MAINTAINER    big-fucking-rocket
-
-# alpha version
-LABEL version=&quot;0.1.1&quot;
-
-
-
-# install base lib
-RUN yum -y install gcc make vim sudo lsof \
-  libevent-devel \
-  zlib-devel \
-  python-devel\
-  wget \
-  openssl \
-  python-pip \
-  libmemcached-devel.x86_64 \
-  libpq-dev \
-  curl \
-  git \
-  supervisor
-
-RUN yum -y install httpd; yum clean all; systemctl enable httpd.service
-
-# related get-pip.py
-RUN cd /tmp &amp;&amp; wget  https://bootstrap.pypa.io/get-pip.py \
-    &amp;&amp; python get-pip.py
-
-# pip and virtualenv
-RUN pip install --upgrade pip
-RUN pip install virtualenv
-RUN virtualenv auction_live
-
-#  psycopg2 Library
-RUN pip install psycopg2-binary
-
-# install nginx
-# set up the yum repository
-RUN cd /etc/yum.repos.d/ &amp;&amp; \
-echo &apos;[nginx]&apos; &gt;&gt; ./nginx.repo &amp;&amp; \
-echo &apos;name=nginx repo&apos; &gt;&gt; ./nginx.repo &amp;&amp; \
-echo &apos;baseurl=http://nginx.org/packages/centos/7/$basearch/&apos; &gt;&gt; ./nginx.repo &amp;&amp; \
-echo &apos;gpgcheck=0&apos; &gt;&gt; ./nginx.repo &amp;&amp; \
-echo &apos;enabled=1&apos; &gt;&gt; ./nginx.repo &amp;&amp; \
-
-# force update repo &amp; install nginx
-yum list | grep nginx &amp;&amp; yum -y install nginx
-
-# install uwsgi now because it takes a little while
-RUN pip install uwsgi
-
-
-#  install memcached
-RUN yum -y install memcached
-
-# install redis
-#RUN cd /tmp/ &amp;&amp; wget http://download.redis.io/releases/redis-stable.tar.gz &amp;&amp; \
-#tar xzf redis-stable.tar.gz &amp;&amp; \
-#cd redis-stable &amp;&amp; make &amp;&amp; make install
-#cp -r /redis-stable /usr/local/redis
-
-#RUN yum install epel-release
-RUN yum install redis
-
-# install postgresql
-RUN yum -y install https://download.postgresql.org/pub/repos/yum/9.6/redhat/rhel-7-x86_64/pgdg-centos96-9.6-3.noarch.rpm
-
-RUN yum -y install postgresql96-server
-# init
-# RUN /usr/pgsql-9.6/bin/postgresql96-setup initdb
-
-#RUN echo &quot;listen_addresses = &apos;*&apos;&quot; &gt;&gt; /var/lib/pgsql/9.6/data/postgresql.conf
-#RUN echo &quot;PORT = 5432&quot; &gt;&gt; /var/lib/pgsql/9.6/data/postgresql.conf
-#RUN echo &quot;local   all             all                                     trust&quot; &gt;&gt; #/var/lib/pgsql/9.6/data/pg_hba.conf
-#RUN echo &quot;host    all             all             127.0.0.1/32            ident&quot; &gt;&gt; #/var/lib/pgsql/9.6/data/pg_hba.conf
-#RUN echo &quot;host    all             all             ::1/128                 ident&quot; &gt;&gt; #/var/lib/pgsql/9.6/data/pg_hba.conf
-#RUN echo &quot;host    all             all         0.0.0.0/0            trust&quot; &gt;&gt; # /var/lib/pgsql/9.6/data/pg_hba.conf
-
-
-# configure systemd
-RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
-systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-rm -f /lib/systemd/system/multi-user.target.wants/*;\
-rm -f /etc/systemd/system/*.wants/*;\
-rm -f /lib/systemd/system/local-fs.target.wants/*; \
-rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-rm -f /lib/systemd/system/basic.target.wants/*;\
-rm -f /lib/systemd/system/anaconda.target.wants/*;
-
-# port
-EXPOSE  5432 6379 7000 8000-9000
-
-CMD [&quot;/usr/sbin/init&quot;]
-</code></pre><h3 id="查看编译的镜像"><a href="#查看编译的镜像" class="headerlink" title="查看编译的镜像"></a>查看编译的镜像</h3><pre><code>&gt; docker images
-</code></pre><h3 id="启动镜像进入容器"><a href="#启动镜像进入容器" class="headerlink" title="启动镜像进入容器"></a>启动镜像进入容器</h3><pre><code># 普通模式
-docker  run  -t  -i  jdk8/centos  /bin/bash
-# 可以使用systemctl命令
-docker  run  -t  -i  jdk8/centos   /usr/sbin/init
-# 给容器别名 指定端口启动
-docker run -tid --name eoa    -p 6380:6379 -p 8082:8080 -p 9082:9081 centos7/eoa    /usr/sbin/init
-</code></pre><h3 id="查看允许的容器"><a href="#查看允许的容器" class="headerlink" title="查看允许的容器"></a>查看允许的容器</h3><pre><code>&gt; docker ps
-</code></pre><h3 id="退出容器"><a href="#退出容器" class="headerlink" title="退出容器"></a>退出容器</h3><pre><code>exit
-或者 ctrl+p+q
-</code></pre><h3 id="再次进入允许的容器"><a href="#再次进入允许的容器" class="headerlink" title="再次进入允许的容器"></a>再次进入允许的容器</h3><p>如果想进入独立的环境可以使用另一种进入容器的方式：<br>      docker exec -it <id> bash<br>      docker exec -it  8e185ef88c14 bash 或者<br>      docker exec -it  8e bash  镜像id的前2位</id></p>
-<h3 id="文件拷贝"><a href="#文件拷贝" class="headerlink" title="文件拷贝"></a>文件拷贝</h3><p>把文件从容器拷贝到宿主机：</p>
-<pre><code>docker cp 容器名：要拷贝的文件在容器里面的路径        要拷贝到宿主机的相应路径
-</code></pre><p>把文件从宿主机拷贝到容器：</p>
-<pre><code>docker cp 要拷贝的文件路径 容器名：要拷贝到容器里面对应的路径
-docker cp   ./nginx-1.12.2.tar.gz   7db885ebfe04:/usr/local/
-</code></pre><h3 id="容器停止、删除、退出"><a href="#容器停止、删除、退出" class="headerlink" title="容器停止、删除、退出"></a>容器停止、删除、退出</h3><pre><code>docker stop [NAME]/[CONTAINER ID]:将容器退出。
-
-docker kill [NAME]/[CONTAINER ID] :强制停止一个容器。
-
-docker rm [NAME]/[CONTAINER ID]:不能够删除一个正在运行的容器，会报错。需要先停止容器。
-</code></pre><h3 id="用commit命令创建镜像"><a href="#用commit命令创建镜像" class="headerlink" title="用commit命令创建镜像"></a>用commit命令创建镜像</h3><p>进入容器可以继续安装其他的软件、服务及配置等,然后保存提交</p>
-<p>要想利用现有的容器制作成镜像：先退出该容器，不要在容器中，然后，</p>
-<blockquote>
-<p>docker commit   当前容器的ID   要保存镜像的名称</p>
-</blockquote>
-<p>如：docker commit 614122c0aabb aoct/apache2</p>
-<h3 id="查看镜像信息"><a href="#查看镜像信息" class="headerlink" title="查看镜像信息"></a>查看镜像信息</h3><p>使用docker inspect命令查看新创建的镜像的详细信息</p>
-<blockquote>
-<p>docker inspect your-CONTAINER</p>
-</blockquote>
+            <p>verbose: 表示详细信息</p>
 
           
         
@@ -884,7 +1309,7 @@ docker rm [NAME]/[CONTAINER ID]:不能够删除一个正在运行的容器，会
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/26/2018/2018-04-26-dockerfiles-django-uwsgi-nginx/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/06/2018/2018-06-06-flag-阅读py3-x官方文档/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -903,7 +1328,7 @@ docker rm [NAME]/[CONTAINER ID]:不能够删除一个正在运行的容器，会
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/04/26/2018/2018-04-26-dockerfiles-django-uwsgi-nginx/" itemprop="url">dockerfiles:django-uwsgi-nginx</a></h1>
+                <a class="post-title-link" href="/2018/06/06/2018/2018-06-06-flag-阅读py3-x官方文档/" itemprop="url">Flag 阅读py3.x官方文档 </a></h1>
         
 
         <div class="post-meta">
@@ -915,8 +1340,8 @@ docker rm [NAME]/[CONTAINER ID]:不能够删除一个正在运行的容器，会
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T16:44:00+08:00">
-                2018-04-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-06T15:44:00+08:00">
+                2018-06-06
               </time>
             
 
@@ -955,663 +1380,7 @@ docker rm [NAME]/[CONTAINER ID]:不能够删除一个正在运行的容器，会
       
         
           
-            <pre><code># Copyright 2013 Thatcher Peskens
-#
-# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-FROM ubuntu:16.04
-
-MAINTAINER Dockerfiles
-
-# Install required packages and remove the apt packages cache when done.
-
-RUN apt-get update &amp;&amp; \
-    apt-get upgrade -y &amp;&amp; \
-    apt-get install -y \
-    git \
-    python3 \
-    python3-dev \
-    python3-setuptools \
-    python3-pip \
-    nginx \
-    supervisor \
-    sqlite3 &amp;&amp; \
-    pip3 install -U pip setuptools &amp;&amp; \
-   rm -rf /var/lib/apt/lists/*
-
-# install uwsgi now because it takes a little while
-RUN pip3 install uwsgi
-
-# setup all the configfiles
-RUN echo &quot;daemon off;&quot; &gt;&gt; /etc/nginx/nginx.conf
-COPY nginx-app.conf /etc/nginx/sites-available/default
-COPY supervisor-app.conf /etc/supervisor/conf.d/
-
-# COPY requirements.txt and RUN pip install BEFORE adding the rest of your code, this will cause Docker&apos;s caching mechanism
-# to prevent re-installing (all your) dependencies when you made a change a line or two in your app.
-
-COPY app/requirements.txt /home/docker/code/app/
-RUN pip3 install -r /home/docker/code/app/requirements.txt
-
-# add (the rest of) our code
-COPY . /home/docker/code/
-
-# install django, normally you would remove this step because your project would already
-# be installed in the code/app/ directory
-RUN django-admin.py startproject website /home/docker/code/app/
-
-EXPOSE 80
-CMD [&quot;supervisord&quot;, &quot;-n&quot;]
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/26/2018/2018-04-26-pylibmc-安装zlib-h错误/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/26/2018/2018-04-26-pylibmc-安装zlib-h错误/" itemprop="url">pylibmc 安装zlib.h错误</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T12:02:00+08:00">
-                2018-04-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/异常问题/" itemprop="url" rel="index">
-                    <span itemprop="name">异常问题</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="问题抛出"><a href="#问题抛出" class="headerlink" title="问题抛出"></a>问题抛出</h3><pre><code>src/_pylibmcmodule.c:36:20: fatal error: zlib.h: No such file or directory
-#  include &lt;zlib.h&gt;
-                  ^
-compilation terminated.
-error: command &apos;gcc&apos; failed with exit status 1
-
-----------------------------------------
-Command &quot;/the-big-fucking-rocket/bin/python -u -c &quot;import setuptools, tokenize;__file__=&apos;/tmp/pip-install-CaJmCs/pylibmc/setup.py&apos;;f=getattr(tokenize, &apos;open&apos;, open)(__file__);code=f.read().replace(&apos;\r\n&apos;, &apos;\n&apos;);f.close();exec(compile(code, __file__, &apos;exec&apos;))&quot; install --record /tmp/pip-record-DcuGLB/install-record.txt --single-version-externally-managed --compile --install-headers /the-big-fucking-rocket/include/site/python2.7/pylibmc&quot; failed with error code 1 in /tmp/pip-install-CaJmCs/pylibmc/
-</code></pre><h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><blockquote>
-<p>yum install zlib-devel</p>
-</blockquote>
-<p>这里是centos系统的zlib包,不同系统的(zlib-*)不同,例如apt-get install zlib-dev</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/20/2018/2018-04-20-py3-与py2的差异/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/20/2018/2018-04-20-py3-与py2的差异/" itemprop="url">py3 与py2的差异</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-20T10:36:00+08:00">
-                2018-04-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="python3-与-python2的改进地方"><a href="#python3-与-python2的改进地方" class="headerlink" title="python3 与 python2的改进地方"></a>python3 与 python2的改进地方</h2><p><a href="http://python3porting.com/differences.html" target="_blank" rel="noopener">http://python3porting.com/differences.html</a></p>
-<h3 id="apply"><a href="#apply" class="headerlink" title="apply()"></a>apply()</h3><blockquote>
-<p>2to3 fixer ☑ six support ☐</p>
-</blockquote>
-<p>apply()函数用于当函数参数已经存在于一个元组或字典中时，间接地调用函数.<br>apply()内建函数自py2.3以后被移除，因为可以直接调用函数。</p>
-<h3 id="buffer"><a href="#buffer" class="headerlink" title="buffer()"></a>buffer()</h3><blockquote>
-<p>2to3 fixer ☑ six support ☐</p>
-</blockquote>
-<p>buffer() –&gt; memoryview(),他们并不完全兼容，</p>
-<p>下面代码在py2,py3都可以允许：</p>
-<pre><code>&gt;&gt;&gt; import sys
-&gt;&gt;&gt; if sys.version_info &gt; (3,): # 确定py的版本号
-...     buffer = memoryview
-&gt;&gt;&gt; b = buffer(&apos;yay!&apos;.encode())
-&gt;&gt;&gt; len(b)
-4
-</code></pre><h3 id="callable"><a href="#callable" class="headerlink" title="callable()"></a>callable()</h3><blockquote>
-<p>2to3 fixer ☑ six support ☑</p>
-</blockquote>
-<p>callable()在py3.0移除，然后在py3.2再次加进来，如果在python3.1使用不可以callable的对象需要抓起TypeError错误。<br>如果判断是否可调用函数，可以通过下列方法：</p>
-<pre><code>&gt;&gt;&gt; def afunction():
-...     pass
-
-&gt;&gt;&gt; any(&quot;__call__&quot; in klass.__dict__ for
-...     klass in type(afunction).__mro__)
-True
-
-&gt;&gt;&gt; import collections
-&gt;&gt;&gt; isinstance(afunction, collections.Callable)
-True
-</code></pre><p>如果没有引用2to3兼容包的情况下，可以使用<code>hasattr</code>函数</p>
-<pre><code>&gt;&gt;&gt; hasattr(bool, &apos;__call__&apos;)
-True
-</code></pre><p>six模块定义了可调函数,为py3使用。</p>
-<h3 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h3><blockquote>
-<p>2to3 fixer ☐ six support ☐</p>
-</blockquote>
-<p>在py2有两者类的类型 新样式和旧样式, 在py3剔除了旧样式。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/19/2018/2018-04-19-pro/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/19/2018/2018-04-19-pro/" itemprop="url">@pro</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-19T19:20:00+08:00">
-                2018-04-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Django: @cached_property on models</p>
-<p><a href="https://medium.com/@fdemmer/django-cached-property-on-models-f4673de33990" target="_blank" rel="noopener">https://medium.com/@fdemmer/django-cached-property-on-models-f4673de33990</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/11/2018/2018-04-11-python-property函数/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/11/2018/2018-04-11-python-property函数/" itemprop="url">python 内置函数property</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-11T09:47:00+08:00">
-                2018-04-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>属性函数（property）有以下作用：</p>
-<blockquote>
-<p>将类方法转换为只读属性<br> 重新实现一个属性的setter和getter方法</p>
-</blockquote>
-<p>Property 源代码：</p>
-<pre><code>class Property:
-    def __init__(self,fget=None,fset=None,fdel=None):
-        self.fget = fget
-        self.fset = fset
-        self.fdel = fdel
-
-    def __get__(self,instance,cls):
-        if self.fget is not None:
-            return self.fget(instance)
-
-    def __set__(self,instance,value):
-        if self.fset is not None:
-            self.fset(instance,value)
-
-    def __delete__(self,instance):
-        if self.fdel is not None:
-            self.fdel(instance)
-
-    def getter(self,fn):
-        self.fget = fn
-
-    def setter(self,fn):
-        self.fset = fn
-
-    def deler(self,fn):
-        self.fdel = fn
-</code></pre><p>简单例子：</p>
-<pre><code>class Foo:
-    def __init__(self,val):
-        self.__NAME=val #将所有的数据属性都隐藏起来
-
-    def getname(self): #get
-        return self.__NAME #obj.name访问的是self.__NAME(这也是真实值的存放位置)
-
-    def setname(self,value): #set
-        if not isinstance(value,str):  #在设定值之前进行类型检查
-            raise TypeError(&apos;%s must be str&apos; %value)
-        self.__NAME=value #通过类型检查后,将值value存放到真实的位置self.__NAME
-
-    def delname(self): #delete
-        raise TypeError(&apos;Can not delete&apos;)
-
-    name=property(getname,setname,delname) #最后把方法变成属性
-</code></pre><p>  高级用法：<br>  @property 类属性装饰器。常见案例不再举例子。</p>
-
+            <h3 id="这里记录-阅读官方文档的日志"><a href="#这里记录-阅读官方文档的日志" class="headerlink" title="这里记录 阅读官方文档的日志"></a>这里记录 阅读官方文档的日志</h3><h3 id="每周一模块"><a href="#每周一模块" class="headerlink" title="每周一模块"></a>每周一模块</h3><h3 id="坚持年底"><a href="#坚持年底" class="headerlink" title="坚持年底"></a>坚持年底</h3>
           
         
       
@@ -1650,7 +1419,7 @@ True
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1696,7 +1465,7 @@ True
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">29</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
