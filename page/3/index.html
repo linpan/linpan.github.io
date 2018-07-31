@@ -259,6 +259,1166 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/29/2018/2018-05-29-py3与py2的变动之处/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/29/2018/2018-05-29-py3与py2的变动之处/" itemprop="url">第二期: py3 与py2的差异</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-29T18:11:00+08:00">
+                2018-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="file"><a href="#file" class="headerlink" title="file"></a>file</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>file 在py2是内置函数, 在py3不在支持了。替代用法是</p>
+<blockquote>
+<p>open(filename)</p>
+</blockquote>
+<p>当然也可以使用 <code>io.IOBase</code> 替代file</p>
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter()"></a>filter()</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>filter()在py2 返回是list, py3返回是迭代器</p>
+<h3 id="imports"><a href="#imports" class="headerlink" title="imports"></a>imports</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>在Python 3中，包内的隐式相对导入不再可用 – 仅支持绝对导入和显式相对导入<br>引入当前目录下的包必须指定相对路径:</p>
+<pre><code>from . import mypkg
+from .mypkg import subpkg
+from .. import fatherpkg
+</code></pre><h3 id="input-and-raw-input"><a href="#input-and-raw-input" class="headerlink" title="input and raw_input()"></a>input and raw_input()</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>py3 由input 替代 raw_input()函数. 如果求输入字符串的值,可以用eval()</p>
+<pre><code>&gt;&gt;&gt; eval(input(&apos;Type in an expression: &apos;))
+&apos;Type in an expression: &apos; 1+2
+3
+</code></pre><h3 id="interger-division"><a href="#interger-division" class="headerlink" title="interger division"></a>interger division</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>py2 两个整数相除,结果为int,<br>py3 两个整数相除,结果为float,</p>
+<h3 id="long-and-int"><a href="#long-and-int" class="headerlink" title="long and int"></a>long and int</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>python3 彻底废弃了 long+int 双整数实现的方法, 统一为 int , 支持高精度整数运算</p>
+<h3 id="range-and-xrange"><a href="#range-and-xrange" class="headerlink" title="range() and xrange()"></a>range() and xrange()</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+<p>python3 只留range(),返回是迭代器。</p>
+</blockquote>
+<h3 id="map"><a href="#map" class="headerlink" title="map()"></a>map()</h3><p>py2 map()返回list, py3 返回迭代器</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/29/2018/py3 与py2差异的地方/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/29/2018/py3 与py2差异的地方/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-29T18:10:43+08:00">
+                2018-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/17/2018/2018-05-17-模块：进度条tqdm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/17/2018/2018-05-17-模块：进度条tqdm/" itemprop="url">模块：进度条Tqdm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-17T11:12:00+08:00">
+                2018-05-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="描述"><a href="#描述" class="headerlink" title="描述"></a>描述</h3><p>显示进度条（ ProgressBar）</p>
+<h3 id="官方文档"><a href="#官方文档" class="headerlink" title="官方文档"></a>官方文档</h3><p>通过迭代对象 循环实现的, 基本用法：</p>
+<pre><code>from tqdm import tqdm
+for i in tqdm(range(10000)):
+    ...
+</code></pre><p>或者with 语言实现：</p>
+<pre><code>with tqdm(total=100) as pbar:
+    for i in range(10):
+        pbar.update(10)
+</code></pre><p>更多使用方法参考<a href="https://github.com/tqdm/tqdm" target="_blank" rel="noopener">官网文档</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/07/2018/2018-05-07-pip-你熟悉多少呀？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/07/2018/2018-05-07-pip-你熟悉多少呀？/" itemprop="url">pip 你熟悉多少呀？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-07T18:53:00+08:00">
+                2018-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="查看包信息"><a href="#查看包信息" class="headerlink" title="查看包信息"></a>查看包信息</h3><blockquote>
+<p>pip show [package-name]</p>
+</blockquote>
+<p>输出的info：</p>
+<pre><code>Name: six
+Version: 1.11.0
+Summary: Python 2 and 3 compatibility utilities
+Home-page: http://pypi.python.org/pypi/six/
+Author: Benjamin Peterson
+Author-email: benjamin@python.org
+License: MIT
+Location: /usr/local/lib/python3.6/site-packages
+Requires:
+Required-by:
+</code></pre><h3 id="查看包是否有更新"><a href="#查看包是否有更新" class="headerlink" title="查看包是否有更新"></a>查看包是否有更新</h3><blockquote>
+<p>pip list –outdated</p>
+</blockquote>
+<h3 id="包的升级"><a href="#包的升级" class="headerlink" title="包的升级"></a>包的升级</h3><blockquote>
+<p> pip install [—U | –upgrade] [package-name] # pip install -U six</p>
+</blockquote>
+<h3 id="搜索包"><a href="#搜索包" class="headerlink" title="搜索包"></a>搜索包</h3><blockquote>
+<p>pip search [package-name]</p>
+</blockquote>
+<h3 id="列出安装的包"><a href="#列出安装的包" class="headerlink" title="列出安装的包"></a>列出安装的包</h3><blockquote>
+<p>pip list</p>
+</blockquote>
+<h3 id="安装指定版本的软件包"><a href="#安装指定版本的软件包" class="headerlink" title="安装指定版本的软件包"></a>安装指定版本的软件包</h3><blockquote>
+<p>pip install six                    #不指定版本号，安装可用的最新版本</p>
+<p>pip install django==2.0          #指定版本号2.0</p>
+<p>pip install requests&gt;2.0,&lt; 3.0      #(2.0,3.0)之间的最新版本</p>
+<h3 id="自动生成和安装requirements-txt依赖"><a href="#自动生成和安装requirements-txt依赖" class="headerlink" title="自动生成和安装requirements.txt依赖"></a>自动生成和安装requirements.txt依赖</h3></blockquote>
+<p>在查看别人的Python项目时，经常会看到一个requirements.txt文件，里面记录了当前程序的所有依赖包及其精确版本号。这个文件有点类似与Rails的Gemfile。其作用是用来在另一台PC上重新构建项目所需要的运行环境依赖。</p>
+<p>requirements.txt可以通过pip命令自动生成和安装</p>
+<p>生成requirements.txt文件</p>
+<blockquote>
+<p>pip freeze &gt; requirements.txt</p>
+</blockquote>
+<p>安装requirements.txt依赖</p>
+<blockquote>
+<p>pip install -r requirements.txt</p>
+</blockquote>
+<h3 id="pypi国内镜像源"><a href="#pypi国内镜像源" class="headerlink" title="pypi国内镜像源"></a>pypi国内镜像源</h3><p>国外的pypi镜像源下载比较缓慢,尤其比较大的文件,龟速,考虑使用国内的镜像源,<br>国内的一般在一定的时间内与国外的同步一次,保持着更新.</p>
+<ol>
+<li>豆瓣：<a href="http://pypi.douban.com/simple？" target="_blank" rel="noopener">http://pypi.douban.com/simple？</a></li>
+<li>中国科学技术大学 <a href="http://pypi.mirrors.ustc.edu.cn/simple/" target="_blank" rel="noopener">http://pypi.mirrors.ustc.edu.cn/simple/</a></li>
+<li>阿里：<a href="http://mirrors.aliyun.com/pypi/simple/" target="_blank" rel="noopener">http://mirrors.aliyun.com/pypi/simple/</a></li>
+<li>清华： <a href="https://pypi.tuna.tsinghua.edu.cn/simple" target="_blank" rel="noopener">https://pypi.tuna.tsinghua.edu.cn/simple</a></li>
+</ol>
+<h4 id="普通用法"><a href="#普通用法" class="headerlink" title="普通用法"></a>普通用法</h4><p>pip install -i <a href="https://pypi.tuna.tsinghua.edu.cn/simple" target="_blank" rel="noopener">https://pypi.tuna.tsinghua.edu.cn/simple</a> some-package</p>
+<p>注意<code>simple</code>不能少, 是<code>https</code>而不是<code>http</code></p>
+<h4 id="设置默认"><a href="#设置默认" class="headerlink" title="设置默认"></a>设置默认</h4><p>配置文件指定镜像<br>pip 的配置文件为 ~/.pip/pip.conf</p>
+<pre><code>[global]
+index-url = http://mirrors.aliyun.com/pypi/simple/
+
+[install]
+trusted-host = mirrors.aliyun.com
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/07/2018/2018-05-07-kivy-控件的根root/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/07/2018/2018-05-07-kivy-控件的根root/" itemprop="url">kivy 控件的根root</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-07T14:22:00+08:00">
+                2018-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code>&apos;&apos;&apos;
+Little demonstration of various kivy useful features:
+    - loading kv code
+    - adding dynamic parts to static parts using ids
+    - dynamic classes
+    - getting a reference to a Dynamic classes using Factory
+    - binding events to python expressions on kv side
+useful references:
+    - http://kivy.org/docs/guide/lang.html#referencing-widgets
+    - http://kivy.org/docs/api-kivy.uix.widget.html?highlight=ids#kivy.uix.widget.Widget.ids
+    - http://kivy.org/docs/api-kivy.lang.html?highlight=dynamic%20classes#dynamic-classes
+&apos;&apos;&apos;
+
+from kivy.app import App
+from kivy.lang import Builder
+from kivy.factory import Factory
+from kivy.uix.label import Label
+from kivy.uix.button import Button
+from kivy.uix.screenmanager import Screen
+
+from string import letters
+
+# this kv code defines two things:
+# - the root widget, a vertical boxlayout with:
+#   - the first element being another boxlayout to store buttons, with a
+#   &quot;button&quot; id
+#   - the second element being the ScreenManager that will contain our
+#   screens, with &quot;sm&quot; id
+# - a dynamic class rule, that defines the `MahButton` class, based on
+#   button, and whose only difference with button is that on_press, it
+#   changes the screen manager&apos;s screen to the one with the name equals
+#   to the button&apos;s text.
+#   This works by using using the app&apos;s root widget, and its `ids`
+#   member, that maps the ids defined in the root widget&apos;s rule (ids
+#   being local to rules), to get the ScreenManager object and change
+#   its current screen. self is the current widget, here any `MahButton`
+#   instance that is currently being pressed, so self.text is the text
+#   displayed by the clicked button.
+
+
+kv = &apos;&apos;&apos;
+BoxLayout:
+    orientation: &apos;vertical&apos;
+    BoxLayout:
+        size_hint_y: None
+        height: 30
+        id: buttons
+    ScreenManager:
+        id: sm
+&lt;MahButton&gt;:
+    on_press: app.root.ids.sm.current = self.text
+&apos;&apos;&apos;
+
+
+class MahButton(Button):
+    pass
+
+
+class MahApp(App):
+    &apos;&apos;&apos;
+    Our main application
+    &apos;&apos;&apos;
+    def build(self):
+        # here we load the kv code, so we get the root rule as root, and
+        # the MahButton dynamic class is defined
+        self.root = Builder.load_string(kv)
+
+        for l in letters:
+            # create a screen with a Label as content, and add it to the
+            # ScreenManager object, again using ids, since the rule has
+            # been loaded.
+            s = Screen(name=l)
+            s.add_widget(Label(text=l))
+            self.root.ids.sm.add_widget(s)
+
+            # add a button with the same text as the screen name to the
+            # `buttons` id of root, using the same ids technique
+            self.root.ids.buttons.add_widget(MahButton(text=l))
+
+        # we need to return the root widget
+        return self.root
+
+# common python idiom to make programs that behave well if imported as
+# modules
+
+if __name__ == &apos;__main__&apos;:
+    MahApp().run()
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/05/2018/2018-05-05-python-zipfile-文件压缩/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/05/2018/2018-05-05-python-zipfile-文件压缩/" itemprop="url">python Zipfile 文件压缩</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-05T11:42:00+08:00">
+                2018-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="知识点："><a href="#知识点：" class="headerlink" title="知识点："></a>知识点：</h3><ul>
+<li>临时文件的自动创建及自动销毁 写入临时文件的是file-like 对象<br>-ZipFile wirte方法的参数filename,要压缩的文件名</li>
+<li>arcname 重新指定在压缩包的文件路径<br>如果不指定arcname 压缩的文件包括文件的整个路径.我们可以通过arcname重新调整文件的压缩结构。</li>
+</ul>
+<pre><code>def get():
+    pic_path = &apos;/Users/py2018/antique_images&apos;
+    zip_file_name = &apos;img&apos;
+    zip_filename = &apos;%s.zip&apos; % zip_file_name
+    try:
+        with tempfile.SpooledTemporaryFile() as tmp:
+            with ZipFile(&apos;/Users/py2018/here.zip&apos;, &apos;w&apos;) as archive:
+
+                for root, dirs, files in os.walk(pic_path):
+                    for file in files:
+                        zip_path = os.path.join(&apos;abc&apos;, file)
+
+                        archive.write(os.path.join(root, file), zip_path )
+            tmp.seek(0)
+            tmp.read()
+
+    except Exception as e:
+        print e
+</code></pre><h3 id="补充点："><a href="#补充点：" class="headerlink" title="补充点："></a>补充点：</h3><p> 创建临时的目录 （using  the context manager）</p>
+<blockquote>
+<p>tempfile.TemporaryDirectory()</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/02/2018/2018-05-02-kivy语言：if-else/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/02/2018/2018-05-02-kivy语言：if-else/" itemprop="url">kivy语言：if-else</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-02T19:46:00+08:00">
+                2018-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code>from kivy.config import Config
+Config.set(&apos;graphics&apos;,&apos;width&apos;,&apos;400&apos;)
+Config.set(&apos;graphics&apos;, &apos;width&apos;, &apos;300&apos;)
+
+from kivy.lang import Builder
+from kivy.uix.widget import Widget
+from kivy.uix.boxlayout import BoxLayout
+from kivy.properties import BooleanProperty, NumericProperty
+from kivy.clock import Clock
+from kivy.app import App
+
+
+Builder.load_string(&apos;&apos;&apos;
+#:kivy 1.8.0
+
+&lt;KivyTimer&gt;:
+    BoxLayout:
+        orientation: &apos;vertical&apos;
+        pos: root.pos
+        size: root.size
+
+        Label:
+            text: str(root.left_time)
+            font_size: 100
+
+        BoxLayout:
+            orientation: &apos;horizontal&apos;
+            size_hint: 1.0, 0.3
+
+            Button:
+                text: &apos;+1 minute&apos;
+                font_size: 16
+                on_press: root.on_command(&apos;+1 minute&apos;)
+
+            Button:
+                text: &apos;Stop&apos; if root.is_countdown else &apos;Start&apos;
+                font_size: 16
+                on_press: root.on_command(&apos;start/stop&apos;)
+
+            Button:
+                text: &apos;Reset&apos;
+                font_size: 16
+                on_press: root.on_command(&apos;reset&apos;)
+&apos;&apos;&apos;)
+
+
+
+class KivyTimer(Widget):
+    is_countdown = BooleanProperty(False)
+    left_time = NumericProperty(0)
+
+    def on_command(self, command):
+        if command == &apos;+1 minute&apos;:
+            self.left_time += 60
+        elif command == &apos;start/stop&apos;:
+            if self.is_countdown:
+                self.stop_timer()
+            elif self.left_time &gt; 0:
+                self.start_timer()
+        elif command == &apos;reset&apos;:
+            self.stop_timer()
+            self.left_time = 0
+
+    def on_countdown(self, dt):
+        self.left_time -= 1
+        if self.left_time == 0:
+            self.is_countdown = False
+            return False
+
+    def start_timer(self):
+        self.is_countdown = False
+        Clock.schedule_interval(self.on_countdown, 1.0)
+
+    def stop_timer(self):
+        self.is_countdown = False
+
+        Clock.unschedule(self.on_countdown)
+
+
+class KivyTimerApp(App):
+    def build(self):
+        return KivyTimer()
+
+
+
+if __name__ == &apos;__main__&apos;:
+    KivyTimerApp().run()
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/28/2018/2018-04-28-docker-基本操作/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -498,1182 +1658,11 @@ docker rm [NAME]/[CONTAINER ID]:不能够删除一个正在运行的容器，会
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/26/2018/2018-04-26-dockerfiles-django-uwsgi-nginx/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/26/2018/2018-04-26-dockerfiles-django-uwsgi-nginx/" itemprop="url">dockerfiles:django-uwsgi-nginx</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T16:44:00+08:00">
-                2018-04-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <pre><code># Copyright 2013 Thatcher Peskens
-#
-# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-FROM ubuntu:16.04
-
-MAINTAINER Dockerfiles
-
-# Install required packages and remove the apt packages cache when done.
-
-RUN apt-get update &amp;&amp; \
-    apt-get upgrade -y &amp;&amp; \
-    apt-get install -y \
-    git \
-    python3 \
-    python3-dev \
-    python3-setuptools \
-    python3-pip \
-    nginx \
-    supervisor \
-    sqlite3 &amp;&amp; \
-    pip3 install -U pip setuptools &amp;&amp; \
-   rm -rf /var/lib/apt/lists/*
-
-# install uwsgi now because it takes a little while
-RUN pip3 install uwsgi
-
-# setup all the configfiles
-RUN echo &quot;daemon off;&quot; &gt;&gt; /etc/nginx/nginx.conf
-COPY nginx-app.conf /etc/nginx/sites-available/default
-COPY supervisor-app.conf /etc/supervisor/conf.d/
-
-# COPY requirements.txt and RUN pip install BEFORE adding the rest of your code, this will cause Docker&apos;s caching mechanism
-# to prevent re-installing (all your) dependencies when you made a change a line or two in your app.
-
-COPY app/requirements.txt /home/docker/code/app/
-RUN pip3 install -r /home/docker/code/app/requirements.txt
-
-# add (the rest of) our code
-COPY . /home/docker/code/
-
-# install django, normally you would remove this step because your project would already
-# be installed in the code/app/ directory
-RUN django-admin.py startproject website /home/docker/code/app/
-
-EXPOSE 80
-CMD [&quot;supervisord&quot;, &quot;-n&quot;]
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/26/2018/2018-04-26-pylibmc-安装zlib-h错误/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/26/2018/2018-04-26-pylibmc-安装zlib-h错误/" itemprop="url">pylibmc 安装zlib.h错误</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T12:02:00+08:00">
-                2018-04-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/异常问题/" itemprop="url" rel="index">
-                    <span itemprop="name">异常问题</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="问题抛出"><a href="#问题抛出" class="headerlink" title="问题抛出"></a>问题抛出</h3><pre><code>src/_pylibmcmodule.c:36:20: fatal error: zlib.h: No such file or directory
-#  include &lt;zlib.h&gt;
-                  ^
-compilation terminated.
-error: command &apos;gcc&apos; failed with exit status 1
-
-----------------------------------------
-Command &quot;/the-big-fucking-rocket/bin/python -u -c &quot;import setuptools, tokenize;__file__=&apos;/tmp/pip-install-CaJmCs/pylibmc/setup.py&apos;;f=getattr(tokenize, &apos;open&apos;, open)(__file__);code=f.read().replace(&apos;\r\n&apos;, &apos;\n&apos;);f.close();exec(compile(code, __file__, &apos;exec&apos;))&quot; install --record /tmp/pip-record-DcuGLB/install-record.txt --single-version-externally-managed --compile --install-headers /the-big-fucking-rocket/include/site/python2.7/pylibmc&quot; failed with error code 1 in /tmp/pip-install-CaJmCs/pylibmc/
-</code></pre><h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><blockquote>
-<p>yum install zlib-devel</p>
-</blockquote>
-<p>这里是centos系统的zlib包,不同系统的(zlib-*)不同,例如apt-get install zlib-dev</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/20/2018/2018-04-20-py3-与py2的差异/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/20/2018/2018-04-20-py3-与py2的差异/" itemprop="url">第一期: py3 与py2的差异</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-20T10:36:00+08:00">
-                2018-04-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="apply"><a href="#apply" class="headerlink" title="apply()"></a>apply()</h3><blockquote>
-<p>2to3 fixer ☑ six support ☐</p>
-</blockquote>
-<p>apply()函数用于当函数参数已经存在于一个元组或字典中时，间接地调用函数.<br>apply()内建函数自py2.3以后被移除，因为可以直接调用函数。</p>
-<h3 id="buffer"><a href="#buffer" class="headerlink" title="buffer()"></a>buffer()</h3><blockquote>
-<p>2to3 fixer ☑ six support ☐</p>
-</blockquote>
-<p>buffer() –&gt; memoryview(),他们并不完全兼容，</p>
-<p>下面代码在py2,py3都可以允许：</p>
-<pre><code>&gt;&gt;&gt; import sys
-&gt;&gt;&gt; if sys.version_info &gt; (3,): # 确定py的版本号
-...     buffer = memoryview
-&gt;&gt;&gt; b = buffer(&apos;yay!&apos;.encode())
-&gt;&gt;&gt; len(b)
-4
-</code></pre><h3 id="callable"><a href="#callable" class="headerlink" title="callable()"></a>callable()</h3><blockquote>
-<p>2to3 fixer ☑ six support ☑</p>
-</blockquote>
-<p>callable()在py3.0移除，然后在py3.2再次加进来，如果在python3.1使用不可以callable的对象需要抓起TypeError错误。<br>如果判断是否可调用函数，可以通过下列方法：</p>
-<pre><code>&gt;&gt;&gt; def afunction():
-...     pass
-
-&gt;&gt;&gt; any(&quot;__call__&quot; in klass.__dict__ for
-...     klass in type(afunction).__mro__)
-True
-
-&gt;&gt;&gt; import collections
-&gt;&gt;&gt; isinstance(afunction, collections.Callable)
-True
-</code></pre><p>如果没有引用2to3兼容包的情况下，可以使用<code>hasattr</code>函数</p>
-<pre><code>&gt;&gt;&gt; hasattr(bool, &apos;__call__&apos;)
-True
-</code></pre><p>six模块定义了可调函数,为py3使用。</p>
-<h3 id="Classes"><a href="#Classes" class="headerlink" title="Classes"></a>Classes</h3><blockquote>
-<p>2to3 fixer ☐ six support ☐</p>
-</blockquote>
-<p>在py2有两者类的类型 新样式和旧样式, 在py3剔除了旧样式。</p>
-<h3 id="Comparisions"><a href="#Comparisions" class="headerlink" title="Comparisions"></a>Comparisions</h3><blockquote>
-<p>2to3 fixer ☐ six support ☐</p>
-</blockquote>
-<p>不要使用 cmp() 函数， <code>__cmp__</code> 已经不再被支持。因此排序请使用 <code>__lt__</code>、 <code>__eq__</code> 和 <code>__hash__</code> 这些更有意义的比较。（现有的 cmp() 函数使用可以修改为 (a &gt; b) - (a &lt; b)，等价于 cmp(a, b) 。）</p>
-<pre><code>def cmp(a, b):
-    return (a &gt; b) - (a &lt; b)
-</code></pre><h3 id="coerce-and-coerece"><a href="#coerce-and-coerece" class="headerlink" title="coerce() and __coerece__"></a>coerce() and <code>__coerece__</code></h3><blockquote>
-<p>2to3 fixer ☐ six support ☐</p>
-</blockquote>
-<p>python3 正式被移除了</p>
-<h3 id="Dictionary-方法"><a href="#Dictionary-方法" class="headerlink" title="Dictionary 方法"></a>Dictionary 方法</h3><blockquote>
-<p>2to3 fixer ☐ six support ☐</p>
-</blockquote>
-<p>python2 字典有<code>iterkeys()</code> 、<code>itervalue()</code> 、<code>iteritems()</code> 方法, 返回类型是迭代器<br>python 3 变成了 <code>keys</code> <code>values</code> <code>items</code> 方法了。 ‘has_key’被移除。<br>如果做到py2 py3的兼容,使用try/except</p>
-<pre><code>&gt;&gt;&gt; d = {&apos;key1&apos;: &apos;value1&apos;,
-...      &apos;key2&apos;: &apos;value2&apos;,
-...      &apos;key3&apos;: &apos;value3&apos;,
-... }
-
-&gt;&gt;&gt; try:
-...     values = d.itervalues()
-... except AttributeError:
-...     values = d.values()
-
-&gt;&gt;&gt; isinstance(values, list)
-False
-
-&gt;&gt;&gt; for value in values:
-...     print(value)
-value3
-value2
-value1
-</code></pre><h3 id="except"><a href="#except" class="headerlink" title="except"></a>except</h3><blockquote>
-<p>2to3 fixer ☐ six support ☐</p>
-</blockquote>
-<p>python 2.6 之前的版本是</p>
-<pre><code>except (Exception1, Exception2), target:
-</code></pre><p>python 2.6 - python 3.x 以更简洁的表达</p>
-<pre><code>except (Exception1, Exception2) as target:
-</code></pre><h3 id="Exception-object"><a href="#Exception-object" class="headerlink" title="Exception object"></a>Exception object</h3><blockquote>
-<p>2to3 fixer ☐ six support ☐</p>
-</blockquote>
-<p>在 py2 异常对象是可迭代对象和可索引的</p>
-<pre><code>&gt;&gt;&gt; e = Exception(&apos;arg1&apos;, &apos;arg2&apos;)
-&gt;&gt;&gt; e[1]
-&apos;arg2&apos;
-&gt;&gt;&gt; for a in e:
-...   print a
-...
-arg1
-arg2
-</code></pre><p>在 py3 必须使用args属性, 此属性也可以在py2支持</p>
-<pre><code>&gt;&gt;&gt; e = Exception(&apos;arg1&apos;, &apos;arg2&apos;)
-&gt;&gt;&gt; e.args[1]
-&apos;arg2&apos;
-&gt;&gt;&gt; for a in e.args:
-...   print a
-...
-arg1
-arg2
-</code></pre><h3 id="exec"><a href="#exec" class="headerlink" title="exec"></a>exec</h3><blockquote>
-<p>2to3 fixer ☐ six support ☐</p>
-</blockquote>
-<p>py2,exec 是语句</p>
-<pre><code>&gt;&gt;&gt; g_dict={}
-&gt;&gt;&gt; l_dict={}
-&gt;&gt;&gt; exec &quot;v = 3&quot; in g_dict, l_dict
-&gt;&gt;&gt; l_dict[&apos;v&apos;]
-3
-</code></pre><p>py3, exec 是函数,类似print与print()</p>
-<pre><code>&gt;&gt;&gt; g_dict={}
-&gt;&gt;&gt; l_dict={}
-&gt;&gt;&gt; exec(&quot;v = 3&quot;, g_dict, l_dict)
-&gt;&gt;&gt; l_dict[&apos;v&apos;]
-3
-</code></pre><h3 id="execfile"><a href="#execfile" class="headerlink" title="execfile"></a>execfile</h3><p>execfile() 函数可以用来执行一个文件。</p>
-<blockquote>
-<p>2to3 fixer ☐ six support ☐</p>
-</blockquote>
-<p>execfile 在py2 是语句,  在py3被抛弃,你可以通过exce来实现</p>
-<blockquote>
-<p>exec(open(‘hello.py’).read())</p>
-</blockquote>
-<p>此方法适合python任何版本。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/11/2018/2018-04-11-python-property函数/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/11/2018/2018-04-11-python-property函数/" itemprop="url">python 内置函数property</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-11T09:47:00+08:00">
-                2018-04-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>属性函数（property）有以下作用：</p>
-<blockquote>
-<p>将类方法转换为只读属性<br> 重新实现一个属性的setter和getter方法</p>
-</blockquote>
-<p>Property 源代码：</p>
-<pre><code>class Property:
-    def __init__(self,fget=None,fset=None,fdel=None):
-        self.fget = fget
-        self.fset = fset
-        self.fdel = fdel
-
-    def __get__(self,instance,cls):
-        if self.fget is not None:
-            return self.fget(instance)
-
-    def __set__(self,instance,value):
-        if self.fset is not None:
-            self.fset(instance,value)
-
-    def __delete__(self,instance):
-        if self.fdel is not None:
-            self.fdel(instance)
-
-    def getter(self,fn):
-        self.fget = fn
-
-    def setter(self,fn):
-        self.fset = fn
-
-    def deler(self,fn):
-        self.fdel = fn
-</code></pre><p>简单例子：</p>
-<pre><code>class Foo:
-    def __init__(self,val):
-        self.__NAME=val #将所有的数据属性都隐藏起来
-
-    def getname(self): #get
-        return self.__NAME #obj.name访问的是self.__NAME(这也是真实值的存放位置)
-
-    def setname(self,value): #set
-        if not isinstance(value,str):  #在设定值之前进行类型检查
-            raise TypeError(&apos;%s must be str&apos; %value)
-        self.__NAME=value #通过类型检查后,将值value存放到真实的位置self.__NAME
-
-    def delname(self): #delete
-        raise TypeError(&apos;Can not delete&apos;)
-
-    name=property(getname,setname,delname) #最后把方法变成属性
-</code></pre><p>  高级用法：<br>  @property 类属性装饰器。常见案例不再举例子。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/03/2018/2018-04-03-postgresql-懒得说序列-sequeue/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/03/2018/2018-04-03-postgresql-懒得说序列-sequeue/" itemprop="url">Postgresql 懒得说序列 Sequeue</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-03T12:05:00+08:00">
-                2018-04-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="PostgreSQL-序列（Sequence）"><a href="#PostgreSQL-序列（Sequence）" class="headerlink" title="PostgreSQL - 序列（Sequence）"></a>PostgreSQL - 序列（Sequence）</h3><p>PostgreSQL 中的序列是一个<code>数据库对象</code>，本质上是一个<code>自增器</code>。因此，序列在其他同类型数据库软件中以 autoincrment 值的形式存在。</p>
-<p>场景需求：<br>在一张表需要非随机，唯一标实符的场景下，Sequence 非常有用。</p>
-<p>Sequence 对象中包含当前值，和一些独特属性，例如如何递增（或者递减）。实际上，Sequence 是不能被直接访问到的；他们需要通过 PostgreSQL 中的相关函数(setval等等)来操作他们。</p>
-<h3 id="创建序列"><a href="#创建序列" class="headerlink" title="创建序列"></a>创建序列</h3><p>序列创建语法：</p>
-<pre><code>CREATE SEQUEUE sequeuename
-[INCREMENT increment]   -- 自增数, 默认1
-[MINVALUE minvalue]     -- 最小值
-[MAXVALUE maxvalue]     -- 最大值
-[START start]           -- 设置起始值
-[CACHE cache]           -- 是否预先缓存
-[CYCLE]                 -- 是否达到最大值后,回到最小值
-</code></pre><p>Sequence 使用的是整型数值，因此它的取值范围[ -9223372036854775808 to 9223372036854775807]之间(Postgresql9.5官方文档)；现在我们创建一个序列范例：</p>
-<pre><code>CREATE SEQUENCE &quot;reg_num_2017a_serial&quot;
-INCREMENT 1
-MINVALUE  1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1;
-</code></pre><h3 id="查看序列"><a href="#查看序列" class="headerlink" title="查看序列"></a>查看序列</h3><p>psql 的 \d 命令输出一个数据库对象，包括 Sequence表，视图和索引。你还可以使用 \ds 命令只查看当前数据库的所有序列。</p>
-<pre><code>py2018=# \ds
-             List of relations
-Schema |          Name          |   Type   |  Owner
---------+------------------------+----------+----------
-public | activities_id_seq      | sequence | postgres
-public | antique_details_id_seq | sequence | postgres
-public | antiques_id_seq        | sequence | postgres
-public | bid_records_id_seq     | sequence | postgres
-public | buyers_id_seq          | sequence | postgres
-public | contracts_id_seq       | sequence | postgres
-public | countries_id_seq       | sequence | postgres
-public | identity_types_id_seq  | sequence | postgres
-public | `reg_nums_id_seq`      | sequence | postgres
-public | sellers_id_seq         | sequence | postgres
-public | sub_activities_id_seq  | sequence | postgres
-public | transactions_id_seq    | sequence | postgres
-(12 rows)
-</code></pre><p>  Sequence 就像表和视图一样，拥有自己的结构，只不过它的结构是固定的:</p>
-<pre><code>py2018=# \d reg_nums_id_seq
-                      Sequence &quot;public.reg_nums_id_seq&quot;
-  Type  | Start | Minimum |       Maximum       | Increment | Cycles? | Cache
---------+-------+---------+---------------------+-----------+---------+-------
- bigint | 60828 |       1 | 9223372036854775807 |         1 | no      |     1
-Owned by: public.reg_nums.id
-</code></pre><h3 id="序列的基本方法"><a href="#序列的基本方法" class="headerlink" title="序列的基本方法"></a>序列的基本方法</h3><p> Sequence 的函数：</p>
-<ul>
-<li>nextval(‘sequence_name’): 将当前值设置成递增后的值，并返回</li>
-<li>currval(‘sequence_name’): 返回当前值</li>
-<li>setval(‘sequence_name’, n, b=true): 设置当前值；b 默认设置 true，下一次调用 nextval() 时，直接返回 n，如果设置 false，则返回 n+increment:</li>
-</ul>
-<p><code>extval()</code> 函数要求一个序列名（必须由单引号包围）为第一个参数。 需要注意的是，当你第一次调用 nextval() 将会返回序列的初始值，即 START；因为他没有调用递增的方法。</p>
-<p>Sequence 一般作为表的唯一标识符字段的默认值使用（这是序列的最常见的场景）；看个例子：</p>
-<pre><code>py2018=# CREATE TABLE shipments (id integer DEFAULT nextval(&apos;shipments_ship_id_seq&apos;) PRIMARY KEY,
-customer_id integer, isbn text, ship_date timestamp);
-CREATE TABLE
-py2018=# \d shipments
-                                    Table &quot;public.shipments&quot;
-Column    |            Type             |                          Modifiers
--------------+-----------------------------+-------------------------------------------------------------
-id          | integer                     | not null default nextval(&apos;shipments_ship_id_seq&apos;::regclass)
-customer_id | integer                     |
-isbn        | text                        |
-ship_date   | timestamp without time zone |
-Indexes:
-&quot;shipments_pkey&quot; PRIMARY KEY, btree (id)
-</code></pre><p>这张表中的 id 字段的默认值将被设置成 shipments_ship_id_seq 的 nextval() 值。如果插入值的时候，没有指定 id 的值，将会自动选择 nextval(‘shipments_ship_id_seq’) 的值。</p>
-<p>注意： id 字段的默认值并不是强制使用的。用户仍然可以手动插入值，这样潜在地造成与未来的序列值冲突的风险。这个可以通过 trigger 来防止这个问题，后续将详细介绍。</p>
-<p>为了防止同一个序列同时被多个被多个用户访问导致错误，序列的当前值与 session 关联。两个用户可能在两个不同的会话访问同一个序列，但是调用 currval() 时，只会返回同一会话下的当前值。</p>
-<h3 id="序列删除"><a href="#序列删除" class="headerlink" title="序列删除"></a>序列删除</h3><p>基本语法：</p>
-<pre><code>DROP SEQUENCE seq_name[, ...]
-</code></pre><p>来删除一个或者多个序列。命令中的 seq_name 是序列名，不须被引号包围；如果是多个序列，可以使用逗号隔开。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/29/2018/2018-03-29-模块路径导入引用/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/29/2018/2018-03-29-模块路径导入引用/" itemprop="url">模块路径导入引用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-29T17:06:00+08:00">
-                2018-03-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="模块导入"><a href="#模块导入" class="headerlink" title="模块导入"></a>模块导入</h3><p>有时候自己写的模块,在执行终端执行python your script ， 是无法找到此模块的,需要把当前的父目录导入系统路径里。但在pycharm运行没有问题。</p>
-<p>解决方案：</p>
-<pre><code>import sys
-sys.path.append(&apos;..&apos;)
-将父目录加入import路径
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/28/2018/2018-03-28-python-dunder-method/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/28/2018/2018-03-28-python-dunder-method/" itemprop="url">python:Dunder method 特殊函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-28T11:57:00+08:00">
-                2018-03-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p> dunder method</p>
-<p> An alias for double underscore, “<strong>“. Specially useful in the Python computer language, in which names like “</strong>init__” are common. Coined as a speech shorthand.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1719,7 +1708,7 @@ sys.path.append(&apos;..&apos;)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1730,7 +1719,7 @@ sys.path.append(&apos;..&apos;)
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1741,7 +1730,7 @@ sys.path.append(&apos;..&apos;)
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

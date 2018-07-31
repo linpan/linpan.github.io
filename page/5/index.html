@@ -259,6 +259,1096 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/22/2018/2018-03-22-python-赋值-！拷贝/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/22/2018/2018-03-22-python-赋值-！拷贝/" itemprop="url">python 赋值 =！拷贝</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-22T17:11:00+08:00">
+                2018-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="赋值-assignment"><a href="#赋值-assignment" class="headerlink" title="赋值(assignment)"></a>赋值(assignment)</h3><p>一个东西, 多个名称。</p>
+<blockquote>
+<p>a=b 赋值</p>
+</blockquote>
+<p> a,b 都是指向一个内存地址的.</p>
+<pre><code>&gt;&gt;&gt; a =[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;]
+&gt;&gt;&gt; b =a
+&gt;&gt;&gt; print id(a)  # 4517718024
+&gt;&gt;&gt; print id(b)  # 4517718024
+&gt;&gt;&gt; a is b
+ #true
+</code></pre><p>如果b发送变化,必然a也发送改变</p>
+<pre><code>&gt;&gt;&gt; b.append(&apos;changed&apos;)
+&gt;&gt;&gt; a
+#[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;, &apos;changed&apos;]
+</code></pre><p>在Python中，用一个变量给另一个变量赋值，其实就是给当前内存中的对象增加一个“tag”而已, 并没有创建新的对象。</p>
+<h3 id="浅拷贝-deepcopy"><a href="#浅拷贝-deepcopy" class="headerlink" title="浅拷贝(deepcopy)"></a>浅拷贝(deepcopy)</h3><p>在阐述引用、浅拷贝和深拷贝前，首先需要要了解 Python 的世界里，一切皆对象，每个对象各包含一个 idendity(身份id)、type（类型） 和 value（值）。</p>
+<p>注意：浅拷贝和深拷贝的不同仅仅是对组合对象来说，所谓的组合对象就是包含了其它对象的对象，如列表，类实例。</p>
+<blockquote>
+<p>a =[1,2,3,[5,6]]</p>
+<p>compound objects (objects that contain other objects, like lists or class instances):</p>
+</blockquote>
+<p>比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：<br>而对于数字、字符串以及其它“原子”类型，没有拷贝一说，产生的都是原对象的引用。</p>
+<h4 id="不可变对象"><a href="#不可变对象" class="headerlink" title="不可变对象"></a>不可变对象</h4><p>浅拷贝会创建一个新的对象，然后把生成的新对象赋值给新变量。注意这句话的意思，上面这个例子中1，2，3这三个int型对象并没有创建新的，新的对象是指copy创建了一个新的列表对象，这样a和b这两个变量指向的列表对象就不是同一个，但和两个列表对象里面的元素依然是按引用传递的，所以a列表中的对象1和b列表中的对象1是同一个。 但是这时修改a列表的不可变对象，b列表不会受到影响<br>：</p>
+<h4 id="可变对象"><a href="#可变对象" class="headerlink" title="可变对象"></a>可变对象</h4><p>可变对象例如 a = [1,2,[3,]]<br>由于浅拷贝时，对于对象中的元素，浅拷贝只会使用原始元素的引用（内存地址），所以如果对象中的元素是可变对象，浅拷贝就没辙了。比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：</p>
+<pre><code>&gt;&gt;&gt; a = [1,2,[3,]]
+&gt;&gt;&gt; b = copy.copy(a)
+&gt;&gt;&gt; a is b
+False
+&gt;&gt;&gt; a[2].append(4)
+&gt;&gt;&gt; a
+[1, 2, [3, 4]]
+&gt;&gt;&gt; b
+[1, 2, [3, 4]]
+</code></pre><h3 id="深拷贝deepcopy"><a href="#深拷贝deepcopy" class="headerlink" title="深拷贝deepcopy"></a>深拷贝deepcopy</h3><p>所谓“深拷贝”，是指创建一个新的对象，然后递归的拷贝原对象所包含的子对象。新建了一个新对象，完整的在内存中复制原有对象,<br>对于这个问题，又引入了深拷贝机制，这时不仅创建了新的对象，连对象中的元素都是新的，深拷贝都会重新生成一份，<code>而不是简单的使用原始元素的引用（内存地址）</code>。注意了，对象中的元素，不可变对象还是使用引用，因为没有重新生成的必要，变量改动时会自动生成另一个不可变对象，然后改变引用的地址。但可变对象的内容是可变的，改动后不会产生新的对象，也不会改变引用地址，所以需要重新生成。</p>
+<h3 id="其他情况"><a href="#其他情况" class="headerlink" title="其他情况"></a>其他情况</h3><p>而对于数字、字符串以及其它“原子”类型，没有拷贝一说，产生的都是原对象的引用</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><p>Python中对象的赋值都是进行对象引用（内存地址）传递</p>
+</li>
+<li><p>使用copy.copy()，可以进行对象的浅拷贝，它复制了对象，但对于对象中的元素，依然使用原始的引用.</p>
+</li>
+<li>如果需要复制一个容器对象，以及它里面的所有元素（包含元素的子元素），可以使用copy.deepcopy()进行深拷贝</li>
+<li>非容器类型（如数字、字符串、和其他’原子’类型的对象）不存在拷贝。<br>只包含原子类型对象的元组变量不存在拷贝。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/22/2018/2018-03-22-postgreql-api接口库-pgwrapper/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/22/2018/2018-03-22-postgreql-api接口库-pgwrapper/" itemprop="url">pgwrapper:简单便捷访问pg数据库 </a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-22T16:51:00+08:00">
+                2018-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>使用psycopg2库,需要写sql语言, 原始的操作过程, 期间会遇到各种问题。<code>pgwrap</code>提供更高级的封闭api接口。更少的代码、更简洁的代码实现数据库操作.</p>
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><pre><code>&gt;&gt;&gt; import pgwrap
+&gt;&gt;&gt; db = pgwrap.connection(url=&apos;postgres://localhost&apos;)
+&gt;&gt;&gt; with db.cursor() as c:
+...     c.query(&apos;select version()&apos;)
+[[&apos;PostgreSQL...&apos;]]
+&gt;&gt;&gt; v = db.query_one(&apos;select version()&apos;)
+&gt;&gt;&gt; v
+[&apos;PostgreSQL...&apos;]
+&gt;&gt;&gt; v.items()
+[(&apos;version&apos;, &apos;PostgreSQL...&apos;)]
+&gt;&gt;&gt; v[&apos;version&apos;]
+&apos;PostgreSQL...&apos;
+</code></pre><h3 id="SQL-API-接口列表"><a href="#SQL-API-接口列表" class="headerlink" title="SQL API 接口列表"></a>SQL API 接口列表</h3><h2 id="SQL-API"><a href="#SQL-API" class="headerlink" title="SQL API"></a>SQL API</h2><p>The cursor class also provides a simple Python API for common SQL<br>operations.  The basic methods provides are:</p>
+<pre><code>select          - single table select (with corresponding select_one,
+                  select_dict methods)
+join            - two table join (with corresponding join_one,
+                  join_dict methods)
+insert          - SQL insert
+update          - SQL update
+delete          - SQL delete
+</code></pre><p>The methods can be parameterised to customise the associated query<br>(see db module for detail):</p>
+<pre><code>where           - &apos;where&apos; clause as dict (column operators can be
+                  specified using the colunm__operator format)
+
+                  where = {&apos;name&apos;:&apos;abc&apos;,&apos;status__in&apos;:(1,2,3)}
+
+columns         - list of columns to be returned - these can
+                  be real columns or expressions. If spefified
+                  as a tuple the column is explicitly named
+                  using the AS operator
+
+                  columns = (&apos;name&apos;,(&apos;status &gt; 1&apos;,&apos;updated&apos;))
+
+order           - sort order as list (use &apos;column__desc&apos; to
+                  reverse order)
+
+                  order = (&apos;name__desc&apos;,)
+
+limit           - row limit (int)
+
+offset          - offset (int)
+
+on              - join columns (as tuple)
+
+values          - insert data as dict
+
+returning       - columns to return (string)
+
+
+#### 基本操作例子
+
+    &gt;&gt;&gt; db.create_table(&apos;t1&apos;,&apos;id serial,name text,count int&apos;)
+    &gt;&gt;&gt; db.create_table(&apos;t2&apos;,&apos;id serial,t1_id int,value text&apos;)
+    &gt;&gt;&gt; db.log = sys.stdout
+    &gt;&gt;&gt; db.insert(&apos;t1&apos;,{&apos;name&apos;:&apos;abc&apos;,&apos;count&apos;:0},returning=&apos;id,name&apos;)
+    INSERT INTO t1 (name) VALUES (&apos;abc&apos;) RETURNING id,name
+    [1, &apos;abc&apos;]
+    &gt;&gt;&gt; db.insert(&apos;t2&apos;,{&apos;t1_id&apos;:1,&apos;value&apos;:&apos;t2&apos;})
+    INSERT INTO t2 (t1_id,value) VALUES (1,&apos;t2&apos;)
+    1
+    &gt;&gt;&gt; db.select(&apos;t1&apos;)
+    SELECT * FROM t1
+    [[1, &apos;abc&apos;, 0]]
+    &gt;&gt;&gt; db.select_one(&apos;t1&apos;,where={&apos;name&apos;:&apos;abc&apos;},columns=(&apos;name&apos;,&apos;count&apos;))
+    SELECT name, count FROM t1 WHERE name = &apos;abc&apos;
+    [&apos;abc&apos;, 0]
+    &gt;&gt;&gt; db.join((&apos;t1&apos;,&apos;t2&apos;),columns=(&apos;t1.id&apos;,&apos;t2.value&apos;))
+    SELECT t1.id, t2.value FROM t1 JOIN t2 ON t1.id = t2.t1_id
+    [[1, &apos;t2&apos;]]
+    &gt;&gt;&gt; db.insert(&apos;t1&apos;,{&apos;name&apos;:&apos;abc&apos;},returning=&apos;id&apos;)
+    INSERT INTO t1 (name) VALUES (&apos;abc&apos;) RETURNING id
+    [2]
+    &gt;&gt;&gt; db.update(&apos;t1&apos;,{&apos;name&apos;:&apos;xyz&apos;},where={&apos;name&apos;:&apos;abc&apos;})
+    UPDATE t1 SET name = &apos;xyz&apos; WHERE name = &apos;abc&apos;
+    2
+    &gt;&gt;&gt; db.update(&apos;t1&apos;,{&apos;count__func&apos;:&apos;count + 1&apos;},where={&apos;count__lt&apos;:10},returning=&quot;id,count&quot;)
+    UPDATE t1 SET count = count + 1 WHERE count &lt; 10 RETURNING id,count
+    [[1, 1]]
+
+  更多详细的用法,请阅读官方文档。
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/21/2018/2018-03-21-python-字典数据的插入/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/21/2018/2018-03-21-python-字典数据的插入/" itemprop="url">python 字典数据的插入</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-21T18:39:00+08:00">
+                2018-03-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="以字典形式数据插入数据库"><a href="#以字典形式数据插入数据库" class="headerlink" title="以字典形式数据插入数据库"></a>以字典形式数据插入数据库</h3><p>以字典的形式,把控起来还是比较方便的. 举个例：<br>    d = {‘k1’: ‘v1’, ‘k2’: ‘v2’}</p>
+<pre><code>insert = &apos;insert into table (%s) values %s&apos;
+l = [(c, v) for c, v in d.items()]
+columns = &apos;,&apos;.join([t[0] for t in l])
+values = tuple([t[1] for t in l])
+cursor = conn.cursor()
+print cursor.mogrify(insert, ([AsIs(columns)] + [values]))
+
+keys = d.keys()
+columns = &apos;,&apos;.join(keys)
+values = &apos;,&apos;.join([&apos;%({})s&apos;.format(k) for k in keys])
+insert = &apos;insert into table ({0}) values ({1})&apos;.format(columns, values)
+print cursor.mogrify(insert, d)
+</code></pre><p>参考文章来源：</p>
+<p><a href="https://stackoverflow.com/questions/39203050/psycopg2-insert-python-dictionary-in-postgres-database/39203051#39203051" target="_blank" rel="noopener">https://stackoverflow.com/questions/39203050/psycopg2-insert-python-dictionary-in-postgres-database/39203051#39203051</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/2018/2018-03-16-postgresql-技能/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/16/2018/2018-03-16-postgresql-技能/" itemprop="url">postgrsql 遇上两个with上下午管理器</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T18:14:00+08:00">
+                2018-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="postgrsql-遇上with"><a href="#postgrsql-遇上with" class="headerlink" title="postgrsql 遇上with"></a>postgrsql 遇上with</h3><p>有关pg的连接及关闭问题, 使用2个with上下午管理器, 完全避免完了关闭游标、连接。</p>
+<pre><code>def _run_stmt(self, stmt):
+     with psycopg2.connect(**self._connect_args) as conn:
+         with conn.cursor() as cur:
+             cur.execute(stmt)
+</code></pre><p>其实, 在pg官方英文材料也给出了这中方案</p>
+<h3 id="with-上下文管理器"><a href="#with-上下文管理器" class="headerlink" title="with 上下文管理器"></a>with 上下文管理器</h3><p>基本用法：</p>
+<pre><code>with A() as a, B() as b, C() as c:
+    doSomething(a,b,c)
+</code></pre><p>可以读写文件这样写：</p>
+<pre><code>from __future__ import with_statement
+
+with open(&quot;out.txt&quot;,&quot;wt&quot;), open(&quot;in.txt&quot;) as file_out, file_in:
+    for line in file_in:
+        file_out.write(line)
+</code></pre><p>或者提高一下阅读行：</p>
+<pre><code>from __future__ import with_statement
+
+with open(&quot;out.txt&quot;,&quot;wt&quot;) as file_out:
+    with open(&quot;in.txt&quot;) as file_in:
+        for line in file_in:
+            file_out.write(line)
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/2018/2018-03-16-python-我遇到过的模块/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/16/2018/2018-03-16-python-我遇到过的模块/" itemprop="url">python 我遇到过的模块</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T17:34:00+08:00">
+                2018-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="模块汇总"><a href="#模块汇总" class="headerlink" title="模块汇总"></a>模块汇总</h3><h4 id="1-getpass"><a href="#1-getpass" class="headerlink" title="1. getpass"></a>1. getpass</h4><p>Utilities to get a password and/or the current user name<br>获得输入密码及当前用户名</p>
+<h4 id="2-pexpect"><a href="#2-pexpect" class="headerlink" title="2. pexpect"></a>2. pexpect</h4><p>pexpect 是linux下expect的python封装，通过pexpect我们可以实现对ssh、ftp、password、telnet等命令进行自动交互，无需人工达到自动化需求<br><a href="http://python.jqlinux.com/pythonchang-yong-di-san-fang-3001-nei-zhi-mo-kuai/pythonzhi-pexpect-xiang-jie.html" target="_blank" rel="noopener">参考文章</a></p>
+<h3 id="3-tree"><a href="#3-tree" class="headerlink" title="3. tree"></a>3. tree</h3><p>输出目录结构层次</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/16/2018/2018-03-16-stmt的含义/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/16/2018/2018-03-16-stmt的含义/" itemprop="url">stmt的含义</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-16T11:33:00+08:00">
+                2018-03-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="stmt"><a href="#stmt" class="headerlink" title="stmt"></a>stmt</h3><p>stmt == statement的缩写,通用写法。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/15/2018/2018-03-15-python-函数中定义类/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/15/2018/2018-03-15-python-函数中定义类/" itemprop="url">python 函数中定义类/python class definition in function</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T17:15:00+08:00">
+                2018-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/源码阅读/" itemprop="url" rel="index">
+                    <span itemprop="name">源码阅读</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="阅读get-pip"><a href="#阅读get-pip" class="headerlink" title="阅读get-pip"></a>阅读get-pip</h3><p>近日,在安装pip包,无意发现类定义在函数中,决定了解如何使用这一技能</p>
+<pre><code>def bootstrap(tmpdir=None):
+    # Import pip so we can use it to install pip and maybe setuptools too
+    import pip
+    from pip.commands.install import InstallCommand
+    from pip.req import InstallRequirement
+
+    # Wrapper to provide default certificate with the lowest priority
+    class CertInstallCommand(InstallCommand):
+        def parse_args(self, args):
+            # If cert isn&apos;t specified in config or environment, we provide our
+            # own certificate through defaults.
+            # This allows user to specify custom cert anywhere one likes:
+            # config, environment variable or argv.
+            if not self.parser.get_default_values().cert:
+                self.parser.defaults[&quot;cert&quot;] = cert_path  # calculated below
+            return super(CertInstallCommand, self).parse_args(args)
+
+    pip.commands_dict[&quot;install&quot;] = CertInstallCommand
+</code></pre><p>写个简单一个简单的例子：<br>返回一个类实例</p>
+<pre><code> def func(**args):
+   class BindArgs(object):
+       foo = args[&apos;foo&apos;]
+       print &apos;foo is &apos;, foo
+       def __init__(self,args):
+          print &quot; hello i am here&quot;
+   return BindArgs(args) #return an instance of the class
+
+f = func(foo=3)
+</code></pre><p>用到再实例化,当实例化事,init才真正的执行。</p>
+<pre><code>def func(**args):
+   class BindArgs(object):
+       foo = args[&apos;foo&apos;]
+       print &apos;foo is &apos;, foo
+       def __init__(self,args):
+          print &quot; hello i am here&quot;
+   return BindArgs
+
+f = func(foo=3)
+
+f(args=&quot;yellow&quot;)
+</code></pre><h4 id="类中类"><a href="#类中类" class="headerlink" title="类中类"></a>类中类</h4><pre><code>#!/usr/bin/env python
+
+class Human:
+
+   def __init__(self):
+      self.name = &apos;Guido&apos;
+      self.head = self.Head()
+
+   class Head:
+      def talk(self):
+      return &apos;talking...&apos;
+
+if __name__ == &apos;__main__&apos;:
+    guido = Human()
+    print guido.name
+    print guido.head.talk()
+</code></pre><p>  太简单类, 不解释。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/02/2018/2018-03-02-python-super-mixin论道/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -455,1014 +1545,11 @@ if __name__ == &quot;__main__&quot;:
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/02/2018/2018-03-02-2018-开启-python3-之旅/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/02/2018/2018-03-02-2018-开启-python3-之旅/" itemprop="url">Hello Python3</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-02T13:49:00+08:00">
-                2018-03-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Hello-Python3"><a href="#Hello-Python3" class="headerlink" title="Hello Python3"></a>Hello Python3</h2><p>在python的道路上，和python保持一致性。开启python3之旅。现在重温The Zen of Python：</p>
-<pre><code>The Zen of Python, by Tim Peters
-
-1. Beautiful is better than ugly.
-2. Explicit is better than implicit.
-3. Simple is better than complex.
-4. Complex is better than complicated.
-5. Flat is better than nested.
-6. Sparse is better than dense.
-7. Readability counts.
-8. Special cases aren&apos;t special enough to break the rules.
-9. Although practicality beats purity.
-10. Errors should never pass silently.
-11. Unless explicitly silenced.
-12. In the face of ambiguity, refuse the temptation to guess.
-13. There should be one-- and preferably only one --obvious way to do it.
-14. Although that way may not be obvious at first unless you&apos;re Dutch.
-15. Now is better than never.
-16. Although never is often better than *right* now.
-17. If the implementation is hard to explain, it&apos;s a bad idea.
-18. If the implementation is easy to explain, it may be a good idea.
-19. Namespaces are one honking great idea -- let&apos;s do more of those!
-</code></pre><p>中文翻译</p>
-<pre><code>优美胜于丑陋（Python 以编写优美的代码为目标）
-明了胜于晦涩（优美的代码应当是明了的，命名规范，风格相似）
-简洁胜于复杂（优美的代码应当是简洁的，不要有复杂的内部实现）
-复杂胜于凌乱（如果复杂不可避免，那代码间也不能有难懂的关系，要保持接口简洁）
-扁平胜于嵌套（优美的代码应当是扁平的，不能有太多的嵌套）
-间隔胜于紧凑（优美的代码有适当的间隔，不要奢望一行代码解决问题）
-可读性很重要（优美的代码是可读的）
-即便假借特例的实用性之名，也不可违背这些规则（这些规则至高无上）
-
-不要包容所有错误，除非你确定需要这样做（精准地捕获异常，不写 except:pass 风格的代码）
-
-当存在多种可能，不要尝试去猜测
-而是尽量找一种，最好是唯一一种明显的解决方案（如果不确定，就用穷举法）
-虽然这并不容易，因为你不是 Python 之父（这里的 Dutch 是指 Guido ）
-
-做也许好过不做，但不假思索就动手还不如不做（动手之前要细思量）
-
-如果你无法向人描述你的方案，那肯定不是一个好方案；反之亦然（方案测评标准）
-
-命名空间是一种绝妙的理念，我们应当多加利用（倡导与号召）
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/01/2018/2018-03-01-python-父类使用子类的方法属性/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/01/2018/2018-03-01-python-父类使用子类的方法属性/" itemprop="url">python 父类使用子类的方法属性</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-01T17:15:00+08:00">
-                2018-03-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>近日，在阅读源代码遇到父类使用子类的方法属性，举个简单的例子：</p>
-<pre><code>class parent(object):
-    def test(self):
-        self.child_attribute  # 子类的属性？
-        print self            # &lt;__main__.child object at 0x100597050&gt;
-        self.child_method()
-
-class child(parent):
-    def __init__(self):
-        self.child_attribute = &apos;child&apos;
-
-    def child_method(self):
-        print &apos;child method is called&apos;
-
-
-c=child()
-c.test()
-print dir(c)
-</code></pre><p>实例c 确实有test方法,self用指向child实例,<br>总之,父类及子类之间的方法及属性是<code>共享</code>的。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/01/2018/2018-03-01-你所不知道的python-inpsect窥视秘密/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/01/2018/2018-03-01-你所不知道的python-inpsect窥视秘密/" itemprop="url">你所不知道的Python-inpsect窥视秘密</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-01T17:15:00+08:00">
-                2018-03-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="万能的inspect模块-探测python对象的秘密"><a href="#万能的inspect模块-探测python对象的秘密" class="headerlink" title="万能的inspect模块 - 探测python对象的秘密"></a>万能的inspect模块 - 探测python对象的秘密</h3><blockquote>
-<p>The inspect module provides several useful functions to help get information about live objects such as <code>modules</code>, <code>classes</code>, <code>methods</code>, <code>functions</code>, <code>tracebacks</code>, <code>frame objects</code>, and <code>code objects</code>. For example, it can help you examine the contents of a class, retrieve the <code>source code of a method</code>, extract and format the argument list for a function, or get all the information you need to display a detailed traceback.</p>
-</blockquote>
-<h3 id="检查对象的状态"><a href="#检查对象的状态" class="headerlink" title="检查对象的状态"></a>检查对象的状态</h3><pre><code>&gt;&gt;&gt; import inspect
-&gt;&gt;&gt; inspect.ismodule(inspect)    # 检查 inspect 是否为模块
-True
-&gt;&gt;&gt; inspect.ismethod(inspect)    # 检查 inspect 是否为方法
-False
-&gt;&gt;&gt; inspect.isfunction(len)      # 检查 len 是否为函数
-True
-&gt;&gt;&gt; inspect.isbuiltin(len)       # 检查 len 是否内置函数
-True
-&gt;&gt;&gt; inspect.isawaitable(inspect) # 检查 inspect 是否用于 await expression
-False
-&gt;&gt;&gt;
-</code></pre><p>ismodule 和 ismethod 比较常用方法，更有用的还在下面，</p>
-<h3 id="获得信息"><a href="#获得信息" class="headerlink" title="获得信息"></a>获得信息</h3><p>我们还可以获得docstring、<br>code source、comment</p>
-<pre><code>&gt;&gt;&gt; inspect.getdoc(len)   # 取得 len 的 docstring
-&apos;Return the number of items in a container.&apos;
-&gt;&gt;&gt; inspect.getsource(inspect)    # 取得 inspect 的 source code
-&apos;&quot;&quot;&quot;Get useful information from live Python objects.\n\n
-This module encapsulates the interface provided by the
-internal special\nattributes (co_*, im_*, tb_*, etc.) in ...&apos;
-&gt;&gt;&gt;
-</code></pre><p>调试技术就出现了，在阅读源码时，可能找不到方法的位置，可以查看源代码。<br>inspect.getsource(DocumentVersion.ocr_content)</p>
-<h3 id="获得内部成员列表"><a href="#获得内部成员列表" class="headerlink" title="获得内部成员列表"></a>获得内部成员列表</h3><p>类似dir()方法</p>
-<pre><code>&gt;&gt;&gt; inspect.getmembers(len)
-[(&apos;__call__&apos;,
-  &lt;method-wrapper &apos;__call__&apos; of builtin_function_or_method object at 0x7f85af1491c0&gt;),
- (&apos;__class__&apos;, &lt;class &apos;builtin_function_or_method&apos;&gt;),
- (&apos;__delattr__&apos;,
- ...,
- (&apos;__setattr__&apos;,
-  &lt;method-wrapper &apos;__setattr__&apos; of builtin_function_or_method object at 0x7f85af1491c0&gt;),
- (&apos;__sizeof__&apos;,
-  &lt;built-in method __sizeof__ of builtin_function_or_method object at 0x7f85af1491c0&gt;),
- (&apos;__str__&apos;,
-  &lt;method-wrapper &apos;__str__&apos; of builtin_function_or_method object at 0x7f85af1491c0&gt;),
- (&apos;__subclasshook__&apos;,
-  &lt;built-in method __subclasshook__ of type object at 0x899760&gt;),
- (&apos;__text_signature__&apos;, &apos;($module, obj, /)&apos;)]
-</code></pre><p>参考文章来源<br><a href="https://blog.louie.lu/2017/08/08/inspect-python-standard-library-11/" target="_blank" rel="noopener">https://blog.louie.lu/2017/08/08/inspect-python-standard-library-11/</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/01/2018/2018-03-01-django源代码阅读：import-string函数/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/01/2018/2018-03-01-django源代码阅读：import-string函数/" itemprop="url">Django源代码阅读：import_string函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-01T16:51:00+08:00">
-                2018-03-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="import-string"><a href="#import-string" class="headerlink" title="import_string"></a>import_string</h2><p>  <code>import_string</code>导入模块</p>
-<pre><code>def import_string(dotted_path):
-  &quot;&quot;&quot;
-  Import a dotted module path and return the attribute/class designated by the
-  last name in the path. Raise ImportError if the import failed.
-  &quot;&quot;&quot;
-  try:
-      module_path, class_name = dotted_path.rsplit(&apos;.&apos;, 1)
-  except ValueError:
-      msg = &quot;%s doesn&apos;t look like a module path&quot; % dotted_path
-      six.reraise(ImportError, ImportError(msg), sys.exc_info()[2])
-
-  module = import_module(module_path)
-
-  try:
-      return getattr(module, class_name)
-  except AttributeError:
-      msg = &apos;Module &quot;%s&quot; does not define a &quot;%s&quot; attribute/class&apos; % (
-          module_path, class_name)
-      six.reraise(ImportError, ImportError(msg), sys.exc_info()[2])
-</code></pre><p>假如 dotted_path = ‘ocr.backends.pyocr.PyOCR’ 输出结果是：<br>class_name = PyOCR</p>
-<p>其实这个类在orc/backends/pyocr.py里面</p>
-<p>module_path =’’ocr.backends.pyocr’’</p>
-<h2 id="import-module"><a href="#import-module" class="headerlink" title="import_module"></a>import_module</h2><p>函数声明: importlib.import_module(name, package=None)</p>
-<p>从文档中可以看出，这个函数的主要功能就是导入指定的包或者模块,它并不能导入模块中的类或者函数。代码中使用：</p>
-<blockquote>
-<p>sys.modules</p>
-</blockquote>
-<p>这个函数还支持相对导入，如果要使用相对导入的话，需要设置第二个参数package来确认执行相对导入时的当前路径。<br>如果你想要在运行时动态导入的话，比如新创建一个Python文件再来导入，需要调用importlib.invalidate_caches函数，来确保让导入系统能够发现新的模块。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/26/2018/2018-02-26-python-new-init-区别/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/26/2018/2018-02-26-python-new-init-区别/" itemprop="url">python new init 的 区别</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-26T18:13:00+08:00">
-                2018-02-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="构造与初始化"><a href="#构造与初始化" class="headerlink" title="构造与初始化"></a>构造与初始化</h2><p><code>__init__</code> 实例方法</p>
-<p>构造方法是我们使用频率最高的魔法方法了，几乎在我们定义类的时候，都会去定义构造方法，目的是初始化对象。</p>
-<pre><code>class T(ojbect):
-  def __init__(self,count):
-    self.count = count
-
-t = T(50)
-</code></pre><p><code>__new__</code> 静态类方法<br>一般不常见，它会在对象实例化事第一个被调用的，它和<code>__init__</code>区别是：</p>
-<ol>
-<li><strong>new</strong> 的第一个参数是cls，而<strong>init</strong>的第一个参数是self</li>
-<li><strong>new</strong> 返回值是一个实例，而<strong>init</strong>没有返回值(<strong>init</strong> 只能返回 None 值，否则报错)，只做初始化操作</li>
-<li><strong>new</strong> 返回一个实例对象</li>
-</ol>
-<p>一般我们不会去重写该方法，除非你确切知道怎么做，什么时候你会去关心它呢，它作为构造函数用于创建对象，是一个工厂函数，专用于生产实例对象。著名的设计模式之一，单例模式，就可以通过此方法来实现。在自己写框架级的代码时，可能你会用到它，我们也可以从开源代码中找到它的应用场景</p>
-<pre><code>class T(object):
-    def __init__(self, count):
-        print(&apos;init invoked&apos;)
-        self.count = count
-
-    def __new__(cls, count):
-        print(&apos;cls&apos;, cls)
-        self = super(T, cls).__new__(cls)
-        print(self)
-        return self
-
-
-t = T(50)
-</code></pre><p>输出结果：</p>
-<pre><code>cls &lt;class &apos;__main__.T&apos;&gt; # __new__
-&lt;__main__.T object at 0x103d28470&gt;
-init invoked  # __init__
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/26/2018/2018-02-26-python元类及元类编程思想/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/26/2018/2018-02-26-python元类及元类编程思想/" itemprop="url">python元类及元编程思想</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-26T13:47:00+08:00">
-                2018-02-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="什么是元编程"><a href="#什么是元编程" class="headerlink" title="什么是元编程"></a>什么是元编程</h2><blockquote>
-<p>元编程(meta programming)则是对于某类解决方法的抽象</p>
-</blockquote>
-<p>type()来动态的生成一个类, type()实际上调用所属类的<strong>call</strong>方法(实例方法),因为type的类也是type，所以实际调用的是type.<strong>call</strong>方法。</p>
-<p>type.<strong>call</strong>方法发现传递给他的self参数已经是一个存在的类, 所以他会把自身的args和kwargs当作参数调用对应self对应类的<strong>new</strong>和<strong>init</strong>方法,</p>
-<p>综上:<br>type.<strong>call</strong>函数是根据传递给它的第一个参数来判断，是创建一个新的类，还是根据现有的类创建一个新的对象。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/10/2018/2018-02-10-mysqldb警告信息-truncated-incorrect-double-value错误/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/10/2018/2018-02-10-mysqldb警告信息-truncated-incorrect-double-value错误/" itemprop="url">mysqldb警告信息: Truncated incorrect DOUBLE value错误 </a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-10T13:29:00+08:00">
-                2018-02-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1508,7 +1595,7 @@ init invoked  # __init__
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1519,7 +1606,7 @@ init invoked  # __init__
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1530,7 +1617,7 @@ init invoked  # __init__
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

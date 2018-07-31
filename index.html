@@ -259,6 +259,1202 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/2018/2018-07-31-django高级内容-contenttype-框架探索/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/31/2018/2018-07-31-django高级内容-contenttype-框架探索/" itemprop="url">django高级内容: ContentType 框架探索</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-31T10:40:00+08:00">
+                2018-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="Django-ContentTypes-描述概念"><a href="#Django-ContentTypes-描述概念" class="headerlink" title="Django ContentTypes 描述概念"></a>Django ContentTypes 描述概念</h3><p>django 包含一个用来跟踪所有安装的应用模型的contenttypes 应用,它对当前项目中所有基于Django驱动的model提供了更高层次的抽象接口。<br> ContentType 是一个Django自动创建的模型，它包含2个字段</p>
+<blockquote>
+<p> app_label：app的名称<br> model：模型的名字（小写）</p>
+</blockquote>
+<p> 通过下表, 一个app的下所有model都会写入表中,统一入口管理。<br>        id  app_label  model<br>        42    documents    documentversion<br>        43    documents    duplicateddocument<br>        44    documents    documenttype<br>        45    documents    documentpage<br>        46    documents    documentpagecachedimage<br>        47    documents    recentdocument<br>        48    documents    documenttypefilename<br>        49    documents    document<br>        50    documents    deleteddocument<br>        51    documents    documentpageresult</p>
+<h3 id="ContentType实例方法"><a href="#ContentType实例方法" class="headerlink" title="ContentType实例方法"></a>ContentType实例方法</h3><h5 id="ContentType-get-object-for-this-type-kwargs"><a href="#ContentType-get-object-for-this-type-kwargs" class="headerlink" title="ContentType.get_object_for_this_type(**kwargs)"></a>ContentType.get_object_for_this_type(**kwargs)</h5><p>对表中记录的模型get查询，返回对象</p>
+<h5 id="ContentType-model-class"><a href="#ContentType-model-class" class="headerlink" title="ContentType.model_class()"></a>ContentType.model_class()</h5><p>获得模型类</p>
+<pre><code># 获得contenttype实例
+&gt;&gt;&gt; from django.contrib.contenttypes.models import ContentType
+&gt;&gt;&gt; user_type= ContentType.objects.get(app_label=&quot;auth&quot;, model=&quot;user&quot;)
+# 输出 ContentType: user
+&gt;&gt;&gt; user_type.model_class()
+# class&apos;django.contrib.auth.models.User&apos;
+&gt;&gt;&gt;user_type.get_object_for_this_type(username=&apos;Guido&apos;)
+# User: Guido
+</code></pre><h5 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h5><ul>
+<li>不需要直接导入或者定义模型类, 直接传参app_lable和model给contentype,直接对model完成检索查询。</li>
+<li>您可以将另一个模型与ContentType相关联，作为将其实例绑定到特定模型类的方法，并使用这些方法来访问这些模型类。</li>
+</ul>
+<h3 id="ContentType管理器"><a href="#ContentType管理器" class="headerlink" title="ContentType管理器"></a>ContentType管理器</h3><ol>
+<li><p>ContentType.objects.get_for_id()<br>通过id寻找ContentType类型，这个跟传统的get方法的区别就是它跟get_for_model共享一个缓存，因此更为推荐。</p>
+</li>
+<li><p>ContentType.objects.get_for_model()<br>通过model或者model的实例来寻找ContentType类型</p>
+</li>
+</ol>
+<pre><code>from django.contrib.auth.models import User
+ContentType.objects.get_for_model(User)
+# 输出结果 ContentType: user
+</code></pre><h3 id="Generic-relations-范型关系"><a href="#Generic-relations-范型关系" class="headerlink" title="Generic relations 范型关系"></a>Generic relations 范型关系</h3><p>给用户模型添加Contentype,使得用户的模型更好的和其他模型建立关系，就Permission模型,  ContentType在模型之间建立了范型关系.</p>
+<pre><code>from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+
+class TaggedItem(models.Model):
+    tag = models.SlugField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey(&apos;content_type&apos;, &apos;object_id&apos;)
+
+    def __str__(self):
+        return self.tag
+</code></pre><p><code>ForeignKey</code>指向仅一个模型,<code>GenericForeignKey</code>可以跟多个模型建立关联,需要如下必须的三个过程:</p>
+<ol>
+<li><p>用户模型的ForeignKey to ContentType, 默认字段名称content_type.</p>
+<pre><code>from django.contrib.auth.models import User
+guido = User.objects.get(username=&apos;Guido&apos;)
+t = TaggedItem(content_object=guido, tag=&apos;bdfl&apos;)
+t.save()
+t.content_object
+# User: Guido
+</code></pre></li>
+<li><p>给模型添加object_id 字段,存储来自关联模型的<code>primary key</code></p>
+<pre><code>object_id = models.PositiveIntegerField()
+</code></pre></li>
+<li>给模型添加GenericForeignKey, 传递上面的2个参数,如果上面的参数名称是默认的（content_type, object_id）可以忽略不传参。</li>
+</ol>
+<h3 id="反向-GenericRelation"><a href="#反向-GenericRelation" class="headerlink" title="反向 GenericRelation"></a>反向 GenericRelation</h3><p>给模型模型添加 “reverse” generic relationship,使得可以访问关联的模型。<br>      from django.contrib.contenttypes.fields import GenericRelation<br>      from django.db import models</p>
+<pre><code>class Bookmark(models.Model):
+    url = models.URLField()
+    tags = GenericRelation(TaggedItem)
+</code></pre><p>  Bookmark 实例有tags属性, 可以检索关联TaggedItems模型的数据.</p>
+<h3 id="理解模型中的reserve-反向"><a href="#理解模型中的reserve-反向" class="headerlink" title="理解模型中的reserve 反向"></a>理解模型中的reserve 反向</h3><p>django 默认每个主表的对象都有一个是外键的属性，可以通过它来查询到所有属于主表的子表的信息。这个属性的名称默认是以子表的名称小写加上_set()来表示(上面默认以b_set访问)，默认返回的是一个querydict对象。related_name 可以给这个外键定义好一个别的名称</p>
+<blockquote>
+<p> 例如B中有一个 models.ForeignKey(A) 。而当我们需要反向查询 A 中某个具体实例所关联的 B 时,可能会用到 A.B_set.all() 或 B.objects.filter(A) 这两种不同的方法</p>
+</blockquote>
+<p>  对于用<code>ForeignKey</code> 来定义的关系来说，在关系的另一端也能反向的查询得到相应的结果.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/30/2018/2018-07-30-django-manager管理器利剑/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/30/2018/2018-07-30-django-manager管理器利剑/" itemprop="url">django manager管理器利剑</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-30T17:57:00+08:00">
+                2018-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="管理器"><a href="#管理器" class="headerlink" title="管理器"></a>管理器</h3><p>Manager是django模型进行数据库查询操作的接口。Django应用的每个模型都拥有至少一个管理器。<br>通常产生对manager的自定义的需求来自于两点：</p>
+<ul>
+<li>扩展或者修改Django的manager方法。</li>
+<li><p>修改QuerySet(返回还是QuerySet)</p>
+<pre><code>class DocumentManager(models.Manager):
+    def get_by_nature_key(self, uuid):
+        return self.get(uuid=uuid)
+        # 调用在Manager之中调用方法 例如 self.all()= model.objects.all()
+
+    def get_queryset(self):
+        return TrashCanQuerySet(self.model, using=self._db).filter(in_trash=True)
+</code></pre></li>
+</ul>
+<pre><code>class TrashCanManager(models.Manager):
+    def get_queryset(self):
+        &quot;&quot;&quot;
+        override tihs method
+        :return:
+        &quot;&quot;&quot;
+    return super(TrashCanQuerySet, self).get_queryset().filter(in_trash=True)
+</code></pre><h2 id="管理器高级部分"><a href="#管理器高级部分" class="headerlink" title="管理器高级部分"></a>管理器高级部分</h2><p>写管理器有2个目的驱使，官方原画如下：</p>
+<ul>
+<li>to add extra Manager methods,</li>
+<li>and/or to modify the initial QuerySet the Manager returns.</li>
+</ul>
+<p>在管理器方法中我们可以<code>self.model</code>获得与之管理的模型</p>
+<h4 id="重写QuerySet"><a href="#重写QuerySet" class="headerlink" title="重写QuerySet"></a>重写QuerySet</h4><p>django 默认返回所有的对象,<br>      Employee.objects.all()<br>我们可以重写 Manager.get_queryset(), 返回QuerySet。</p>
+<pre><code>  # First, define the Manager subclass.
+
+  class EmployeeManager(models.Manager):
+  def get_queryset(self):
+     &apos;&apos;&apos;
+     查询激活的用户
+     &apos;&apos;&apos;
+     print self.model # get model class
+     return super(EmployeeManager, self).get_queryset().filter(active=True)
+
+  # Then hook it into the Employee model explicitly.
+  class Employee(models.Model):
+  .....
+  active = models.BooleanField(default=True)
+
+  objects = models.Manager() # The default manager.
+  active_objects = EmployeeManager() # The EmployeeManager manager.
+
+class EmployeeQuerySet(models.QuerySet):
+  def juniors(self):
+      return self.filter(role=&apos;J&apos;)
+
+  def seniors(self):
+      return self.filter(role=&apos;S&apos;)
+</code></pre><h4 id="多个管理器"><a href="#多个管理器" class="headerlink" title="多个管理器"></a>多个管理器</h4><p> 例如Employee.all_employees.all(), Employee.seniors.all() and Employee.juniors.all() 返回各自过滤的对象</p>
+<pre><code>class SeniorManager(models.Manager):
+    def get_queryset(self):
+        return super(SeniorManager, self).get_queryset().filter(role=&apos;S&apos;)
+
+class JuniorManager(models.Manager):
+    def get_queryset(self):
+        return super(JuniorManager, self).get_queryset().filter(role=&apos;J&apos;)
+
+class Employee(models.Model):
+    ...
+    roles_choices = (
+        (&quot;J&quot;, &quot;Junior&quot;),
+        (&quot;S&quot;, &quot;Senior&quot;),
+    )
+    ....
+    role = models.CharField(max_length=1, choices=role_choices)
+
+    all_employees = models.Manager()
+    seniors = SeniorManager()
+    juniors = JuniorManager()
+</code></pre><h4 id="调用管理中QuerySet方法"><a href="#调用管理中QuerySet方法" class="headerlink" title="调用管理中QuerySet方法"></a>调用管理中QuerySet方法</h4><p>Calling custom QuerySet methods from the manager</p>
+<pre><code>class EmployeeQuerySet(models.QuerySet):
+  def juniors(self):
+      return self.filter(role=&apos;J&apos;)
+
+  def seniors(self):
+      return self.filter(role=&apos;S&apos;)
+
+class EmployeeManager(models.Manager):
+  def get_queryset(self):
+      return EmployeeQuerySet(self.model, using=self._db)
+
+  def juniors(self):
+      return self.get_queryset().juniors()
+
+  def seniors(self):
+      return self.get_queryset().seniors()
+
+class Employee(models.Model):
+  ...
+  roles_choices = (
+      (&quot;J&quot;, &quot;Junior&quot;),
+      (&quot;S&quot;, &quot;Senior&quot;),
+  )
+  ....
+  role = models.CharField(max_length=1, choices=role_choices)
+
+  all_employees = EmployeeManager()
+</code></pre><p>可以通过Employee.all_employees.juniors 或者Employee.all_employees.seniors</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>掌握管理器的重写，可以方便代码的管理,实现分离，达到对模型的精细控制。<br>from django.db import models</p>
+<pre><code>class ProductQueryset(models.query.QuerySet):
+    def active(self):
+        # understand self is related to
+        return self.filter(active=True)
+
+    def featured(self):
+        return self.filter(featured=True)
+
+
+class ProductManager(models.Manager):
+    def get_queryset(self):
+        return ProductQueryset(self.model, using=self._db)
+
+    def active(self):
+        return self.get_queryset().active()
+
+    def featured(self):
+        return self.get_queryset().featured()
+
+
+class Product(models.Model):
+    active = models.BooleanField(default=True)
+    featured = models.BooleanField(default=False)
+
+    objects = ProductManager()
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/30/2018/2018-07-30-django开发规范/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/30/2018/2018-07-30-django开发规范/" itemprop="url">django开发规范</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-30T17:37:00+08:00">
+                2018-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/django/" itemprop="url" rel="index">
+                    <span itemprop="name">django</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/django/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>本文主要约定在 Django 开发过程中，需要注意的一些事项。统一的编码风格，良好的设计理念，有利于项目的开发和维护，值得开发人员不断地研究和探讨。</p>
+</blockquote>
+<h3 id="1-编码声明"><a href="#1-编码声明" class="headerlink" title="1. 编码声明"></a>1. 编码声明</h3><p>在 Python 解释器执行代码时，需要告诉解释器代码的编码方式。Python 代码实际上是文本数据，如果代码的编码方式与解释器读取的编码方式不一致，将会因编码错误，代码无法执行。Python 2 解释器读取代码时，默认的编码方式是 ASCII，而如果在代码中出现非 ASCII 码的字符时，就会报错。这时，就需要声明 Python 代码的编码方式。<br>python3 统一解决了中文编码问题.</p>
+<h4 id="1-1-设置解释器读取代码的编码格式"><a href="#1-1-设置解释器读取代码的编码格式" class="headerlink" title="1.1 设置解释器读取代码的编码格式"></a>1.1 设置解释器读取代码的编码格式</h4><p>为了统一 Python 解释器读取代码的格式，建议在代码文件头部统一添加，utf-8 的编码设置(python3kk y k)：</p>
+<pre><code># coding:utf-8
+</code></pre><h4 id="1-2-字符串的编码格式"><a href="#1-2-字符串的编码格式" class="headerlink" title="1.2 字符串的编码格式"></a>1.2 字符串的编码格式</h4><p>在 Python 中有三种 string 类型：</p>
+<p>unicode，text string，文本数据<br>str，byte string，二进制数据<br>basestring，是前两者的父类。<br>Python 2 中的字符串 ‘xxx’ 表示 str，u’xxx’ 表示 unicode。Python 3 中，u’xxx’ 和 ‘xxx’ 都表示 unicode。而 b’xxx’ 在 Python 2 和 Python 3 中，均表示二进制数据。</p>
+<p>在 Python 2 中， <strong>future</strong> 提供了 unicode_literals 模块，将当前文件中所有的字符串转化为 unicode ，以兼容 Python 3 字符编码。</p>
+<pre><code># coding:utf-8
+from __future__ import unicode_literals
+
+print type(&apos;测试&apos;)
+&lt;type &apos;unicode&apos;&gt;
+</code></pre><p>字节存储的 str ，必须加前缀 b。例如下面这个例子，由于设置了 unicode_literals， 代码中字符串默认采用 unicode 编码，而 strftime 函数接受的是一个二进制字符串。这时，就需要显示的声明 %m月%d日 %H:%M 为二进制字符串；否则执行时，将会报错。</p>
+<pre><code># coding:utf-8
+from __future__ import unicode_literals
+
+from datetime import datetime
+
+print datetime.now().strftime(b&apos;%m月%d日 %H:%M&apos;)
+</code></pre><h3 id="2-PEP8"><a href="#2-PEP8" class="headerlink" title="2. PEP8"></a>2. PEP8</h3><h4 id="2-1-命名"><a href="#2-1-命名" class="headerlink" title="2.1 命名"></a>2.1 命名</h4><ul>
+<li>模块名 尽量全小写，也可以使用下划线 module django_module</li>
+<li>全局变量\常量 全大写+下划线式驼峰 GLOBAL_VAR</li>
+<li>类名 首字母大写式驼峰 ClassName()</li>
+<li>函数命名 全小写+下划线驼峰 is_valid_data()</li>
+<li><p>局部变量 全小写+下划线式驼峰 this_is_var</p>
+<h4 id="2-2-flake-8"><a href="#2-2-flake-8" class="headerlink" title="2.2 flake 8"></a>2.2 flake 8</h4><p>Flake8 是由 Python 官方发布的一款辅助检测Python 代码是否规范的工具。Flake8 包含三个工具：</p>
+</li>
+<li><p>PyFlakes 静态检查 Python 代码逻辑错误的工具。</p>
+</li>
+<li>Pep8 静态检查 PEP8 编码风格的工具。</li>
+<li>NedBatchelder’s McCabe script 静态分析 Python 代码复杂度的工具。</li>
+</ul>
+<h3 id="3-包引入"><a href="#3-包引入" class="headerlink" title="3. 包引入"></a>3. 包引入</h3><h4 id="3-1-import-顺序"><a href="#3-1-import-顺序" class="headerlink" title="3.1 import 顺序"></a>3.1 import 顺序</h4><ul>
+<li>标准库</li>
+<li>第三方库</li>
+<li>项目本身<h4 id="3-2-import-格式"><a href="#3-2-import-格式" class="headerlink" title="3.2 import 格式"></a>3.2 import 格式</h4></li>
+<li>单独一行</li>
+<li>使用绝对路径，Python 2 缺省为相对路径导入，Python 3 缺省为绝对路径导入，建议统一使用绝对路径。绝对路径导入可以避免导入子模块覆盖掉标准库模块。<strong>future</strong> 中提供了 absolute_import 模块支持。</li>
+<li>使用 import x 来导入包和模块，不要使用 import *</li>
+<li>使用 from x import y , 其中x是包前缀, y是不带前缀的模块名.</li>
+<li><p>使用 from x import y as z, 如果两个要导入的模块都叫做y或者y太长了.</p>
+<h4 id="3-3-isort"><a href="#3-3-isort" class="headerlink" title="3.3 isort"></a>3.3 isort</h4><p>isort 是一个 Python 实用工具/库，用于按字母顺序对导入进行排序，并自动分割为各个部分。 它为各种编辑器提供了一个命令行 实用工具，Python 库和插件，可以快速地对所有导入进行排序。 它目前干净地支持 Python 2.7 - 3.6，但没有任何依赖关系。</p>
+<pre><code>安装：
+
+$ pip install isort
+使用：
+
+# 对单个文件中的导入排序
+$ isort you.py
+# 对整个目录进行导入排序
+$ isort ./
+</code></pre><h3 id="4-models-内部定义顺序"><a href="#4-models-内部定义顺序" class="headerlink" title="4. models 内部定义顺序"></a>4. models 内部定义顺序</h3></li>
+<li>数据库字段</li>
+<li>非数据库字段</li>
+<li>默认 objects 管理器</li>
+<li>自定义管理器属性（即其他 managers）</li>
+<li>class Meta</li>
+<li>def natural_key() （因为它与模型紧密相关）</li>
+<li>所有 @cached_property 属性</li>
+<li>任何 @classmethod 装饰的方法<ul>
+<li>def <strong>unicode</strong>()（py2）</li>
+</ul>
+</li>
+<li>def <strong>str</strong>()(py3)</li>
+<li>任何以 <strong> 开头的方法（例如 </strong>init__()）</li>
+<li>def save()</li>
+<li>def delete()</li>
+<li>def get_absolute_url()</li>
+<li>def get_translate_url()<br>任何自定义方法<br>这里需要说明的是在 Django admin 中显示一个对象的名字，Python 2 上是使用 <strong>unicode</strong>()，而在 Python 3 上是使用 <strong>str</strong>()。为了兼容两种写法，可以使用 python_2_unicode_compatible 装饰器。</li>
+</ul>
+<h3 id="5-代码提交注释"><a href="#5-代码提交注释" class="headerlink" title="5. 代码提交注释"></a>5. 代码提交注释</h3><p>git提交注释说明的习惯：</p>
+<pre><code>bugfix ： 线上功能 Bug 修复
+sprintfix：未上线代码修改
+minor：不重要的修改（换行，拼写错误等）
+feature ：新功能说明
+improvement ：已有功能优化
+documentation ：新增说明文档，比如 readme.md 文件
+refactoring：代码重构
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/20/2018/2018-07-20-django-queryset-总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/20/2018/2018-07-20-django-queryset-总结/" itemprop="url">django queryset 总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-20T18:07:00+08:00">
+                2018-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="不要滥用count和exits方法"><a href="#不要滥用count和exits方法" class="headerlink" title="不要滥用count和exits方法"></a>不要滥用count和exits方法</h3><pre><code>if display_inbox
+ with emails=user.emails.all % # 定义了变量email
+% if emails %
+&lt;p&gt;You have  emails|length  email(s)&lt;/p&gt;
+% for email in emails %
+  &lt;p&gt;email.body&lt;/p&gt;
+% endfor %
+% else %
+&lt;p&gt;No messages today.&lt;/p&gt;
+% endif %
+% endwith %
+% endif %
+</code></pre><h3 id="first-and-none"><a href="#first-and-none" class="headerlink" title="first and none"></a>first and none</h3><p>first 获得第一个对象<br>      Model.objects.first()</p>
+<pre><code>#returns one instance or None
+</code></pre><p>  <code>if emails</code> 会调用<code>QuerySet.__bool__()</code>方法，进而导致<code>user.emails.all()</code>查询一次数据库。</p>
+<p>  <code>emails|length</code> 调用 <code>QuerySet.__len__()</code>  在缓存中查询，不需要再hit数据库了。<br>  本段代码最多1次查询数据库.<br>  <code>QuerySet.exists()`` 和</code>QuerySet.count()` 都是查询数据库, 三思而行.</p>
+<h3 id="获得模型的类名"><a href="#获得模型的类名" class="headerlink" title="获得模型的类名"></a>获得模型的类名</h3><p>基于查询集获得类名</p>
+<blockquote>
+<p> querysets.models<br>基于类实例获得类名</p>
+<p>querysets[0]._meta.models</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/20/2018/2018-07-20-template中-变量可以使用model中的方法及属性/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/20/2018/2018-07-20-template中-变量可以使用model中的方法及属性/" itemprop="url">模板中 变量可以使用model中的方法及属性</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-20T17:53:00+08:00">
+                2018-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="保存用户信息-不设置密码"><a href="#保存用户信息-不设置密码" class="headerlink" title="保存用户信息 不设置密码"></a>保存用户信息 不设置密码</h3><p>django 官方文档给出方法：<br>User.set_unusable_password()</p>
+<blockquote>
+<p>set_unusable_password 不设置密码 密码空白</p>
+</blockquote>
+<p>与之对应的方法是<code>has_usable_password()</code>检查用户是否有密码。<br>链接：<a href="https://docs.djangoproject.com/en/2.0/ref/contrib/auth/" target="_blank" rel="noopener">https://docs.djangoproject.com/en/2.0/ref/contrib/auth/</a></p>
+<h3 id="模版中使用类中的方法"><a href="#模版中使用类中的方法" class="headerlink" title="模版中使用类中的方法"></a>模版中使用类中的方法</h3><p>在template 可以使用对象方法</p>
+<pre><code>if  not item.has_usable_password
+</code></pre><h3 id="适合特别的场景"><a href="#适合特别的场景" class="headerlink" title="适合特别的场景"></a>适合特别的场景</h3><p>用户注册基本信息（不含密码） 然后再设置密码信息。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/20/2018/2018-07-20-将unicode文本标准化/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/20/2018/2018-07-20-将unicode文本标准化/" itemprop="url">将Unicode文本标准化</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-20T16:34:00+08:00">
+                2018-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>你正在处理Unicode字符串，需要确保所有字符串在底层有相同的表示。以删除变音符号，重音等.</p>
+<pre><code>import unicodedata
+
+&quot;&quot;&quot; Normalise (normalize) unicode data in Python to remove umlauts, accents etc. &quot;&quot;&quot;
+
+data = u&apos;naïve café&apos;
+normal = unicodedata.normalize(&apos;NFKD&apos;, data).encode(&apos;ASCII&apos;, &apos;ignore&apos;)
+print normal
+
+# prints &quot;naive cafe&quot;
+</code></pre><ul>
+<li>NFC表示字符应该是整体组成(比如可能的话就使用单一编码)</li>
+<li>NFD表示字符应该分解为多个组合字符表示</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/19/2018/2018-07-19-静态类-静态方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/19/2018/2018-07-19-静态类-静态方法/" itemprop="url">静态类&&静态方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-19T14:41:00+08:00">
+                2018-07-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="staticmethod-静态类"><a href="#staticmethod-静态类" class="headerlink" title="@staticmethod 静态类"></a>@staticmethod 静态类</h3><p>参数必须有cls, 类名.方法直接用,不需要实例化</p>
+<pre><code>@classmethod
+def get(cls, name):
+    return cls._registry[name]
+#name 是类的参数
+#类名称.get(&apos;name&apos;)
+</code></pre><h3 id="staticmethod"><a href="#staticmethod" class="headerlink" title="@staticmethod"></a>@staticmethod</h3><p>在类中往往有一些方法跟类有关系(可有可无的)，但是又不会改变类和实例状态的方法，这种方法是静态方法.<br>静态方法没有 self 和 cls 参数，但是可以有指定其他参数。 可以把它看成是一个普通的函数，我们当然可以把它写到类外面，但这是不推荐的，因为这不利于代码的组织和命名空间的整洁.<br>静态方法也可以不需要实例化也可以的。</p>
+<h3 id="property"><a href="#property" class="headerlink" title="@property"></a>@property</h3><p>类属性,把方法封装城属性使用 \</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><p>类方法使用 @classmethod 装饰器，可以使用类（也可使用实例）来调用方法。</p>
+</li>
+<li><p>静态方法使用 @staticmethod 装饰器，它是跟类有关系但在运行时又不需要实例和类参与的方法，可以使用类和实例来调用</p>
+</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/19/2018/2018-07-19-python模块-itertools/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -439,987 +1635,11 @@ print(each)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/02/2018/2018-07-02-pathlib-让你的路更平坦/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/02/2018/2018-07-02-pathlib-让你的路更平坦/" itemprop="url">pathlib 让你的路更平坦</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-02T17:07:00+08:00">
-                2018-07-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="pathlib-简介"><a href="#pathlib-简介" class="headerlink" title="pathlib 简介"></a>pathlib 简介</h3><p><code>pathlib</code> 库完全面对对象的编程方式, 在python 3.4+以后已经成为标准库，基本上可以代替os.path来处理路径。对于字符串的低级别路径处理，您还可以使用os.path模块。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/12/2018/2018-06-12-argparse-小节笔记/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/12/2018/2018-06-12-argparse-小节笔记/" itemprop="url">argparse 小节笔记</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-12T10:20:00+08:00">
-                2018-06-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="可选参数-和位置参数"><a href="#可选参数-和位置参数" class="headerlink" title="可选参数 和位置参数"></a>可选参数 和位置参数</h3><p>可选参数 <code>Optional argument</code><br>可选参数将由-前缀标识,例如 ‘-foo’ ‘–foo’</p>
-<pre><code>&gt;&gt;&gt; parser.add_argument(&apos;-f&apos;, &apos;--foo&apos;)
-</code></pre><p>位置参数 <code>Positional arguments</code><br>剩下的即为位置参数,且位置参数都是必须的(required)</p>
-<pre><code>&gt;&gt;&gt; parser.add_argument(&apos;bar&apos;)
-</code></pre><p>官方文档例子prog.py<br>    import argparse</p>
-<pre><code>parser =argparse.ArgumentParser(description=&apos;Process some integers.&apos;)
-parser.add_argument(&apos;integers&apos;, metavar=&apos;N&apos;, type=int, nargs=&apos;+&apos;,
-                help=&apos;an integer for the accumulator&apos;)
-parser.add_argument(&apos;--sum&apos;, dest=&apos;accumulate&apos;, action=&apos;store_const&apos;,
-                const=sum, default=max,
-                help=&apos;sum the integers (default: find the max)&apos;)
-
-args = parser.parse_args()
-print(args.accumulate(args.integers))
-</code></pre><p><code>integers</code>是位置参数,在执行的适合不 ‘integers’</p>
-<p><code>--sum</code> 是可选参数，</p>
-<p><code>dest</code>是目标参数的名称, dest允许设置自定义属性名字(属性别名)</p>
-<p><code>const</code> 接受参数 或者回调函数, 这是接受sum回调函数。</p>
-<p><code>type</code> 接受参数的类型(默认是string类型),  type属性还可以接收一个回调函数，这个回调函数接收一个命令行参数并返回转换类型之后的值</p>
-<p><code>defualt</code>默认参数</p>
-<p><code>choices</code> 参数默认范围</p>
-<p><code>nargs</code> 参数个人 （+ ？*）<br><code>action</code> action参数指定了参数是如何被处理的<br><code>help</code>  help=’…’，指定帮助提示信息。</p>
-<pre><code>&gt;&gt;&gt; python prog 1 2 4 5
-### Namespace(accumulate=&lt;built-in function max&gt;, t=[1243])
-&gt;&gt;&gt; python prog 1 2 4 5 --sum
-### 10
-</code></pre><h3 id="长参短参"><a href="#长参短参" class="headerlink" title="长参短参"></a>长参短参</h3><pre><code>parser.add_argument(&apos;-h&apos;,&apos;--help&apos;,type = int,choices = [0,1,2],default = 0,help = &apos;this is arg3&apos;)
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/11/2018/2018-06-11-修改mac终端默认打开路径/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/11/2018/2018-06-11-修改mac终端默认打开路径/" itemprop="url">修改mac终端默认打开路径</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-11T19:32:00+08:00">
-                2018-06-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h3><p>有时候我们希望默认终端打开指定的路径,避免每一次都cd一下。</p>
-<pre><code>cd ~ #进入～根目录
-vim .bash_profile 
-cd /hiro/workdirs/ # 指定进入的目录
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/07/2018/2018-06-07-tabnanny-检测文件缩进/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/07/2018/2018-06-07-tabnanny-检测文件缩进/" itemprop="url">tabnanny 检测文件缩进</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-07T12:14:00+08:00">
-                2018-06-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="源代码路径-Lib-tabnanny-py"><a href="#源代码路径-Lib-tabnanny-py" class="headerlink" title="源代码路径 Lib/tabnanny.py"></a>源代码路径 Lib/tabnanny.py</h3><ol>
-<li>该模板是脚本, 在IDE下的用法,可以使用check()函数<br> import tabnanny<br> tabnanny.check(file)</li>
-</ol>
-<ol>
-<li><p>在终端使用方法：</p>
-<p>   python  -m tabnanny -v  -qfile_or_path</p>
-<h1 id="v-如果作为脚本调用，则由-v选项递增，-打印详情信息，"><a href="#v-如果作为脚本调用，则由-v选项递增，-打印详情信息，" class="headerlink" title="-v 如果作为脚本调用，则由-v选项递增， 打印详情信息，"></a>-v 如果作为脚本调用，则由-v选项递增， 打印详情信息，</h1><h1 id="q-文件名包括空格等特殊情况的"><a href="#q-文件名包括空格等特殊情况的" class="headerlink" title="-q 文件名包括空格等特殊情况的"></a>-q 文件名包括空格等特殊情况的</h1><blockquote>
-<p>注意：<code>-m</code> 模块作为脚本执行 run library module as a script (terminates option list)</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="源代码内容分析"><a href="#源代码内容分析" class="headerlink" title="源代码内容分析"></a>源代码内容分析</h3><ol>
-<li><p>可以返回 空</p>
-<blockquote>
-<p>return</p>
-</blockquote>
-</li>
-<li><p>os.path<br>使用isfile()、islink()、normcase()、isdir()方法</p>
-<p> os.path.abspath(path) #返回绝对路径<br> os.path.basename(path) #返回文件名<br> os.path.commonprefix(list) #返回list(多个路径)中，所有path共有的最长的路径。<br> os.path.dirname(path) #返回文件路径<br> os.path.exists(path)  #路径存在则返回True,路径损坏返回False<br> os.path.lexists  #路径存在则返回True,路径损坏也返回True<br> os.path.expanduser(path)  #把path中包含的”~”和”~user”转换成用户目录<br> os.path.expandvars(path)  #根据环境变量的值替换path中包含的”$name”和”${name}”<br> os.path.getatime(path)  #返回最后一次进入此path的时间。<br> os.path.getmtime(path)  #返回在此path下最后一次修改的时间。<br> os.path.getctime(path)  #返回path的大小<br> os.path.getsize(path)  #返回文件大小，如果文件不存在就返回错误<br> os.path.isabs(path)  #判断是否为绝对路径</p>
-<ul>
-<li>os.path.isfile(path)  #判断路径是否为文件</li>
-<li>os.path.isdir(path)  #判断路径是否为目录</li>
-<li>os.path.islink(path)  #判断路径是否为链接<br>os.path.ismount(path)  #判断路径是否为挂载点（）<br>os.path.join(path1[, path2[, …]])  #把目录和文件名合成一个路径</li>
-<li>os.path.normcase(path)  #转换path的大小写和(不同系统平台斜杠不一样)斜杠<br>os.path.normpath(path)  #规范path字符串形式<br>os.path.realpath(path)  #返回path的真实路径<br>os.path.relpath(path[, start])  #从start开始计算相对路径<br>os.path.samefile(path1, path2)  #判断目录或文件是否相同<br>os.path.sameopenfile(fp1, fp2)  #判断fp1和fp2是否指向同一文件<br>os.path.samestat(stat1, stat2)  #判断stat tuple stat1和stat2是否指向同一个文件<br>os.path.split(path)  #把路径分割成dirname和basename，返回一个元组<br>os.path.splitdrive(path)   #一般用在windows下，返回驱动器名和路径组成的元组<br>os.path.splitext(path)  #分割路径，返回路径名和文件扩展名的元组<br>os.path.splitunc(path)  #把路径分割为加载点与文件<br>os.path.walk(path, visit, arg)  #遍历path，进入每个目录都调用visit函数，visit函数必须有<br>3个参数(arg, dirname, names)，dirname表示当前目录的目录名，names代表当前目录下的所有<br>文件名，args则为walk的第三个参数<br>os.path.supports_unicode_filenames  #设置是否支持unicode路径名</li>
-</ul>
-</li>
-<li><p>flag 标志<br> verbose = 0 # 通过+1 实现真逻辑</p>
-</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/06/2018/2018-06-06-与众不同/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/06/2018/2018-06-06-与众不同/" itemprop="url">与众不同</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-06T17:08:00+08:00">
-                2018-06-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <pre><code>Think Different
-
-Here’s to the crazy ones.
-
-向那些疯狂的家伙们致敬，
-
-The misfits.
-
-他们特立独行，
-
-The rebels.
-
-他们桀骜不驯，
-
-The troublemakers.
-
-他们惹是生非，
-
-The round pegs in the square holes.
-
-他们格格不入，
-
-The ones who see things differently.
-
-他们用与众不同的眼光看待事物，
-
-They’re not fond of rules.
-
-他们不喜欢墨守成规，
-
-And they have no respect for the status quo.
-
-他们也不愿安于现状。
-
-You can quote them, disagree with them, glorify or vilify them.
-
-你可以赞美他们，引用他们，反对他们，质疑他们，颂扬或是诋毁他们，
-
-About the only thing you can’t do is ignore them.
-
-但唯独不能漠视他们。
-
-Because they change things.
-
-因为他们改变了事物。
-
-They invent. They imagine. They heal. They explore. They create. They inspire.
-
-他们发明，他们想象，他们治愈，他们探索，他们创造，他们启迪，
-
-They push the human race forward.
-
-他们推动人类向前发展。
-
-Maybe they have to be crazy.
-
-也许，他们必须要疯狂。
-
-How else can you stare at an empty canvas and see a work of art?
-
-你能盯着白纸，就看到美妙的画作么？
-
-Or sit in silence and hear a song that’s never been written?
-
-你能静静坐着，就谱出动听的歌曲么？
-
-Or gaze at a red planet and see a laboratory on wheels?
-
-你能凝视火星，就想到神奇的太空轮么？
-
-We make tools for these kinds of people.
-
-我们为这些家伙制造良机。
-
-While some see them as the crazy ones, we see genius.
-
-或许他们是别人眼里的疯子，但他们却是我们眼中的天才。
-
-Because the people who are crazy enough to think they can change the world, are the ones who do.
-
-因为只有那些疯狂到以为自己能够改变世界的人，才能真正地改变世界。
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/06/2018/2018-06-06-python-技术词汇/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/06/2018/2018-06-06-python-技术词汇/" itemprop="url">python 技术词汇</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-06T15:54:00+08:00">
-                2018-06-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>verbose: 表示详细信息</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/06/2018/2018-06-06-flag-阅读py3-x官方文档/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/06/2018/2018-06-06-flag-阅读py3-x官方文档/" itemprop="url">Flag 阅读py3.x官方文档 </a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-06T15:44:00+08:00">
-                2018-06-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="这里记录-阅读官方文档的日志"><a href="#这里记录-阅读官方文档的日志" class="headerlink" title="这里记录 阅读官方文档的日志"></a>这里记录 阅读官方文档的日志</h3><h3 id="每周一模块"><a href="#每周一模块" class="headerlink" title="每周一模块"></a>每周一模块</h3><h3 id="坚持年底"><a href="#坚持年底" class="headerlink" title="坚持年底"></a>坚持年底</h3>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1465,7 +1685,7 @@ Because the people who are crazy enough to think they can change the world, are 
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">49</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1476,7 +1696,7 @@ Because the people who are crazy enough to think they can change the world, are 
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1487,7 +1707,7 @@ Because the people who are crazy enough to think they can change the world, are 
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

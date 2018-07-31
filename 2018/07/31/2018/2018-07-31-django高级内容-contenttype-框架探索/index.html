@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Django ContentTypes 描述概念django 包含一个用来跟踪所有安装的应用模型的contenttypes 应用,它对当前项目中所有基于Django驱动的model提供了更高层次的抽象接口。 ContentType 是一个Django自动创建的模型，它包含2个字段   app_label：app的名称 model：模型的名字（小写）   通过下表, 一个app的下所有model都会">
+<meta property="og:type" content="article">
+<meta property="og:title" content="django高级内容: ContentType 框架探索">
+<meta property="og:url" content="http://yoursite.com/2018/07/31/2018/2018-07-31-django高级内容-contenttype-框架探索/index.html">
+<meta property="og:site_name" content="python">
+<meta property="og:description" content="Django ContentTypes 描述概念django 包含一个用来跟踪所有安装的应用模型的contenttypes 应用,它对当前项目中所有基于Django驱动的model提供了更高层次的抽象接口。 ContentType 是一个Django自动创建的模型，它包含2个字段   app_label：app的名称 model：模型的名字（小写）   通过下表, 一个app的下所有model都会">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-07-31T09:46:29.849Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="django高级内容: ContentType 框架探索">
+<meta name="twitter:description" content="Django ContentTypes 描述概念django 包含一个用来跟踪所有安装的应用模型的contenttypes 应用,它对当前项目中所有基于Django驱动的model提供了更高层次的抽象接口。 ContentType 是一个Django自动创建的模型，它包含2个字段   app_label：app的名称 model：模型的名字（小写）   通过下表, 一个app的下所有model都会">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/31/2018/2018-07-31-django高级内容-contenttype-框架探索/"/>
+
+
+
+
+
+  <title>django高级内容: ContentType 框架探索 | python</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">python</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/2018/2018-07-31-django高级内容-contenttype-框架探索/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">django高级内容: ContentType 框架探索</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-31T10:40:00+08:00">
+                2018-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="Django-ContentTypes-描述概念"><a href="#Django-ContentTypes-描述概念" class="headerlink" title="Django ContentTypes 描述概念"></a>Django ContentTypes 描述概念</h3><p>django 包含一个用来跟踪所有安装的应用模型的contenttypes 应用,它对当前项目中所有基于Django驱动的model提供了更高层次的抽象接口。<br> ContentType 是一个Django自动创建的模型，它包含2个字段</p>
+<blockquote>
+<p> app_label：app的名称<br> model：模型的名字（小写）</p>
+</blockquote>
+<p> 通过下表, 一个app的下所有model都会写入表中,统一入口管理。<br>        id  app_label  model<br>        42    documents    documentversion<br>        43    documents    duplicateddocument<br>        44    documents    documenttype<br>        45    documents    documentpage<br>        46    documents    documentpagecachedimage<br>        47    documents    recentdocument<br>        48    documents    documenttypefilename<br>        49    documents    document<br>        50    documents    deleteddocument<br>        51    documents    documentpageresult</p>
+<h3 id="ContentType实例方法"><a href="#ContentType实例方法" class="headerlink" title="ContentType实例方法"></a>ContentType实例方法</h3><h5 id="ContentType-get-object-for-this-type-kwargs"><a href="#ContentType-get-object-for-this-type-kwargs" class="headerlink" title="ContentType.get_object_for_this_type(**kwargs)"></a>ContentType.get_object_for_this_type(**kwargs)</h5><p>对表中记录的模型get查询，返回对象</p>
+<h5 id="ContentType-model-class"><a href="#ContentType-model-class" class="headerlink" title="ContentType.model_class()"></a>ContentType.model_class()</h5><p>获得模型类</p>
+<pre><code># 获得contenttype实例
+&gt;&gt;&gt; from django.contrib.contenttypes.models import ContentType
+&gt;&gt;&gt; user_type= ContentType.objects.get(app_label=&quot;auth&quot;, model=&quot;user&quot;)
+# 输出 ContentType: user
+&gt;&gt;&gt; user_type.model_class()
+# class&apos;django.contrib.auth.models.User&apos;
+&gt;&gt;&gt;user_type.get_object_for_this_type(username=&apos;Guido&apos;)
+# User: Guido
+</code></pre><h5 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h5><ul>
+<li>不需要直接导入或者定义模型类, 直接传参app_lable和model给contentype,直接对model完成检索查询。</li>
+<li>您可以将另一个模型与ContentType相关联，作为将其实例绑定到特定模型类的方法，并使用这些方法来访问这些模型类。</li>
+</ul>
+<h3 id="ContentType管理器"><a href="#ContentType管理器" class="headerlink" title="ContentType管理器"></a>ContentType管理器</h3><ol>
+<li><p>ContentType.objects.get_for_id()<br>通过id寻找ContentType类型，这个跟传统的get方法的区别就是它跟get_for_model共享一个缓存，因此更为推荐。</p>
+</li>
+<li><p>ContentType.objects.get_for_model()<br>通过model或者model的实例来寻找ContentType类型</p>
+</li>
+</ol>
+<pre><code>from django.contrib.auth.models import User
+ContentType.objects.get_for_model(User)
+# 输出结果 ContentType: user
+</code></pre><h3 id="Generic-relations-范型关系"><a href="#Generic-relations-范型关系" class="headerlink" title="Generic relations 范型关系"></a>Generic relations 范型关系</h3><p>给用户模型添加Contentype,使得用户的模型更好的和其他模型建立关系，就Permission模型,  ContentType在模型之间建立了范型关系.</p>
+<pre><code>from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
+from django.db import models
+
+class TaggedItem(models.Model):
+    tag = models.SlugField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    content_object = GenericForeignKey(&apos;content_type&apos;, &apos;object_id&apos;)
+
+    def __str__(self):
+        return self.tag
+</code></pre><p><code>ForeignKey</code>指向仅一个模型,<code>GenericForeignKey</code>可以跟多个模型建立关联,需要如下必须的三个过程:</p>
+<ol>
+<li><p>用户模型的ForeignKey to ContentType, 默认字段名称content_type.</p>
+<pre><code>from django.contrib.auth.models import User
+guido = User.objects.get(username=&apos;Guido&apos;)
+t = TaggedItem(content_object=guido, tag=&apos;bdfl&apos;)
+t.save()
+t.content_object
+# User: Guido
+</code></pre></li>
+<li><p>给模型添加object_id 字段,存储来自关联模型的<code>primary key</code></p>
+<pre><code>object_id = models.PositiveIntegerField()
+</code></pre></li>
+<li>给模型添加GenericForeignKey, 传递上面的2个参数,如果上面的参数名称是默认的（content_type, object_id）可以忽略不传参。</li>
+</ol>
+<h3 id="反向-GenericRelation"><a href="#反向-GenericRelation" class="headerlink" title="反向 GenericRelation"></a>反向 GenericRelation</h3><p>给模型模型添加 “reverse” generic relationship,使得可以访问关联的模型。<br>      from django.contrib.contenttypes.fields import GenericRelation<br>      from django.db import models</p>
+<pre><code>class Bookmark(models.Model):
+    url = models.URLField()
+    tags = GenericRelation(TaggedItem)
+</code></pre><p>  Bookmark 实例有tags属性, 可以检索关联TaggedItems模型的数据.</p>
+<h3 id="理解模型中的reserve-反向"><a href="#理解模型中的reserve-反向" class="headerlink" title="理解模型中的reserve 反向"></a>理解模型中的reserve 反向</h3><p>django 默认每个主表的对象都有一个是外键的属性，可以通过它来查询到所有属于主表的子表的信息。这个属性的名称默认是以子表的名称小写加上_set()来表示(上面默认以b_set访问)，默认返回的是一个querydict对象。related_name 可以给这个外键定义好一个别的名称</p>
+<blockquote>
+<p> 例如B中有一个 models.ForeignKey(A) 。而当我们需要反向查询 A 中某个具体实例所关联的 B 时,可能会用到 A.B_set.all() 或 B.objects.filter(A) 这两种不同的方法</p>
+</blockquote>
+<p>  对于用<code>ForeignKey</code> 来定义的关系来说，在关系的另一端也能反向的查询得到相应的结果.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/30/2018/2018-07-30-django-manager管理器利剑/" rel="next" title="django manager管理器利剑">
+                <i class="fa fa-chevron-left"></i> django manager管理器利剑
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Hiro</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">49</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.zuopiezi.org" title="zuopiezi" target="_blank">zuopiezi</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Django-ContentTypes-描述概念"><span class="nav-number">1.</span> <span class="nav-text">Django ContentTypes 描述概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ContentType实例方法"><span class="nav-number">2.</span> <span class="nav-text">ContentType实例方法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ContentType-get-object-for-this-type-kwargs"><span class="nav-number">2.0.1.</span> <span class="nav-text">ContentType.get_object_for_this_type(**kwargs)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#ContentType-model-class"><span class="nav-number">2.0.2.</span> <span class="nav-text">ContentType.model_class()</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#应用场景"><span class="nav-number">2.0.3.</span> <span class="nav-text">应用场景</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ContentType管理器"><span class="nav-number">3.</span> <span class="nav-text">ContentType管理器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generic-relations-范型关系"><span class="nav-number">4.</span> <span class="nav-text">Generic relations 范型关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反向-GenericRelation"><span class="nav-number">5.</span> <span class="nav-text">反向 GenericRelation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#理解模型中的reserve-反向"><span class="nav-number">6.</span> <span class="nav-text">理解模型中的reserve 反向</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hiro</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
