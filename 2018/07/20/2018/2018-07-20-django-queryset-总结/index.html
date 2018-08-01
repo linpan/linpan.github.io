@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="python">
 <meta property="og:description" content="不要滥用count和exits方法if display_inbox  with emails=user.emails.all % # 定义了变量email % if emails % &amp;lt;p&amp;gt;You have  emails|length  email(s)&amp;lt;/p&amp;gt; % for email in emails %   &amp;lt;p&amp;gt;email.body&amp;lt;/p&amp;gt;">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-07-31T10:02:51.954Z">
+<meta property="og:updated_time" content="2018-08-01T03:51:00.363Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="django queryset 总结">
 <meta name="twitter:description" content="不要滥用count和exits方法if display_inbox  with emails=user.emails.all % # 定义了变量email % if emails % &amp;lt;p&amp;gt;You have  emails|length  email(s)&amp;lt;/p&amp;gt; % for email in emails %   &amp;lt;p&amp;gt;email.body&amp;lt;/p&amp;gt;">
@@ -350,7 +350,36 @@
 <p> querysets.models<br>基于类实例获得类名</p>
 <p>querysets[0]._meta.models</p>
 </blockquote>
+<h3 id="跨表查询span-relationships"><a href="#跨表查询span-relationships" class="headerlink" title="跨表查询span relationships"></a>跨表查询span relationships</h3><p>组成：关联模型字段+双下划线+关联模型的字段</p>
+<pre><code>document_model.objects.filter(
+                recentdocument__user=user
+            ).order_by(&apos;-recentdocument__datetime_accessed&apos;)
+#entry外键是blog（blog = models.ForeignKey(Blog, on_delete=models.CASCADE)）
+Blog.objects.filter(entry__headline__contains=&apos;Lennon&apos;)
+</code></pre><h3 id="负索引不支持"><a href="#负索引不支持" class="headerlink" title="负索引不支持"></a>负索引不支持</h3><pre><code># 不支持此用法
+ Entry.objects.all()[-1]
+</code></pre><h3 id="F查询"><a href="#F查询" class="headerlink" title="F查询"></a>F查询</h3><p>F询专门对对象中某列值的操作，不可使用__双下划线！例如对产品的所有价格*1.2 倍, 常规操作是：</p>
+<pre><code>products = Product.objects.all()
+for product in products:
+    product.price *= 1.2
+    product.save()
+</code></pre><p>如果使用F()的话<br>    from django.db.models import F</p>
+<pre><code>Product.objects.update(price=F(&apos;price&apos;) * 1.2)
 
+# 单个对象的F操作
+product = Product.objects.get(pk=5009)
+product.price = F(&apos;price&apos;) * 1.2
+product.save()
+</code></pre><p>注意:F操作在save后生效。</p>
+<h3 id="Q查询"><a href="#Q查询" class="headerlink" title="Q查询"></a>Q查询</h3><p>  Q查询可以组合使用 “ \&amp;”, “|” 操作符，当一个操作符是用于两个Q的对象,它产生一个新的Q对象，Q对象可以用 “~” 操作符放在前面表示否定，也可允许否定与不否定形式的组合,</p>
+<blockquote>
+<p><code>&amp;</code>表示and且, <code>|</code> 表示or 或</p>
+</blockquote>
+<h3 id="单个对象的查询方法"><a href="#单个对象的查询方法" class="headerlink" title="单个对象的查询方法"></a>单个对象的查询方法</h3><p>当你指定查询需要匹配的一个值时，你可以使用一个对象实例或者对象的主键的值。<br>例如，如果你有一个id=5 的Blog 对象b，下面的三个查询将是完全一样的：<br>    Entry.objects.filter(blog=b) # Query using object instance<br>    Entry.objects.filter(blog=b.id) # Query using id from instance<br>    Entry.objects.filter(blog=5) # Query using id directly</p>
+<h3 id="获得app的模型"><a href="#获得app的模型" class="headerlink" title="获得app的模型"></a>获得app的模型</h3><pre><code>from django.apps import apps
+    apps.get_model(app_label=&apos;document_parsing&apos;, model_name=&apos;DocumentPageContent&apos;)
+    好处 根据app名称动态获取model。
+</code></pre>
       
     </div>
     
@@ -463,7 +492,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -532,7 +561,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#不要滥用count和exits方法"><span class="nav-number">1.</span> <span class="nav-text">不要滥用count和exits方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#first-and-none"><span class="nav-number">2.</span> <span class="nav-text">first and none</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获得模型的类名"><span class="nav-number">3.</span> <span class="nav-text">获得模型的类名</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#不要滥用count和exits方法"><span class="nav-number">1.</span> <span class="nav-text">不要滥用count和exits方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#first-and-none"><span class="nav-number">2.</span> <span class="nav-text">first and none</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获得模型的类名"><span class="nav-number">3.</span> <span class="nav-text">获得模型的类名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跨表查询span-relationships"><span class="nav-number">4.</span> <span class="nav-text">跨表查询span relationships</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#负索引不支持"><span class="nav-number">5.</span> <span class="nav-text">负索引不支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#F查询"><span class="nav-number">6.</span> <span class="nav-text">F查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q查询"><span class="nav-number">7.</span> <span class="nav-text">Q查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单个对象的查询方法"><span class="nav-number">8.</span> <span class="nav-text">单个对象的查询方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#获得app的模型"><span class="nav-number">9.</span> <span class="nav-text">获得app的模型</span></a></li></ol></div>
             
 
           </div>

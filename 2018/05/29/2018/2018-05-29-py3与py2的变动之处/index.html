@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="python">
 <meta property="og:description" content="file 2to3 fixer ☑ six support ☐  file 在py2是内置函数, 在py3不在支持了。替代用法是  open(filename)  当然也可以使用 io.IOBase 替代file filter() 2to3 fixer ☑ six support ☐  filter()在py2 返回是list, py3返回是迭代器 imports 2to3 fixer ☑ six">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-30T03:03:08.584Z">
+<meta property="og:updated_time" content="2018-08-01T08:48:01.606Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="第二期: py3 与py2的差异">
 <meta name="twitter:description" content="file 2to3 fixer ☑ six support ☐  file 在py2是内置函数, 在py3不在支持了。替代用法是  open(filename)  当然也可以使用 io.IOBase 替代file filter() 2to3 fixer ☑ six support ☐  filter()在py2 返回是list, py3返回是迭代器 imports 2to3 fixer ☑ six">
@@ -368,6 +368,7 @@ from .. import fatherpkg
 <p>python3 只留range(),返回是迭代器。</p>
 </blockquote>
 <h3 id="map"><a href="#map" class="headerlink" title="map()"></a>map()</h3><p>py2 map()返回list, py3 返回迭代器</p>
+<h3 id="scandir"><a href="#scandir" class="headerlink" title="scandir"></a>scandir</h3><p><code>os.scandir</code> 成为py3的标准库 ,替代<code>os.walk()</code>.</p>
 
       
     </div>
@@ -481,7 +482,7 @@ from .. import fatherpkg
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">50</span>
+                  <span class="site-state-item-count">59</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -550,7 +551,7 @@ from .. import fatherpkg
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#file"><span class="nav-number">1.</span> <span class="nav-text">file</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filter"><span class="nav-number">2.</span> <span class="nav-text">filter()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#imports"><span class="nav-number">3.</span> <span class="nav-text">imports</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#input-and-raw-input"><span class="nav-number">4.</span> <span class="nav-text">input and raw_input()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interger-division"><span class="nav-number">5.</span> <span class="nav-text">interger division</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#long-and-int"><span class="nav-number">6.</span> <span class="nav-text">long and int</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#range-and-xrange"><span class="nav-number">7.</span> <span class="nav-text">range() and xrange()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map"><span class="nav-number">8.</span> <span class="nav-text">map()</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#file"><span class="nav-number">1.</span> <span class="nav-text">file</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filter"><span class="nav-number">2.</span> <span class="nav-text">filter()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#imports"><span class="nav-number">3.</span> <span class="nav-text">imports</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#input-and-raw-input"><span class="nav-number">4.</span> <span class="nav-text">input and raw_input()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#interger-division"><span class="nav-number">5.</span> <span class="nav-text">interger division</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#long-and-int"><span class="nav-number">6.</span> <span class="nav-text">long and int</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#range-and-xrange"><span class="nav-number">7.</span> <span class="nav-text">range() and xrange()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map"><span class="nav-number">8.</span> <span class="nav-text">map()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#scandir"><span class="nav-number">9.</span> <span class="nav-text">scandir</span></a></li></ol></div>
             
 
           </div>
