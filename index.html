@@ -259,6 +259,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/10/2018/requests Post数据注意事项/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/10/2018/requests Post数据注意事项/" itemprop="url">reqeusts post数据注意</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-10T10:37:00+08:00">
+                2019-01-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="python-requests"><a href="#python-requests" class="headerlink" title="python requests"></a>python requests</h2><p>这位作者是python界的大妖, 如果想学习python及代码规范,请看这个库的源代码。</p>
+<p>###request利器推荐：</p>
+<blockquote>
+<p>Requests 模块</p>
+</blockquote>
+<h3 id="POST请求响应头注意事项："><a href="#POST请求响应头注意事项：" class="headerlink" title="POST请求响应头注意事项："></a>POST请求响应头注意事项：</h3><p>headers 有必要带着</p>
+<pre><code>headers = {&quot;Content-type&quot;: &quot;application/json&quot;, &quot;X-Auth-Token&quot;: &quot;c4c344d1eab54d9889713eb732fdd3de&quot;}
+</code></pre><h3 id="payload-遇到的坑"><a href="#payload-遇到的坑" class="headerlink" title="payload 遇到的坑"></a>payload 遇到的坑</h3><p>单引号和双引号的坑, 单引号python可以理解, 但是其他平台语言估计是理解不到位的，必须使用json规范来构建data, 必须使用<strong>双引号</strong></p>
+<pre><code>payload = {&quot;auciton&quot;: auciton, &quot;bookname&quot;: document_label}
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/03/2018/2018-08-03-django-drf-视图/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1237,179 +1387,6 @@ def register_model_converter(model):
 &gt;&gt;&gt; Form = modelform_factory(Book, form=BookForm,
 ...                          widgets={&quot;title&quot;: Textarea()})
 </code></pre><p>参考文档:<a href="https://docs.djangoproject.com/zh-hans/2.0/topics/forms/modelforms/" target="_blank" rel="noopener">https://docs.djangoproject.com/zh-hans/2.0/topics/forms/modelforms/</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-实现搜索/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-实现搜索/" itemprop="url">django 实现搜索</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T16:17:00+08:00">
-                2018-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="多字段搜索"><a href="#多字段搜索" class="headerlink" title="多字段搜索"></a>多字段搜索</h3><pre><code>def normalize_query(query_string,
-    findterms=re.compile(r&apos;&quot;([^&quot;]+)&quot;|(\S+)&apos;).findall,
-    normspace=re.compile(r&apos;\s{2,}&apos;).sub):
-
-    &apos;&apos;&apos;
-    Splits the query string in invidual keywords, getting rid of unecessary spaces and grouping quoted words together.
-    Example:
-    &gt;&gt;&gt; normalize_query(&apos;  some random  words &quot;with   quotes  &quot; and   spaces&apos;)
-        [&apos;some&apos;, &apos;random&apos;, &apos;words&apos;, &apos;with quotes&apos;, &apos;and&apos;, &apos;spaces&apos;]
-    &apos;&apos;&apos;
-
-    return [normspace(&apos;&apos;,(t[0] or t[1]).strip()) for t in findterms(query_string)]
-
-def get_query(query_string, search_fields):
-
-    &apos;&apos;&apos;
-    Returns a query, that is a combination of Q objects.
-    That combination aims to search keywords within a model by testing the given search fields.
-    &apos;&apos;&apos;
-
-    query = None # Query to search for every search term
-    terms = normalize_query(query_string)
-    for term in terms:
-        or_query = None # Query to search for a given term in each field
-        for field_name in search_fields:
-            q = Q(**{&quot;%s__icontains&quot; % field_name: term})
-            if or_query is None:
-                or_query = q
-            else:
-                or_query = or_query | q
-        if query is None:
-            query = or_query
-        else:
-            query = query &amp; or_query
-
-def search_for_something(request):
-   query_string = &apos;&apos;
-   found_entries = None
-   if (&apos;q&apos; in request.GET) and request.GET[&apos;q&apos;].strip():
-       query_string = request.GET[&apos;q&apos;]
-       entry_query = get_query(query_string, [&apos;field1&apos;, &apos;field2&apos;, &apos;field3&apos;])
-       found_entries = Model.objects.filter(entry_query).order_by(&apos;-something&apos;)
-
-   return render_to_response(&apos;app/template-result.html&apos;,
-           { &apos;query_string&apos;: query_string, &apos;found_entries&apos;: found_entries },
-           context_instance=RequestContext(request)
-</code></pre><h3 id="优化搜索"><a href="#优化搜索" class="headerlink" title="优化搜索"></a>优化搜索</h3><pre><code>from operator import and_, or_
-li = [&apos;keith&apos;, &apos;s&apos;, &apos;thompson&apos;]
-# and
-#reduce 把结果继续和序列的下一个元素and运算
-Profile.objects.filter(reduce(and_, [Q(full_name__icontains=q) for q in li]))
-# or
-Profile.objects.filter(reduce(or_, [Q(full_name__icontains=q) for q in li]))
-</code></pre><p>注明：在 Python3 中，reduce() 函数已经被从全局名字空间里移除了，它现在被放置在 fucntools 模块里，如果想要使用它，则需要通过引入 functools 模块来调用 reduce() 函数.</p>
 
           
         

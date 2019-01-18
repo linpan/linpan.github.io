@@ -259,6 +259,165 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/29/2018/2018-05-29-py3与py2的变动之处/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/29/2018/2018-05-29-py3与py2的变动之处/" itemprop="url">第二期: py3 与py2的差异</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-29T18:11:00+08:00">
+                2018-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="file"><a href="#file" class="headerlink" title="file"></a>file</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>file 在py2是内置函数, 在py3不在支持了。替代用法是</p>
+<blockquote>
+<p>open(filename)</p>
+</blockquote>
+<p>当然也可以使用 <code>io.IOBase</code> 替代file</p>
+<h3 id="filter"><a href="#filter" class="headerlink" title="filter()"></a>filter()</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>filter()在py2 返回是list, py3返回是迭代器</p>
+<h3 id="imports"><a href="#imports" class="headerlink" title="imports"></a>imports</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>在Python 3中，包内的隐式相对导入不再可用 – 仅支持绝对导入和显式相对导入<br>引入当前目录下的包必须指定相对路径:</p>
+<pre><code>from . import mypkg
+from .mypkg import subpkg
+from .. import fatherpkg
+</code></pre><h3 id="input-and-raw-input"><a href="#input-and-raw-input" class="headerlink" title="input and raw_input()"></a>input and raw_input()</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>py3 由input 替代 raw_input()函数. 如果求输入字符串的值,可以用eval()</p>
+<pre><code>&gt;&gt;&gt; eval(input(&apos;Type in an expression: &apos;))
+&apos;Type in an expression: &apos; 1+2
+3
+</code></pre><h3 id="interger-division"><a href="#interger-division" class="headerlink" title="interger division"></a>interger division</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>py2 两个整数相除,结果为int,<br>py3 两个整数相除,结果为float,</p>
+<h3 id="long-and-int"><a href="#long-and-int" class="headerlink" title="long and int"></a>long and int</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+</blockquote>
+<p>python3 彻底废弃了 long+int 双整数实现的方法, 统一为 int , 支持高精度整数运算</p>
+<h3 id="range-and-xrange"><a href="#range-and-xrange" class="headerlink" title="range() and xrange()"></a>range() and xrange()</h3><blockquote>
+<p>2to3 fixer ☑ six support ☐</p>
+<p>python3 只留range(),返回是迭代器。</p>
+</blockquote>
+<h3 id="map"><a href="#map" class="headerlink" title="map()"></a>map()</h3><p>py2 map()返回list, py3 返回迭代器</p>
+<h3 id="scandir"><a href="#scandir" class="headerlink" title="scandir"></a>scandir</h3><p><code>os.scandir</code> 成为py3的标准库 ,替代<code>os.walk()</code>.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/29/2018/py3 与py2差异的地方/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1469,182 +1628,6 @@ docker rm [NAME]/[CONTAINER ID]:不能够删除一个正在运行的容器，会
 <p>docker inspect your-CONTAINER</p>
 </blockquote>
 
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/26/2018/2018-04-26-dockerfiles-django-uwsgi-nginx/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/04/26/2018/2018-04-26-dockerfiles-django-uwsgi-nginx/" itemprop="url">dockerfiles:django-uwsgi-nginx</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-26T16:44:00+08:00">
-                2018-04-26
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <pre><code># Copyright 2013 Thatcher Peskens
-#
-# Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#    http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-FROM ubuntu:16.04
-
-MAINTAINER Dockerfiles
-
-# Install required packages and remove the apt packages cache when done.
-
-RUN apt-get update &amp;&amp; \
-    apt-get upgrade -y &amp;&amp; \
-    apt-get install -y \
-    git \
-    python3 \
-    python3-dev \
-    python3-setuptools \
-    python3-pip \
-    nginx \
-    supervisor \
-    sqlite3 &amp;&amp; \
-    pip3 install -U pip setuptools &amp;&amp; \
-   rm -rf /var/lib/apt/lists/*
-
-# install uwsgi now because it takes a little while
-RUN pip3 install uwsgi
-
-# setup all the configfiles
-RUN echo &quot;daemon off;&quot; &gt;&gt; /etc/nginx/nginx.conf
-COPY nginx-app.conf /etc/nginx/sites-available/default
-COPY supervisor-app.conf /etc/supervisor/conf.d/
-
-# COPY requirements.txt and RUN pip install BEFORE adding the rest of your code, this will cause Docker&apos;s caching mechanism
-# to prevent re-installing (all your) dependencies when you made a change a line or two in your app.
-
-COPY app/requirements.txt /home/docker/code/app/
-RUN pip3 install -r /home/docker/code/app/requirements.txt
-
-# add (the rest of) our code
-COPY . /home/docker/code/
-
-# install django, normally you would remove this step because your project would already
-# be installed in the code/app/ directory
-RUN django-admin.py startproject website /home/docker/code/app/
-
-EXPOSE 80
-CMD [&quot;supervisord&quot;, &quot;-n&quot;]
-</code></pre>
           
         
       

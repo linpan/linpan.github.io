@@ -259,6 +259,169 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/22/2018/2018-03-22-python-赋值-！拷贝/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/22/2018/2018-03-22-python-赋值-！拷贝/" itemprop="url">python 赋值 =！拷贝</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-22T17:11:00+08:00">
+                2018-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="赋值-assignment"><a href="#赋值-assignment" class="headerlink" title="赋值(assignment)"></a>赋值(assignment)</h3><p>一个东西, 多个名称。</p>
+<blockquote>
+<p>a=b 赋值</p>
+</blockquote>
+<p> a,b 都是指向一个内存地址的.</p>
+<pre><code>&gt;&gt;&gt; a =[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;]
+&gt;&gt;&gt; b =a
+&gt;&gt;&gt; print id(a)  # 4517718024
+&gt;&gt;&gt; print id(b)  # 4517718024
+&gt;&gt;&gt; a is b
+ #true
+</code></pre><p>如果b发送变化,必然a也发送改变</p>
+<pre><code>&gt;&gt;&gt; b.append(&apos;changed&apos;)
+&gt;&gt;&gt; a
+#[&apos;python&apos;, &apos;love&apos;, &apos;world&apos;, &apos;changed&apos;]
+</code></pre><p>在Python中，用一个变量给另一个变量赋值，其实就是给当前内存中的对象增加一个“tag”而已, 并没有创建新的对象。</p>
+<h3 id="浅拷贝-deepcopy"><a href="#浅拷贝-deepcopy" class="headerlink" title="浅拷贝(deepcopy)"></a>浅拷贝(deepcopy)</h3><p>在阐述引用、浅拷贝和深拷贝前，首先需要要了解 Python 的世界里，一切皆对象，每个对象各包含一个 idendity(身份id)、type（类型） 和 value（值）。</p>
+<p>注意：浅拷贝和深拷贝的不同仅仅是对组合对象来说，所谓的组合对象就是包含了其它对象的对象，如列表，类实例。</p>
+<blockquote>
+<p>a =[1,2,3,[5,6]]</p>
+<p>compound objects (objects that contain other objects, like lists or class instances):</p>
+</blockquote>
+<p>比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：<br>而对于数字、字符串以及其它“原子”类型，没有拷贝一说，产生的都是原对象的引用。</p>
+<h4 id="不可变对象"><a href="#不可变对象" class="headerlink" title="不可变对象"></a>不可变对象</h4><p>浅拷贝会创建一个新的对象，然后把生成的新对象赋值给新变量。注意这句话的意思，上面这个例子中1，2，3这三个int型对象并没有创建新的，新的对象是指copy创建了一个新的列表对象，这样a和b这两个变量指向的列表对象就不是同一个，但和两个列表对象里面的元素依然是按引用传递的，所以a列表中的对象1和b列表中的对象1是同一个。 但是这时修改a列表的不可变对象，b列表不会受到影响<br>：</p>
+<h4 id="可变对象"><a href="#可变对象" class="headerlink" title="可变对象"></a>可变对象</h4><p>可变对象例如 a = [1,2,[3,]]<br>由于浅拷贝时，对于对象中的元素，浅拷贝只会使用原始元素的引用（内存地址），所以如果对象中的元素是可变对象，浅拷贝就没辙了。比方说列表中包含一个列表，这时改动a，浅拷贝的b依然可能受影响：</p>
+<pre><code>&gt;&gt;&gt; a = [1,2,[3,]]
+&gt;&gt;&gt; b = copy.copy(a)
+&gt;&gt;&gt; a is b
+False
+&gt;&gt;&gt; a[2].append(4)
+&gt;&gt;&gt; a
+[1, 2, [3, 4]]
+&gt;&gt;&gt; b
+[1, 2, [3, 4]]
+</code></pre><h3 id="深拷贝deepcopy"><a href="#深拷贝deepcopy" class="headerlink" title="深拷贝deepcopy"></a>深拷贝deepcopy</h3><p>所谓“深拷贝”，是指创建一个新的对象，然后递归的拷贝原对象所包含的子对象。新建了一个新对象，完整的在内存中复制原有对象,<br>对于这个问题，又引入了深拷贝机制，这时不仅创建了新的对象，连对象中的元素都是新的，深拷贝都会重新生成一份，<code>而不是简单的使用原始元素的引用（内存地址）</code>。注意了，对象中的元素，不可变对象还是使用引用，因为没有重新生成的必要，变量改动时会自动生成另一个不可变对象，然后改变引用的地址。但可变对象的内容是可变的，改动后不会产生新的对象，也不会改变引用地址，所以需要重新生成。</p>
+<h3 id="其他情况"><a href="#其他情况" class="headerlink" title="其他情况"></a>其他情况</h3><p>而对于数字、字符串以及其它“原子”类型，没有拷贝一说，产生的都是原对象的引用</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li><p>Python中对象的赋值都是进行对象引用（内存地址）传递</p>
+</li>
+<li><p>使用copy.copy()，可以进行对象的浅拷贝，它复制了对象，但对于对象中的元素，依然使用原始的引用.</p>
+</li>
+<li>如果需要复制一个容器对象，以及它里面的所有元素（包含元素的子元素），可以使用copy.deepcopy()进行深拷贝</li>
+<li>非容器类型（如数字、字符串、和其他’原子’类型的对象）不存在拷贝。<br>只包含原子类型对象的元组变量不存在拷贝。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/22/2018/2018-03-22-postgreql-api接口库-pgwrapper/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1348,168 +1511,6 @@ if __name__ == &quot;__main__&quot;:
 </blockquote>
 <p>总结补充：</p>
 
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/02/2018/2018-03-02-2018-开启-python3-之旅/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/02/2018/2018-03-02-2018-开启-python3-之旅/" itemprop="url">Hello Python3</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-02T13:49:00+08:00">
-                2018-03-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Hello-Python3"><a href="#Hello-Python3" class="headerlink" title="Hello Python3"></a>Hello Python3</h2><p>在python的道路上，和python保持一致性。开启python3之旅。现在重温The Zen of Python：</p>
-<pre><code>The Zen of Python, by Tim Peters
-
-1. Beautiful is better than ugly.
-2. Explicit is better than implicit.
-3. Simple is better than complex.
-4. Complex is better than complicated.
-5. Flat is better than nested.
-6. Sparse is better than dense.
-7. Readability counts.
-8. Special cases aren&apos;t special enough to break the rules.
-9. Although practicality beats purity.
-10. Errors should never pass silently.
-11. Unless explicitly silenced.
-12. In the face of ambiguity, refuse the temptation to guess.
-13. There should be one-- and preferably only one --obvious way to do it.
-14. Although that way may not be obvious at first unless you&apos;re Dutch.
-15. Now is better than never.
-16. Although never is often better than *right* now.
-17. If the implementation is hard to explain, it&apos;s a bad idea.
-18. If the implementation is easy to explain, it may be a good idea.
-19. Namespaces are one honking great idea -- let&apos;s do more of those!
-</code></pre><p>中文翻译</p>
-<pre><code>优美胜于丑陋（Python 以编写优美的代码为目标）
-明了胜于晦涩（优美的代码应当是明了的，命名规范，风格相似）
-简洁胜于复杂（优美的代码应当是简洁的，不要有复杂的内部实现）
-复杂胜于凌乱（如果复杂不可避免，那代码间也不能有难懂的关系，要保持接口简洁）
-扁平胜于嵌套（优美的代码应当是扁平的，不能有太多的嵌套）
-间隔胜于紧凑（优美的代码有适当的间隔，不要奢望一行代码解决问题）
-可读性很重要（优美的代码是可读的）
-即便假借特例的实用性之名，也不可违背这些规则（这些规则至高无上）
-
-不要包容所有错误，除非你确定需要这样做（精准地捕获异常，不写 except:pass 风格的代码）
-
-当存在多种可能，不要尝试去猜测
-而是尽量找一种，最好是唯一一种明显的解决方案（如果不确定，就用穷举法）
-虽然这并不容易，因为你不是 Python 之父（这里的 Dutch 是指 Guido ）
-
-做也许好过不做，但不假思索就动手还不如不做（动手之前要细思量）
-
-如果你无法向人描述你的方案，那肯定不是一个好方案；反之亦然（方案测评标准）
-
-命名空间是一种绝妙的理念，我们应当多加利用（倡导与号召）
-</code></pre>
           
         
       

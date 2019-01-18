@@ -259,6 +259,179 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-实现搜索/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-实现搜索/" itemprop="url">django 实现搜索</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T16:17:00+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="多字段搜索"><a href="#多字段搜索" class="headerlink" title="多字段搜索"></a>多字段搜索</h3><pre><code>def normalize_query(query_string,
+    findterms=re.compile(r&apos;&quot;([^&quot;]+)&quot;|(\S+)&apos;).findall,
+    normspace=re.compile(r&apos;\s{2,}&apos;).sub):
+
+    &apos;&apos;&apos;
+    Splits the query string in invidual keywords, getting rid of unecessary spaces and grouping quoted words together.
+    Example:
+    &gt;&gt;&gt; normalize_query(&apos;  some random  words &quot;with   quotes  &quot; and   spaces&apos;)
+        [&apos;some&apos;, &apos;random&apos;, &apos;words&apos;, &apos;with quotes&apos;, &apos;and&apos;, &apos;spaces&apos;]
+    &apos;&apos;&apos;
+
+    return [normspace(&apos;&apos;,(t[0] or t[1]).strip()) for t in findterms(query_string)]
+
+def get_query(query_string, search_fields):
+
+    &apos;&apos;&apos;
+    Returns a query, that is a combination of Q objects.
+    That combination aims to search keywords within a model by testing the given search fields.
+    &apos;&apos;&apos;
+
+    query = None # Query to search for every search term
+    terms = normalize_query(query_string)
+    for term in terms:
+        or_query = None # Query to search for a given term in each field
+        for field_name in search_fields:
+            q = Q(**{&quot;%s__icontains&quot; % field_name: term})
+            if or_query is None:
+                or_query = q
+            else:
+                or_query = or_query | q
+        if query is None:
+            query = or_query
+        else:
+            query = query &amp; or_query
+
+def search_for_something(request):
+   query_string = &apos;&apos;
+   found_entries = None
+   if (&apos;q&apos; in request.GET) and request.GET[&apos;q&apos;].strip():
+       query_string = request.GET[&apos;q&apos;]
+       entry_query = get_query(query_string, [&apos;field1&apos;, &apos;field2&apos;, &apos;field3&apos;])
+       found_entries = Model.objects.filter(entry_query).order_by(&apos;-something&apos;)
+
+   return render_to_response(&apos;app/template-result.html&apos;,
+           { &apos;query_string&apos;: query_string, &apos;found_entries&apos;: found_entries },
+           context_instance=RequestContext(request)
+</code></pre><h3 id="优化搜索"><a href="#优化搜索" class="headerlink" title="优化搜索"></a>优化搜索</h3><pre><code>from operator import and_, or_
+li = [&apos;keith&apos;, &apos;s&apos;, &apos;thompson&apos;]
+# and
+#reduce 把结果继续和序列的下一个元素and运算
+Profile.objects.filter(reduce(and_, [Q(full_name__icontains=q) for q in li]))
+# or
+Profile.objects.filter(reduce(or_, [Q(full_name__icontains=q) for q in li]))
+</code></pre><p>注明：在 Python3 中，reduce() 函数已经被从全局名字空间里移除了，它现在被放置在 fucntools 模块里，如果想要使用它，则需要通过引入 functools 模块来调用 reduce() 函数.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-python模块-shelve/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1240,191 +1413,6 @@ linebreaks(&apos;convert\ninto html paragraphs\ntest&apos;)
 </code></pre></li>
 </ol>
 <p>星号分开位置参数和强制关键字参数分界表示,使用函数时,星号没有实际意义,不需要给星号参数.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/2018/2018-07-31-django高级内容-contenttype-框架探索/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/31/2018/2018-07-31-django高级内容-contenttype-框架探索/" itemprop="url">django高级内容: ContentType 框架探索</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-31T10:40:00+08:00">
-                2018-07-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="Django-ContentTypes-描述概念"><a href="#Django-ContentTypes-描述概念" class="headerlink" title="Django ContentTypes 描述概念"></a>Django ContentTypes 描述概念</h3><p>django 包含一个用来跟踪所有安装的应用模型的contenttypes 应用,它对当前项目中所有基于Django驱动的model提供了更高层次的抽象接口。<br> ContentType 是一个Django自动创建的模型，它包含2个字段</p>
-<blockquote>
-<p> app_label：app的名称<br> model：模型的名字（小写）</p>
-</blockquote>
-<p> 通过下表, 一个app的下所有model都会写入表中,统一入口管理。<br>        id  app_label  model<br>        42    documents    documentversion<br>        43    documents    duplicateddocument<br>        44    documents    documenttype<br>        45    documents    documentpage<br>        46    documents    documentpagecachedimage<br>        47    documents    recentdocument<br>        48    documents    documenttypefilename<br>        49    documents    document<br>        50    documents    deleteddocument<br>        51    documents    documentpageresult</p>
-<h3 id="ContentType实例方法"><a href="#ContentType实例方法" class="headerlink" title="ContentType实例方法"></a>ContentType实例方法</h3><h5 id="ContentType-get-object-for-this-type-kwargs"><a href="#ContentType-get-object-for-this-type-kwargs" class="headerlink" title="ContentType.get_object_for_this_type(**kwargs)"></a>ContentType.get_object_for_this_type(**kwargs)</h5><p>对表中记录的模型get查询，返回对象</p>
-<h5 id="ContentType-model-class"><a href="#ContentType-model-class" class="headerlink" title="ContentType.model_class()"></a>ContentType.model_class()</h5><p>获得模型类</p>
-<pre><code># 获得contenttype实例
-&gt;&gt;&gt; from django.contrib.contenttypes.models import ContentType
-&gt;&gt;&gt; user_type= ContentType.objects.get(app_label=&quot;auth&quot;, model=&quot;user&quot;)
-# 输出 ContentType: user
-&gt;&gt;&gt; user_type.model_class()
-# class&apos;django.contrib.auth.models.User&apos;
-&gt;&gt;&gt;user_type.get_object_for_this_type(username=&apos;Guido&apos;)
-# User: Guido
-</code></pre><h5 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h5><ul>
-<li>不需要直接导入或者定义模型类, 直接传参app_lable和model给contentype,直接对model完成检索查询。</li>
-<li>您可以将另一个模型与ContentType相关联，作为将其实例绑定到特定模型类的方法，并使用这些方法来访问这些模型类。</li>
-</ul>
-<h3 id="ContentType管理器"><a href="#ContentType管理器" class="headerlink" title="ContentType管理器"></a>ContentType管理器</h3><ol>
-<li><p>ContentType.objects.get_for_id()<br>通过id寻找ContentType类型，这个跟传统的get方法的区别就是它跟get_for_model共享一个缓存，因此更为推荐。</p>
-</li>
-<li><p>ContentType.objects.get_for_model()<br>通过model或者model的实例来寻找ContentType类型</p>
-</li>
-</ol>
-<pre><code>from django.contrib.auth.models import User
-ContentType.objects.get_for_model(User)
-# 输出结果 ContentType: user
-</code></pre><h3 id="Generic-relations-范型关系"><a href="#Generic-relations-范型关系" class="headerlink" title="Generic relations 范型关系"></a>Generic relations 范型关系</h3><p>给用户模型添加Contentype,使得用户的模型更好的和其他模型建立关系，就Permission模型,  ContentType在模型之间建立了范型关系.</p>
-<pre><code>from django.contrib.contenttypes.fields import GenericForeignKey
-from django.contrib.contenttypes.models import ContentType
-from django.db import models
-
-class TaggedItem(models.Model):
-    tag = models.SlugField()
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey(&apos;content_type&apos;, &apos;object_id&apos;)
-
-    def __str__(self):
-        return self.tag
-</code></pre><p><code>ForeignKey</code>指向仅一个模型,<code>GenericForeignKey</code>可以跟多个模型建立关联,需要如下必须的三个过程:</p>
-<ol>
-<li><p>用户模型的ForeignKey to ContentType, 默认字段名称content_type.</p>
-<pre><code>from django.contrib.auth.models import User
-guido = User.objects.get(username=&apos;Guido&apos;)
-t = TaggedItem(content_object=guido, tag=&apos;bdfl&apos;)
-t.save()
-t.content_object
-# User: Guido
-</code></pre></li>
-<li><p>给模型添加object_id 字段,存储来自关联模型的<code>primary key</code></p>
-<pre><code>object_id = models.PositiveIntegerField()
-</code></pre></li>
-<li>给模型添加GenericForeignKey, 传递上面的2个参数,如果上面的参数名称是默认的（content_type, object_id）可以忽略不传参。</li>
-</ol>
-<h3 id="反向-GenericRelation"><a href="#反向-GenericRelation" class="headerlink" title="反向 GenericRelation"></a>反向 GenericRelation</h3><p>给模型模型添加 “reverse” generic relationship,使得可以访问关联的模型。<br>      from django.contrib.contenttypes.fields import GenericRelation<br>      from django.db import models</p>
-<pre><code>class Bookmark(models.Model):
-    url = models.URLField()
-    tags = GenericRelation(TaggedItem)
-</code></pre><p>  Bookmark 实例有tags属性, 可以检索关联TaggedItems模型的数据.</p>
-<h3 id="理解模型中的reserve-反向"><a href="#理解模型中的reserve-反向" class="headerlink" title="理解模型中的reserve 反向"></a>理解模型中的reserve 反向</h3><p>django 默认每个主表的对象都有一个是外键的属性，可以通过它来查询到所有属于主表的子表的信息。这个属性的名称默认是以子表的名称小写加上_set()来表示(上面默认以b_set访问)，默认返回的是一个querydict对象。related_name 可以给这个外键定义好一个别的名称</p>
-<blockquote>
-<p> 例如B中有一个 models.ForeignKey(A) 。而当我们需要反向查询 A 中某个具体实例所关联的 B 时,可能会用到 A.B_set.all() 或 B.objects.filter(A) 这两种不同的方法</p>
-</blockquote>
-<p>  对于用<code>ForeignKey</code> 来定义的关系来说，在关系的另一端也能反向的查询得到相应的结果.</p>
 
           
         
