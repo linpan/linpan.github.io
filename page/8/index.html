@@ -1100,6 +1100,156 @@ init invoked  # __init__
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/requests Post数据注意事项/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/09/2018/requests Post数据注意事项/" itemprop="url">reqeusts post数据注意</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T19:37:00+08:00">
+                2018-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="python-requests"><a href="#python-requests" class="headerlink" title="python requests"></a>python requests</h2><p>这位作者是python界的大妖, 如果想学习python及代码规范,请看这个库的源代码。</p>
+<p>###request利器推荐：</p>
+<blockquote>
+<p>Requests 模块</p>
+</blockquote>
+<h3 id="POST请求响应头注意事项："><a href="#POST请求响应头注意事项：" class="headerlink" title="POST请求响应头注意事项："></a>POST请求响应头注意事项：</h3><p>headers 有必要带着</p>
+<pre><code>headers = {&quot;Content-type&quot;: &quot;application/json&quot;, &quot;X-Auth-Token&quot;: &quot;c4c344d1eab54d9889713eb732fdd3de&quot;}
+</code></pre><h3 id="payload-遇到的坑"><a href="#payload-遇到的坑" class="headerlink" title="payload 遇到的坑"></a>payload 遇到的坑</h3><p>单引号和双引号的坑, 单引号python可以理解, 但是其他平台语言估计是理解不到位的，必须使用json规范来构建data, 必须使用<strong>双引号</strong></p>
+<pre><code>payload = {&quot;auciton&quot;: auciton, &quot;bookname&quot;: document_label}
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-并行世界的线程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1224,156 +1374,6 @@ init invoked  # __init__
 <h4 id="3-Condition-条件"><a href="#3-Condition-条件" class="headerlink" title="3.Condition 条件"></a>3.Condition 条件</h4><p>其中某些线程在等待某一条件发生，其他的线程会在该条件发生的时候进行通知。一旦条件发生，线程会拿到共享资源的唯一权限</p>
 <h4 id="4-Event-事件"><a href="#4-Event-事件" class="headerlink" title="4. Event 事件"></a>4. Event 事件</h4><p>事件是线程之间用于通讯的对象。有的线程等待信号，有的线程发出信号。基本上事件对象都会维护一个内部变量，可以通过 set() 方法设置为 true ，也可以通过 clear() 方法设置为 false 。 wait() 方法将会阻塞线程，直到内部变量为 true 。</p>
 
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2019/requests Post数据注意事项/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/09/2019/requests Post数据注意事项/" itemprop="url">reqeusts post数据注意</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T19:37:00+08:00">
-                2018-02-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="python-requests"><a href="#python-requests" class="headerlink" title="python requests"></a>python requests</h2><p>这位作者是python界的大妖, 如果想学习python及代码规范,请看这个库的源代码。</p>
-<p>###request利器推荐：</p>
-<blockquote>
-<p>Requests 模块</p>
-</blockquote>
-<h3 id="POST请求响应头注意事项："><a href="#POST请求响应头注意事项：" class="headerlink" title="POST请求响应头注意事项："></a>POST请求响应头注意事项：</h3><p>headers 有必要带着</p>
-<pre><code>headers = {&quot;Content-type&quot;: &quot;application/json&quot;, &quot;X-Auth-Token&quot;: &quot;c4c344d1eab54d9889713eb732fdd3de&quot;}
-</code></pre><h3 id="payload-遇到的坑"><a href="#payload-遇到的坑" class="headerlink" title="payload 遇到的坑"></a>payload 遇到的坑</h3><p>单引号和双引号的坑, 单引号python可以理解, 但是其他平台语言估计是理解不到位的，必须使用json规范来构建data, 必须使用<strong>双引号</strong></p>
-<pre><code>payload = {&quot;auciton&quot;: auciton, &quot;bookname&quot;: document_label}
-</code></pre>
           
         
       
