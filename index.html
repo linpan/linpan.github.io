@@ -259,6 +259,443 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/18/2018/python &&django 第三方库推荐/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/18/2018/python &&django 第三方库推荐/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T14:39:15+08:00">
+                2019-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h2><ol>
+<li>django-mptt # mptt结构, 多级层次结构,例如可以实现多级菜单</li>
+<li>django-categories</li>
+</ol>
+<h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p>1.python-decouple （项目上线的安全措施方法）</p>
+<h2 id="文本内容生产markdown"><a href="#文本内容生产markdown" class="headerlink" title="文本内容生产markdown"></a>文本内容生产markdown</h2><p>def get_markdown(self):<br>    content = self.content<br>    markdown_text = markdown(content)<br>    return mark_safe(markdown_text)</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/18/2018/django keys already exists errors/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/18/2018/django keys already exists errors/" itemprop="url">并行世界的线程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T14:20:13+08:00">
+                2019-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/django/" itemprop="url" rel="index">
+                    <span itemprop="name">django</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h2><pre><code>ERROR: duplicate key value violates unique constraint &quot;table_pkey&quot; DETAIL: Key (id)=(25) already exists.
+</code></pre><h2 id="解决方式："><a href="#解决方式：" class="headerlink" title="解决方式："></a>解决方式：</h2><p>这用方式比较方便：</p>
+<pre><code>$ ./manage.py sqlsequencereset app_name
+</code></pre><h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>基类和子类，如何在基类得到子类的类</p>
+<pre><code>class A(object):
+   def __init__(self):
+       print &quot;A created&quot;
+
+   def a(self):
+       print (self.__class__.__name__)
+       print self.__class__.__bases__
+
+
+class B(A):
+   def __init__(self):
+       pass
+       # print super((B), self).__init__
+       # print self.__class__.__name__
+       # print super(B,self).__class__.__name__
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/18/2018/django queryset slice can't chain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/18/2018/django queryset slice can't chain/" itemprop="url">并行世界的线程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T13:59:21+08:00">
+                2019-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h2><p>两个查询集是可以 | 和&amp; 操作的,但是如果查询集slice后, 就会：</p>
+<pre><code>queryset1 | queryset1 适合不是切片的情况 （or） 报错情况是：  &quot;Cannot combine queries once a slice has been taken.&quot;
+</code></pre><h2 id="解决方式："><a href="#解决方式：" class="headerlink" title="解决方式："></a>解决方式：</h2><p>使用itertools 库</p>
+<blockquote>
+<p>from itertools import chain</p>
+</blockquote>
+<pre><code>from itertools import chain
+  chain(qs1, qs[:4])
+</code></pre><p>##补充知识点<br>比较两者的区别：</p>
+<pre><code>.chain() #0 或多个参数
+.from_iterable() # 一个参数, 生成iterables对象
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/10/2018/requests Post数据注意事项/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -985,443 +1422,6 @@ class AlwaysAuthenticatedMiddleware(MiddlewareMixin):
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/02/2018/2018-08-02-django-编写path匹配规则函数/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/02/2018/2018-08-02-django-编写path匹配规则函数/" itemprop="url">django 编写path匹配规则函数 </a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-02T11:43:00+08:00">
-                2018-08-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="url-to-path"><a href="#url-to-path" class="headerlink" title="url to path"></a>url to path</h3><p>自django2.0 以前, 利用url函数的正则匹配获得URL中的参数。</p>
-<pre><code>url(r&apos;^posts/(?P&lt;post_id&gt;[0-9]+)/$&apos;, post_detail_view)
-</code></pre><p>在django2.0后 path 路径转换。</p>
-<pre><code>path(&apos;posts/&lt;int:post_id/&gt;/&apos;, post_detail_view)
-</code></pre><h4 id="内置转换器函数"><a href="#内置转换器函数" class="headerlink" title="内置转换器函数"></a>内置转换器函数</h4><ul>
-<li>str<br>Matches any non-empty string, excluding the path separator, ‘/’. This is the default if a converter isn’t included in the expression.<br>Example: ‘best_product_ever!-123.html’<br>Returns a string ( <code>str</code>).<br>Equivalent regular expression: <code>[^/]+</code></li>
-<li><p>int<br>Matches zero or any positive integer.<br>Example: ‘1234’<br>Returns an integer (<code>int</code>).<br>Equivalent regular expression: <code>[0-9]+</code></p>
-</li>
-<li><p>slug<br>Matches any slug string consisting of ASCII letters or numbers, plus the hyphen and underscore characters.<br>Returns a string (<code>str</code>).<br>Example: ‘building-your-1st-django-site’<br>Equivalent regular expression: <code>[-a-zA-Z0-9_]+</code></p>
-</li>
-<li><p>uuid<br>Matches a formatted UUID. To prevent multiple URLs from mapping to the same page, dashes must be included and letters must be lowercase.<br>Returns a UUID instance (uuid.UUID).<br>Example: ‘075194d3-6885-417e-a8a8-6c931e272f00’<br>Equivalent regular expression:  <code>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}</code></p>
-</li>
-<li><p>path<br>Matches any non-empty string, including the path separator, ‘/’. This allows you to match against a complete URL path rather than just a segment of a URL path as with str.<br>Example: ‘/path/to/file’<br>Returns a string (<code>str</code>).<br>Equivalent regular expression: <code>&#39;.+&#39;</code></p>
-</li>
-</ul>
-<h3 id="注册自定义-Path-Converter"><a href="#注册自定义-Path-Converter" class="headerlink" title="注册自定义 Path Converter"></a>注册自定义 Path Converter</h3><p>当默认的 Path Converter 不能满足需求时，Django2.0 支持用户注册自定义的 Path Converter。</p>
-<p>Path Converter 是一个类，定义 Converter 类需要包含下面的属性或方法：</p>
-<p>regex 属性，字符串类型<br>to_python(self, value) 方法，它处理将匹配的字符串转换为应该传递给 view 函数的类型。 如果它不能转换给定的值，它应该抛出 ValueError。<br>to_url(self, value) 方法，和 to_python 相反，它会将 Python 类型转换为在 URL 中使用的字符串。</p>
-<p>作者：zxd<br>链接：<a href="https://hacpai.com/article/1520431728425" target="_blank" rel="noopener">https://hacpai.com/article/1520431728425</a><br>来源：黑客派<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。<br>最基本的写法：</p>
-<pre><code>from django.urls import path, register_converter
-from django.urls.converters import IntConverter
-
-from . import views
-from .models import Question
-
-class QuestionConverter(IntConverter):
-
-    def to_python(self, value):
-        try:
-            return Question.objects.get(id=int(value))
-        except Question.DoesNotExist:
-            raise ValueError
-
-    def to_url(self, obj):
-        return str(obj.pk)
-
-register_converter(QuestionConverter, &apos;question&apos;)
-
-path(&apos;&amp;lt question:question &amp;gt/vote/&apos;, views.vote, name=&apos;vote&apos;),
-
-def vote(request, question):
-</code></pre><p>使用register_converter()注册 Converter 到 url 配置里.<br>我们可以灵活地写个工厂函数,适合每个类生产转换器。</p>
-<pre><code>class ModelConverter:
-
-    def to_python(self, value):
-        try:
-            return self.model.objects.get(pk=int(value))
-        except self.model.DoesNotExist:
-            raise ValueError
-
-    def to_url(self, obj):
-        return str(obj.pk)
-
-
-def register_model_converter(model):
-    converter_name = &apos;{}Converter&apos;.format(name.capitalize())
-    converter_class = type(converter_name, (ModelConverter,), {&apos;model&apos;: model})
-
-    register_converter(converter_class, name)
-</code></pre><p>现在我们可以注册quesiton路径转换器</p>
-<pre><code>register_model_converter(Question, &apos;question&apos;)
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-给模型添加属性方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-给模型添加属性方法/" itemprop="url">django 给模型添加属性方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T17:25:00+08:00">
-                2018-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="给类添加属性"><a href="#给类添加属性" class="headerlink" title="给类添加属性"></a>给类添加属性</h4><p>引用：</p>
-<blockquote>
-<p>ModelBase.add_to_class</p>
-</blockquote>
-<p>例子：</p>
-<pre><code>Document.add_to_class(
-      &apos;attached_tags&apos;,
-      lambda document: DocumentTag.objects.filter(documents=document)
-  )
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-modelform-factory/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-modelform-factory/" itemprop="url">django modelform_factory </a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T16:54:00+08:00">
-                2018-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="ModelForm的工厂函数"><a href="#ModelForm的工厂函数" class="headerlink" title="ModelForm的工厂函数"></a>ModelForm的工厂函数</h3><p><strong>模型表单的快捷方式,不需要在forms.py定义模型表单</strong></p>
-<p>您可以不使用类定义，而是使用独立函数 modelform_factory() 来创建给定模型的表单。如果您没有很多自定义设置，这可能会更方便。</p>
-<pre><code>&gt;&gt;&gt; from django.forms import modelform_factory
-&gt;&gt;&gt; from myapp.models import Book
-&gt;&gt;&gt; BookForm = modelform_factory(Book, fields=(&quot;author&quot;, &quot;title&quot;))
-</code></pre><p>这也可以用来对已有表单进行简单的修改，例如给某个字段指定使用组件：</p>
-<pre><code>&gt;&gt;&gt; from django.forms import Textarea
-&gt;&gt;&gt; Form = modelform_factory(Book, form=BookForm,
-...                          widgets={&quot;title&quot;: Textarea()})
-</code></pre><p>参考文档:<a href="https://docs.djangoproject.com/zh-hans/2.0/topics/forms/modelforms/" target="_blank" rel="noopener">https://docs.djangoproject.com/zh-hans/2.0/topics/forms/modelforms/</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1472,7 +1472,7 @@ def register_model_converter(model):
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1494,7 +1494,7 @@ def register_model_converter(model):
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

@@ -259,6 +259,457 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-python-工厂函数factory-functions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-python-工厂函数factory-functions/" itemprop="url">python: 工厂函数factory functions</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T11:53:00+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h3><blockquote>
+<p>a factory method returns (new) objects.</p>
+</blockquote>
+<h3 id="工厂函数"><a href="#工厂函数" class="headerlink" title="工厂函数"></a>工厂函数</h3><blockquote>
+<p>A factory function is basically used to return (new) objects.</p>
+</blockquote>
+<p>简单的工厂函数用法:</p>
+<pre><code>def fun(N):
+    def action(X):
+        return X * N
+    return action
+</code></pre><p>返回一个新的对象, 其类型是基于输入决定的。</p>
+<pre><code>class Car(object):
+
+    def factory(type):
+        if type == &quot;Racecar&quot;:
+            return Racecar()
+        if type == &quot;Van&quot;:
+            return Van()
+        assert 0, &quot;Bad car creation: &quot; + type
+
+    factory = staticmethod(factory)
+
+class Racecar(Car):
+    def drive(self): print(&quot;Racecar driving.&quot;)
+
+class Van(Car):
+    def drive(self): print(&quot;Van driving.&quot;)
+
+# Create object using factory.
+obj = Car.factory(&quot;Racecar&quot;)
+obj.drive()
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-utils探索html转义问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-utils探索html转义问题/" itemprop="url">django.utils探索html转义问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T11:08:00+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h3><p>模块位置: <code>django.utils.html</code></p>
+<h4 id="escape-转义"><a href="#escape-转义" class="headerlink" title="escape 转义"></a>escape 转义</h4><p>带有html标签符合的文本转义</p>
+<pre><code>from django.utils.html import escape
+
+escape(&quot;&lt;strong style=&apos;font-size: 12px&apos;&gt;escaped html&lt;/strong&gt;&quot;)
+</code></pre><p>如果再次escaped，会被再次转义。</p>
+<pre><code>escaped_html = escape(&quot;&lt;strong&gt;escaped html&lt;/strong&gt;&quot;)
+escape(escaped_html)
+</code></pre><p>为了避免二次转义,可以使用<code>conditional_escape</code></p>
+<h4 id="conditional-escape"><a href="#conditional-escape" class="headerlink" title="conditional_escape"></a>conditional_escape</h4><p>escaped_html = conditional_escape(“<strong>escaped html</strong>“)</p>
+<h4 id="format-html"><a href="#format-html" class="headerlink" title="format_html"></a>format_html</h4><p>格式化html</p>
+<pre><code>from django.utils.html import format_html
+
+format_html(&apos;&lt;div class=&quot;alert \{\}&quot;&gt;{}&lt;/&gt;&apos;, &apos;warning&apos;, &apos;Watch out!&apos;)
+</code></pre><h4 id="format-html-join"><a href="#format-html-join" class="headerlink" title="format_html_join"></a>format_html_join</h4><pre><code>format_html_join(&apos;\n&apos;, &apos;\&lt;p\&gt;\{\}\&lt;\/p\&gt;&apos;, [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;])
+</code></pre><h4 id="linebreaks-换行"><a href="#linebreaks-换行" class="headerlink" title="linebreaks 换行"></a>linebreaks 换行</h4><pre><code>from django.utils.html import linebreaks
+
+linebreaks(&apos;convert\ninto html paragraphs\ntest&apos;)
+</code></pre><h4 id="strip-tags"><a href="#strip-tags" class="headerlink" title="strip_tags"></a>strip_tags</h4><p>移除字符串中的html 带有&lt;>符号的标签</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-07-31-python-字典参数-的总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/01/2018/2018-07-31-python-字典参数-的总结/" itemprop="url">python 字典参数**的总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T08:29:00+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="函数字典参数"><a href="#函数字典参数" class="headerlink" title="函数字典参数"></a>函数字典参数</h3><ol>
+<li><p>在函数传参中经常遇到**kwargs,现在总结常用的用法：</p>
+<pre><code>def foo(x, y):
+    print(x, y)
+
+&gt; d = {&apos;x&apos;:1, &apos;y&apos;:2}
+&gt; foo(**d)
+# 1 2
+</code></pre></li>
+<li><p>在py3.5后,也可以嵌套</p>
+<pre><code>&gt;d = {&apos;a&apos;: 1}
+&gt;{&apos;b&apos;: 2, **d}
+{&apos;b&apos;: 2, &apos;a&apos;: 1}
+</code></pre></li>
+<li><p>python3 参数带<em><br>根据PEP 3102的定义描述：<br>星号可以以一个参数的形式出现在函数声明中的参数列表中，但星号之后的所有参数都必须有关键字（keyword），这样在函数调用时，星号</em>之后的所有参数都必须以keyword=value的形式调用，而不能以位置顺序调用。</p>
+<pre><code>def func(arg1, arg2, arg3, *, k1, k2):
+    pass
+#使用方法 func(1,2,3,k1=&apos;key&apos;,k2=&apos;key2&apos;)
+</code></pre></li>
+</ol>
+<p>星号分开位置参数和强制关键字参数分界表示,使用函数时,星号没有实际意义,不需要给星号参数.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/31/2018/2018-07-31-django高级内容-contenttype-框架探索/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1206,465 +1657,6 @@ product.save()
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/20/2018/2018-07-20-将unicode文本标准化/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/20/2018/2018-07-20-将unicode文本标准化/" itemprop="url">将Unicode文本标准化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-20T16:34:00+08:00">
-                2018-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h3><p>你正在处理Unicode字符串，需要确保所有字符串在底层有相同的表示。以删除变音符号，重音等.</p>
-<pre><code>import unicodedata
-
-&quot;&quot;&quot; Normalise (normalize) unicode data in Python to remove umlauts, accents etc. &quot;&quot;&quot;
-
-data = u&apos;naïve café&apos;
-normal = unicodedata.normalize(&apos;NFKD&apos;, data).encode(&apos;ASCII&apos;, &apos;ignore&apos;)
-print normal
-
-# prints &quot;naive cafe&quot;
-</code></pre><ul>
-<li>NFC表示字符应该是整体组成(比如可能的话就使用单一编码)</li>
-<li>NFD表示字符应该分解为多个组合字符表示</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/19/2018/2018-07-19-静态类-静态方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/19/2018/2018-07-19-静态类-静态方法/" itemprop="url">静态类&&静态方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-19T14:41:00+08:00">
-                2018-07-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="staticmethod-静态类"><a href="#staticmethod-静态类" class="headerlink" title="@staticmethod 静态类"></a>@staticmethod 静态类</h3><p>参数必须有cls, 类名.方法直接用,不需要实例化</p>
-<pre><code>@classmethod
-def get(cls, name):
-    return cls._registry[name]
-#name 是类的参数
-#类名称.get(&apos;name&apos;)
-</code></pre><h3 id="staticmethod"><a href="#staticmethod" class="headerlink" title="@staticmethod"></a>@staticmethod</h3><p>在类中往往有一些方法跟类有关系(可有可无的)，但是又不会改变类和实例状态的方法，这种方法是静态方法.<br>静态方法没有 self 和 cls 参数，但是可以有指定其他参数。 可以把它看成是一个普通的函数，我们当然可以把它写到类外面，但这是不推荐的，因为这不利于代码的组织和命名空间的整洁.<br>静态方法也可以不需要实例化也可以的。</p>
-<h3 id="property"><a href="#property" class="headerlink" title="@property"></a>@property</h3><p>类属性,把方法封装城属性使用 \</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
-<li><p>类方法使用 @classmethod 装饰器，可以使用类（也可使用实例）来调用方法。</p>
-</li>
-<li><p>静态方法使用 @staticmethod 装饰器，它是跟类有关系但在运行时又不需要实例和类参与的方法，可以使用类和实例来调用</p>
-</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/19/2018/2018-07-19-python模块-itertools/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/19/2018/2018-07-19-python模块-itertools/" itemprop="url">python模块:itertools</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-19T11:22:00+08:00">
-                2018-07-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="accumulate-iterable-func"><a href="#accumulate-iterable-func" class="headerlink" title="accumulate (iterable, [,func])"></a>accumulate (iterable, [,func])</h3><p>创建迭代对象，返回求和的值（默认求和）或者指定含有2个参数的func参数，如果iterable为空，结果为空。<br>特别适合累积利息的求和</p>
-<pre><code>import operator
-data = [1, 2, 3, 4, 5]
-result = itertools.accumulate(data, operator.mul)
-for each in result:
-    print(each)
-</code></pre><p>mul乘法接受2个参数, 计算的结果作为一个参数参与下面的计算。演示过程：</p>
-<pre><code>operator.mul(1, 2)
-2
-operator.mul(2, 3)
-6
-operator.mul(6, 4)
-24
-operator.mul(24, 5)
-120
-</code></pre><p>当然我们可以自定义函数</p>
-<pre><code>cashflows = [1000, -90, -90, -90, -90]
-list(accumulate(cashflows, lambda bal, _: bal*1.05))
-# _ 接受变量,无名变量表示。
-[1000, 960.0, 918.0, 873.9000000000001, 827.5950000000001]
-</code></pre><h3 id="chain-iterables"><a href="#chain-iterables" class="headerlink" title="chain(*iterables)"></a>chain(*iterables)</h3><p>可以把一组迭代对象串联起来，形成一个更大的迭代器, 类似 “拼接”起来迭代对象的元素。</p>
-<pre><code>colors = [&apos;red&apos;, &apos;orange&apos;, &apos;yellow&apos;, &apos;green&apos;, &apos;blue&apos;]
-shapes = [&apos;circle&apos;, &apos;triangle&apos;, &apos;square&apos;, &apos;pentagon&apos;]
-result = itertools.chain(colors, shapes)
-for each in result:
-print(each)
-</code></pre><h3 id="groupby-iterable-key-None"><a href="#groupby-iterable-key-None" class="headerlink" title="groupby(iterable, key=None)"></a>groupby(iterable, key=None)</h3><p>分组, key可以指定自定义分组的函数</p>
-<pre><code>robots = [{
-&apos;name&apos;: &apos;blaster&apos;,
-&apos;faction&apos;: &apos;autobot&apos;
-}, {
-&apos;name&apos;: &apos;galvatron&apos;,
-&apos;faction&apos;: &apos;decepticon&apos;
-}, {
-&apos;name&apos;: &apos;jazz&apos;,
-&apos;faction&apos;: &apos;autobot&apos;
-}, {
-&apos;name&apos;: &apos;metroplex&apos;,
-&apos;faction&apos;: &apos;autobot&apos;
-}, {
-&apos;name&apos;: &apos;megatron&apos;,
-&apos;faction&apos;: &apos;decepticon&apos;
-}, {
-&apos;name&apos;: &apos;starcream&apos;,
-&apos;faction&apos;: &apos;decepticon&apos;
-}]
-for key, group in itertools.groupby(bots, key=lambda x: x[&apos;faction&apos;]):
-print(key)
-print(list(group))
-</code></pre><h3 id="zip-longest-iterables-fillvalue-None"><a href="#zip-longest-iterables-fillvalue-None" class="headerlink" title="zip_longest(*iterables, fillvalue=None)"></a>zip_longest(*iterables, fillvalue=None)</h3><p>组合每个迭代器的元素, 如果迭代器的长度不够，填充默认值。</p>
-<pre><code>colors = [&apos;red&apos;, &apos;orange&apos;, &apos;yellow&apos;, &apos;green&apos;, &apos;blue&apos;,]
-data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,]
-for each in itertools.zip_longest(colors, data, fillvalue=None):
-print(each)
-# 输出结构
-(&apos;red&apos;, 1)
-(&apos;orange&apos;, 2)
-(&apos;yellow&apos;, 3)
-(&apos;green&apos;, 4)
-(&apos;blue&apos;, 5)
-(None, 6)
-(None, 7)
-(None, 8)
-(None, 9)
-(None, 10)
-</code></pre><h3 id="imap-在py3被丢弃"><a href="#imap-在py3被丢弃" class="headerlink" title="imap 在py3被丢弃"></a>imap 在py3被丢弃</h3><p>imap函数存在py2000系列中。</p>
-<h3 id="组合生成器"><a href="#组合生成器" class="headerlink" title="组合生成器"></a>组合生成器</h3><p>这部分都是数学基本组合排列知识点</p>
-<h4 id="product-笛卡尔乘积"><a href="#product-笛卡尔乘积" class="headerlink" title="product 笛卡尔乘积"></a>product 笛卡尔乘积</h4><pre><code>product(&apos;ABCD&apos;, repeat=2)
-#AA AB AC AD BA BB BC BD CA CB CC CD DA DB DC DD
-</code></pre><h4 id="permutations-排列公式"><a href="#permutations-排列公式" class="headerlink" title="permutations 排列公式"></a>permutations 排列公式</h4><p>与上面的区别 就是没有重复元素排列.</p>
-<pre><code>permutations(&apos;ABCD&apos;, 2)
-#AB AC AD BA BC BD CA CB CD DA DB DC
-</code></pre><h3 id="combinations-组合公式"><a href="#combinations-组合公式" class="headerlink" title="combinations 组合公式"></a>combinations 组合公式</h3><pre><code>combinations(&apos;ABCD&apos;, 2)
-#AB AC AD BC BD CD
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1715,7 +1707,7 @@ print(each)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1737,7 +1729,7 @@ print(each)
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

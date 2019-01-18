@@ -259,6 +259,443 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/02/2018/2018-08-02-django-编写path匹配规则函数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/02/2018/2018-08-02-django-编写path匹配规则函数/" itemprop="url">django 编写path匹配规则函数 </a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-02T11:43:00+08:00">
+                2018-08-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="url-to-path"><a href="#url-to-path" class="headerlink" title="url to path"></a>url to path</h3><p>自django2.0 以前, 利用url函数的正则匹配获得URL中的参数。</p>
+<pre><code>url(r&apos;^posts/(?P&lt;post_id&gt;[0-9]+)/$&apos;, post_detail_view)
+</code></pre><p>在django2.0后 path 路径转换。</p>
+<pre><code>path(&apos;posts/&lt;int:post_id/&gt;/&apos;, post_detail_view)
+</code></pre><h4 id="内置转换器函数"><a href="#内置转换器函数" class="headerlink" title="内置转换器函数"></a>内置转换器函数</h4><ul>
+<li>str<br>Matches any non-empty string, excluding the path separator, ‘/’. This is the default if a converter isn’t included in the expression.<br>Example: ‘best_product_ever!-123.html’<br>Returns a string ( <code>str</code>).<br>Equivalent regular expression: <code>[^/]+</code></li>
+<li><p>int<br>Matches zero or any positive integer.<br>Example: ‘1234’<br>Returns an integer (<code>int</code>).<br>Equivalent regular expression: <code>[0-9]+</code></p>
+</li>
+<li><p>slug<br>Matches any slug string consisting of ASCII letters or numbers, plus the hyphen and underscore characters.<br>Returns a string (<code>str</code>).<br>Example: ‘building-your-1st-django-site’<br>Equivalent regular expression: <code>[-a-zA-Z0-9_]+</code></p>
+</li>
+<li><p>uuid<br>Matches a formatted UUID. To prevent multiple URLs from mapping to the same page, dashes must be included and letters must be lowercase.<br>Returns a UUID instance (uuid.UUID).<br>Example: ‘075194d3-6885-417e-a8a8-6c931e272f00’<br>Equivalent regular expression:  <code>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}</code></p>
+</li>
+<li><p>path<br>Matches any non-empty string, including the path separator, ‘/’. This allows you to match against a complete URL path rather than just a segment of a URL path as with str.<br>Example: ‘/path/to/file’<br>Returns a string (<code>str</code>).<br>Equivalent regular expression: <code>&#39;.+&#39;</code></p>
+</li>
+</ul>
+<h3 id="注册自定义-Path-Converter"><a href="#注册自定义-Path-Converter" class="headerlink" title="注册自定义 Path Converter"></a>注册自定义 Path Converter</h3><p>当默认的 Path Converter 不能满足需求时，Django2.0 支持用户注册自定义的 Path Converter。</p>
+<p>Path Converter 是一个类，定义 Converter 类需要包含下面的属性或方法：</p>
+<p>regex 属性，字符串类型<br>to_python(self, value) 方法，它处理将匹配的字符串转换为应该传递给 view 函数的类型。 如果它不能转换给定的值，它应该抛出 ValueError。<br>to_url(self, value) 方法，和 to_python 相反，它会将 Python 类型转换为在 URL 中使用的字符串。</p>
+<p>作者：zxd<br>链接：<a href="https://hacpai.com/article/1520431728425" target="_blank" rel="noopener">https://hacpai.com/article/1520431728425</a><br>来源：黑客派<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。<br>最基本的写法：</p>
+<pre><code>from django.urls import path, register_converter
+from django.urls.converters import IntConverter
+
+from . import views
+from .models import Question
+
+class QuestionConverter(IntConverter):
+
+    def to_python(self, value):
+        try:
+            return Question.objects.get(id=int(value))
+        except Question.DoesNotExist:
+            raise ValueError
+
+    def to_url(self, obj):
+        return str(obj.pk)
+
+register_converter(QuestionConverter, &apos;question&apos;)
+
+path(&apos;&amp;lt question:question &amp;gt/vote/&apos;, views.vote, name=&apos;vote&apos;),
+
+def vote(request, question):
+</code></pre><p>使用register_converter()注册 Converter 到 url 配置里.<br>我们可以灵活地写个工厂函数,适合每个类生产转换器。</p>
+<pre><code>class ModelConverter:
+
+    def to_python(self, value):
+        try:
+            return self.model.objects.get(pk=int(value))
+        except self.model.DoesNotExist:
+            raise ValueError
+
+    def to_url(self, obj):
+        return str(obj.pk)
+
+
+def register_model_converter(model):
+    converter_name = &apos;{}Converter&apos;.format(name.capitalize())
+    converter_class = type(converter_name, (ModelConverter,), {&apos;model&apos;: model})
+
+    register_converter(converter_class, name)
+</code></pre><p>现在我们可以注册quesiton路径转换器</p>
+<pre><code>register_model_converter(Question, &apos;question&apos;)
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-给模型添加属性方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-给模型添加属性方法/" itemprop="url">django 给模型添加属性方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T17:25:00+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="给类添加属性"><a href="#给类添加属性" class="headerlink" title="给类添加属性"></a>给类添加属性</h4><p>引用：</p>
+<blockquote>
+<p>ModelBase.add_to_class</p>
+</blockquote>
+<p>例子：</p>
+<pre><code>Document.add_to_class(
+      &apos;attached_tags&apos;,
+      lambda document: DocumentTag.objects.filter(documents=document)
+  )
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-modelform-factory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-modelform-factory/" itemprop="url">django modelform_factory </a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T16:54:00+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="ModelForm的工厂函数"><a href="#ModelForm的工厂函数" class="headerlink" title="ModelForm的工厂函数"></a>ModelForm的工厂函数</h3><p><strong>模型表单的快捷方式,不需要在forms.py定义模型表单</strong></p>
+<p>您可以不使用类定义，而是使用独立函数 modelform_factory() 来创建给定模型的表单。如果您没有很多自定义设置，这可能会更方便。</p>
+<pre><code>&gt;&gt;&gt; from django.forms import modelform_factory
+&gt;&gt;&gt; from myapp.models import Book
+&gt;&gt;&gt; BookForm = modelform_factory(Book, fields=(&quot;author&quot;, &quot;title&quot;))
+</code></pre><p>这也可以用来对已有表单进行简单的修改，例如给某个字段指定使用组件：</p>
+<pre><code>&gt;&gt;&gt; from django.forms import Textarea
+&gt;&gt;&gt; Form = modelform_factory(Book, form=BookForm,
+...                          widgets={&quot;title&quot;: Textarea()})
+</code></pre><p>参考文档:<a href="https://docs.djangoproject.com/zh-hans/2.0/topics/forms/modelforms/" target="_blank" rel="noopener">https://docs.djangoproject.com/zh-hans/2.0/topics/forms/modelforms/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-实现搜索/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -997,457 +1434,6 @@ def get_object(self, queryset=None):
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-python-工厂函数factory-functions/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-python-工厂函数factory-functions/" itemprop="url">python: 工厂函数factory functions</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T11:53:00+08:00">
-                2018-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h3><blockquote>
-<p>a factory method returns (new) objects.</p>
-</blockquote>
-<h3 id="工厂函数"><a href="#工厂函数" class="headerlink" title="工厂函数"></a>工厂函数</h3><blockquote>
-<p>A factory function is basically used to return (new) objects.</p>
-</blockquote>
-<p>简单的工厂函数用法:</p>
-<pre><code>def fun(N):
-    def action(X):
-        return X * N
-    return action
-</code></pre><p>返回一个新的对象, 其类型是基于输入决定的。</p>
-<pre><code>class Car(object):
-
-    def factory(type):
-        if type == &quot;Racecar&quot;:
-            return Racecar()
-        if type == &quot;Van&quot;:
-            return Van()
-        assert 0, &quot;Bad car creation: &quot; + type
-
-    factory = staticmethod(factory)
-
-class Racecar(Car):
-    def drive(self): print(&quot;Racecar driving.&quot;)
-
-class Van(Car):
-    def drive(self): print(&quot;Van driving.&quot;)
-
-# Create object using factory.
-obj = Car.factory(&quot;Racecar&quot;)
-obj.drive()
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-utils探索html转义问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-utils探索html转义问题/" itemprop="url">django.utils探索html转义问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T11:08:00+08:00">
-                2018-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h3><p>模块位置: <code>django.utils.html</code></p>
-<h4 id="escape-转义"><a href="#escape-转义" class="headerlink" title="escape 转义"></a>escape 转义</h4><p>带有html标签符合的文本转义</p>
-<pre><code>from django.utils.html import escape
-
-escape(&quot;&lt;strong style=&apos;font-size: 12px&apos;&gt;escaped html&lt;/strong&gt;&quot;)
-</code></pre><p>如果再次escaped，会被再次转义。</p>
-<pre><code>escaped_html = escape(&quot;&lt;strong&gt;escaped html&lt;/strong&gt;&quot;)
-escape(escaped_html)
-</code></pre><p>为了避免二次转义,可以使用<code>conditional_escape</code></p>
-<h4 id="conditional-escape"><a href="#conditional-escape" class="headerlink" title="conditional_escape"></a>conditional_escape</h4><p>escaped_html = conditional_escape(“<strong>escaped html</strong>“)</p>
-<h4 id="format-html"><a href="#format-html" class="headerlink" title="format_html"></a>format_html</h4><p>格式化html</p>
-<pre><code>from django.utils.html import format_html
-
-format_html(&apos;&lt;div class=&quot;alert \{\}&quot;&gt;{}&lt;/&gt;&apos;, &apos;warning&apos;, &apos;Watch out!&apos;)
-</code></pre><h4 id="format-html-join"><a href="#format-html-join" class="headerlink" title="format_html_join"></a>format_html_join</h4><pre><code>format_html_join(&apos;\n&apos;, &apos;\&lt;p\&gt;\{\}\&lt;\/p\&gt;&apos;, [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;])
-</code></pre><h4 id="linebreaks-换行"><a href="#linebreaks-换行" class="headerlink" title="linebreaks 换行"></a>linebreaks 换行</h4><pre><code>from django.utils.html import linebreaks
-
-linebreaks(&apos;convert\ninto html paragraphs\ntest&apos;)
-</code></pre><h4 id="strip-tags"><a href="#strip-tags" class="headerlink" title="strip_tags"></a>strip_tags</h4><p>移除字符串中的html 带有&lt;>符号的标签</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-07-31-python-字典参数-的总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/01/2018/2018-07-31-python-字典参数-的总结/" itemprop="url">python 字典参数**的总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T08:29:00+08:00">
-                2018-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="函数字典参数"><a href="#函数字典参数" class="headerlink" title="函数字典参数"></a>函数字典参数</h3><ol>
-<li><p>在函数传参中经常遇到**kwargs,现在总结常用的用法：</p>
-<pre><code>def foo(x, y):
-    print(x, y)
-
-&gt; d = {&apos;x&apos;:1, &apos;y&apos;:2}
-&gt; foo(**d)
-# 1 2
-</code></pre></li>
-<li><p>在py3.5后,也可以嵌套</p>
-<pre><code>&gt;d = {&apos;a&apos;: 1}
-&gt;{&apos;b&apos;: 2, **d}
-{&apos;b&apos;: 2, &apos;a&apos;: 1}
-</code></pre></li>
-<li><p>python3 参数带<em><br>根据PEP 3102的定义描述：<br>星号可以以一个参数的形式出现在函数声明中的参数列表中，但星号之后的所有参数都必须有关键字（keyword），这样在函数调用时，星号</em>之后的所有参数都必须以keyword=value的形式调用，而不能以位置顺序调用。</p>
-<pre><code>def func(arg1, arg2, arg3, *, k1, k2):
-    pass
-#使用方法 func(1,2,3,k1=&apos;key&apos;,k2=&apos;key2&apos;)
-</code></pre></li>
-</ol>
-<p>星号分开位置参数和强制关键字参数分界表示,使用函数时,星号没有实际意义,不需要给星号参数.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1498,7 +1484,7 @@ linebreaks(&apos;convert\ninto html paragraphs\ntest&apos;)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">65</span>
+                  <span class="site-state-item-count">68</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1520,7 +1506,7 @@ linebreaks(&apos;convert\ninto html paragraphs\ntest&apos;)
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">25</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
