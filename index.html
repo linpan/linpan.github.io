@@ -259,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/29/2018/python: 两种创建字典的区别dict() vs {}/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/12/2018/Class.__init__(self) vs super().__init__()的区别/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -278,7 +278,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/04/29/2018/python: 两种创建字典的区别dict() vs {}/" itemprop="url">dict vs {} 的比较分析</a></h1>
+                <a class="post-title-link" href="/2019/07/12/2018/Class.__init__(self) vs super().__init__()的区别/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -290,8 +290,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-29T09:37:00+08:00">
-                2019-04-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-12T14:01:10+08:00">
+                2019-07-12
               </time>
             
 
@@ -300,28 +300,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -352,34 +330,23 @@
       
         
           
-            <h2 id="1-字典创建的方式"><a href="#1-字典创建的方式" class="headerlink" title="1. 字典创建的方式"></a>1. 字典创建的方式</h2><pre><code>1. vars = dict()
-2. vars = {}
-</code></pre><h3 id="1-1值的比较"><a href="#1-1值的比较" class="headerlink" title="1.1值的比较"></a>1.1值的比较</h3><pre><code>dict() == {} #Reture true
-</code></pre><h3 id="1-2-性能比较"><a href="#1-2-性能比较" class="headerlink" title="1.2 性能比较"></a>1.2 性能比较</h3><p>我们使用timeit 模块比较时间</p>
-<pre><code>$ python
-&gt;&gt; from timeit import timeit
-</code></pre><p>分析空字典：</p>
-<pre><code>&gt;&gt;&gt; timeit(&quot;d = dict()&quot;)
-0.11915296099778061
-&gt;&gt;&gt; timeit(&quot;d = {}&quot;)
-0.034184868832198845
-</code></pre><p>{} 竟然比dict() 快3.x倍。现在我们使用带有书籍的字典来比较。</p>
-<pre><code>&gt;&gt;&gt; timeit(&quot;d = dict(one=&apos;one&apos;,two=&apos;two&apos;,three=&apos;three&apos;,four=&apos;four&apos;,five=&apos;five&apos;,six=&apos;six&apos;)&quot;)
-0.5600968430762805
+            <p>“””<br>class Parent(object):<br>    …</p>
+<p>class Child(Parent):</p>
+<pre><code>def __init__(self):
+    super(Child, self).__init__()
+</code></pre><p>class Child(Parent):</p>
+<pre><code>def __init__(self):
+    Parent.__init__(self)
 
-&gt;&gt;&gt; timeit(&quot;d = {&apos;one&apos;:&apos;one&apos;,&apos;two&apos;:&apos;two&apos;,&apos;three&apos;:&apos;three&apos;,&apos;four&apos;:&apos;four&apos;,&apos;five&apos;:&apos;five&apos;,&apos;six&apos;:&apos;six&apos;}&quot;)
-0.1884483945050306
-</code></pre><p>无论是空值还是有值的情况下，{}确实很快。</p>
-<h3 id="1-3-反汇编角度分析"><a href="#1-3-反汇编角度分析" class="headerlink" title="1.3 反汇编角度分析"></a>1.3 反汇编角度分析</h3><p>dis 模块包括用于反编译 Python 字节码将其拆解为更易于阅读的形式的函数。 查看解释器正在执行的字节码是手动调整紧密循环和执行其他类型优化的好方法。 它对于在多线程应用程序中查找竞争条件也很有用，因为它可用于估计代码中线程控制可能切换的点。</p>
-<pre><code>&gt;&gt;&gt; from dis import dis
-&gt;&gt;&gt; dis(&apos;{}&apos;)
-            0 BUILD_MAP                0
-            2 RETURN_VALUE
-&gt;&gt;&gt; dis(&apos;dict()&apos;)
-1           0 LOAD_NAME                0 (dict)
-            2 CALL_FUNCTION            0
-            4 RETURN_VALUE
-</code></pre><p>多了一操作码：CALL_FUNCTION的步骤。</p>
+    &quot;&quot;
+
+
+    class MyGreenlet(Greenlet):
+</code></pre><p>def <strong>init</strong>(self, message, n):<br>    Greenlet.<strong>init</strong>(self) ## super().<strong>init</strong><br>    self.message = message<br>    self.n = n</p>
+<p>def _run(self):<br>    print(self.message)<br>    gevent.sleep(self.n)</p>
+<p> cls = type(self) 获得类</p>
+<h3 id="a"><a href="#a" class="headerlink" title="a"></a>a</h3><p> (ray 和 gevent 都有这个模型)<br> Actors<br>actor模型是一个由于Erlang变得普及的更高层的并发模型。 简单的说它的主要思想就是许多个独立的Actor，每个Actor有一个可以从 其它Actor接收消息的收件箱。Actor内部的主循环遍历它收到的消息，并 根据它期望的行为来采取行动。</p>
+<p>Gevent没有原生的Actor类型，但在一个子类化的Greenlet内使用队列， 我们可以定义一个非常简单的。</p>
 
           
         
@@ -428,7 +395,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/2018/抽象类ABC/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/13/2018/python字符格式及填充补位/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -447,7 +414,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/04/19/2018/抽象类ABC/" itemprop="url">抽象类ABC</a></h1>
+                <a class="post-title-link" href="/2019/06/13/2018/python字符格式及填充补位/" itemprop="url">python字符串格式及填充</a></h1>
         
 
         <div class="post-meta">
@@ -459,8 +426,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-19T19:37:00+08:00">
-                2019-04-19
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-13T10:16:00+08:00">
+                2019-06-13
               </time>
             
 
@@ -484,183 +451,6 @@
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
                   <a href="/categories/python/" itemprop="url" rel="index">
                     <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>python中并没有提供抽象类与抽象方法，但是提供了内置模块abc(abstract base class)来模拟实现抽象类(类似接口)。</p>
-<blockquote>
-<p>抽象方法是父类的一个方法, 父类没有实现这个方法, 父类是不可以实例化的. 子类继承父类, 子类必须实现父类定义的抽象方法, 子类才可以被实例化. Python中的abc提供了@abstractmethod装饰器实现抽象方法的定义。</p>
-</blockquote>
-<p>子类必须实现父类定义的抽象方法, 确保子类实现了某些特定的方法, 实现类型检查</p>
-<pre><code>import abc
-
-class PluginBase(metaclass= abc.ABCMeta):
-  #__metaclass__ = abc.ABCMeta
-
-  @abc.abstractmethod
-  def load(self, input):
-    &quot;&quot;&quot;Retrieve data from the input source and return an object.&quot;&quot;&quot;
-    return
-
-  @abc.abstractmethod
-  def save(self, output, data):
-    &quot;&quot;&quot;Save the data object to the output.&quot;&quot;&quot;
-    return
-
-class SubclassImplementation(PluginBase):
-
-  def load(self, input): # 子类必须有实现抽象类的抽象方法
-    return input.read()
-
-  def save(self, output, data): #子类必须有实现抽象类的抽象方法
-    return output.write(data)
-
-if __name__ == &apos;__main__&apos;:
-print &apos;Subclass:&apos;, issubclass(SubclassImplementation, PluginBase)
-print &apos;Instance:&apos;, isinstance(SubclassImplementation(), PluginBase)
-# 除非子类实现抽象基类的抽象方法，否则子类不能实例化
-</code></pre><h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><ul>
-<li>具体化抽象类可以有两种方式，一种通过注册（register），另外一种通过继承。</li>
-<li>子类必须实现抽象类的方法，否则不能实例化。</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/09/2018/django 高性能方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/04/09/2018/django 高性能方法/" itemprop="url">django 高性能</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-09T19:37:00+08:00">
-                2019-04-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/django/" itemprop="url" rel="index">
-                    <span itemprop="name">django</span>
                   </a>
                 </span>
 
@@ -670,8 +460,19 @@ print &apos;Instance:&apos;, isinstance(SubclassImplementation(), PluginBase)
                 
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/django/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
+                  <a href="/categories/python/数据库规范/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库规范</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/数据库规范/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
                   </a>
                 </span>
 
@@ -709,210 +510,40 @@ print &apos;Instance:&apos;, isinstance(SubclassImplementation(), PluginBase)
       
         
           
-            <h3 id="剖析应用"><a href="#剖析应用" class="headerlink" title="剖析应用"></a>剖析应用</h3><p>查询内容和查询耗时</p>
-<h4 id="数据库优化"><a href="#数据库优化" class="headerlink" title="数据库优化"></a>数据库优化</h4><ol>
-<li>建索引 Field.db_index or Meta.index_together</li>
-<li>使用filter, exclude, order by 等方法</li>
-<li>避免查询内容没有使用的字段的存在</li>
-</ol>
-<pre><code>select * from User
-User.object.all()
-</code></pre><p>比较合适的方法是：</p>
-<pre><code># select first_name from registration_user
-User.objects.all().values_list(&apos;first_name&apos;)
-User.objects.all().values(&apos;first_name&apos;)
-</code></pre><ol>
-<li><p>批量插入<br>对于插入文件对象，可能触发too many files open</p>
-<pre><code># Instead of hitting database various times like:
-User.objects.create(first_name=&apos;Sanyam&apos;)
-User.objects.create(first_name=&apos;Amit&apos;)
-...
+            <h2 id="python-字符串"><a href="#python-字符串" class="headerlink" title="python 字符串"></a>python 字符串</h2><h2 id="zfill"><a href="#zfill" class="headerlink" title="zfill"></a>zfill</h2><p>在字符串前填充0到指定长度</p>
+<pre><code>&gt;&gt;&gt; n = &apos;4&apos;
+&gt;&gt;&gt; print(n.zfill(3))
+  004
+</code></pre><h3 id="其他类似方法"><a href="#其他类似方法" class="headerlink" title="其他类似方法"></a>其他类似方法</h3><ol>
+<li><p>format</p>
+<pre><code>&gt;&gt;&gt; n = 4
+&gt;&gt;&gt; print(&apos;%03d&apos; % n)
+004
+&gt;&gt;&gt; print(format(n, &apos;03&apos;)) # python &gt;= 2.6
+004
+&gt;&gt;&gt; print(&apos;{0:03d}&apos;.format(n))  # python &gt;= 2.6
+004
+&gt;&gt;&gt; print(&apos;{foo:03d}&apos;.format(foo=n))  # python &gt;= 2.6
+004
+&gt;&gt;&gt; print(&apos;{:03d}&apos;.format(n))  # python &gt;= 2.7 + python3
+004
+&gt;&gt;&gt; print(&apos;{0:03d}&apos;.format(n))  # python 3
+004
+&gt;&gt;&gt; print(f&apos;{n:03}&apos;) # python &gt;= 3.6
+004
 </code></pre></li>
 </ol>
-<pre><code># Use bulk_create ( just 1 query )
-User.objects.bulk_create([
-User(first_name=&apos;Sanyam&apos;),
-User(first_name=&apos;Amit&apos;),
-])
-</code></pre><ol>
-<li><p>多对多</p>
-<pre><code>sanyam = User.objects.get(first_name=&quot;sanyam&quot;)
-amit = User.objects.get(first_name=&quot;amit&quot;)
-
-# Instead of using
-PyDelhi.members.add(sanyam)
-PyDelhi.members.add(amit)
-
-# Add multiple at once
-PyDelhi.members.add(sanyam, amit)
-</code></pre></li>
-<li><p>直接使用外键值</p>
-<pre><code># Instead of  不要使用
-user.post.id
-# Use values directly like:
-user.post_id
-</code></pre></li>
-</ol>
-<h3 id="架构角度优化"><a href="#架构角度优化" class="headerlink" title="架构角度优化"></a>架构角度优化</h3><p>自上而下的组件：</p>
-<pre><code>1. Load Balancer       (HAProxy)
-2. Web Accelerator     (VArnish/nginx)
-3. Application(django) (gunicorn)
-4. Cache               (redis)
-5. Database             (pg)
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/08/2018/python 模块 signal/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/08/2018/python 模块 signal/" itemprop="url">未命名</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-08T14:52:36+08:00">
-                2019-03-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h1 id="模块知识："><a href="#模块知识：" class="headerlink" title="模块知识："></a>模块知识：</h1><p>import lib<br>signal<br>collections.abc<br>compat</p>
-<p>exec</p>
-<p>import signal, os</p>
-<pre><code># 定义一个信号处理函数，该函数打印收到的信号，然后raise IOError
-def handler(signum, frame):
-    print &apos;Signal handler called with signal&apos;, signum
-    raise IOError(&quot;Couldn&apos;t open device!&quot;)
-
-# 对SIGALRM(终止)设置处理的handler, 然后设置定时器，5秒后触发SIGALRM信号
-signal.signal(signal.SIGALRM, handler)
-signal.alarm(5)
-
-# This open() may hang indefinitely
-fd = os.open(&apos;/dev/ttyS0&apos;, os.O_RDWR)
-
-signal.alarm(0)          # 关闭定时器
-
-import signal
-
-class TimeoutException(Exception):
-    def __init__(self, error=&apos;Timeout waiting for response from Cloud&apos;):
-        Exception.__init__(self, error)
-</code></pre><p>这是一个实现控制函数运行超时的装饰器。如果超时，则会抛出超时异常。</p>
-<pre><code>def timeout_limit(timeout_time):
-    def wraps(func):
-        def handler(signum, frame):
-            raise TimeoutException()
-
-        def deco(*args, **kwargs):
-            signal.signal(signal.SIGALRM, handler)
-            signal.alarm(timeout_time)
-            func(*args, **kwargs)
-            signal.alarm(0)
-        return dec
-</code></pre><p>这个示例来源于这里。 需求是动态加载python导入的模块，也就是说，当导入的模块代码更新时，希望可以立即更新引用的代码。示例如下：<br><a href="http://engineerwithoutacause.com/easy-signal-handling-for-python-daemons.html" target="_blank" rel="noopener">http://engineerwithoutacause.com/easy-signal-handling-for-python-daemons.html</a></p>
+<p>2.rjust/ljust 左对齐 右对齐</p>
+<pre><code>&gt;&gt;&gt; &apos;99&apos;.rjust(5,&apos;0&apos;)
+&apos;00099&apos;
+</code></pre><h3 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h3><p>千分割符，适合python3.x</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>‘{:,}’.format(1234567890)<br>‘1,234,567,890’</p>
+</blockquote>
+</blockquote>
+</blockquote>
 
           
         
@@ -961,7 +592,7 @@ class TimeoutException(Exception):
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/18/2018/python &&django 第三方库推荐/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/12/2018/django 自定义查询函数/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -980,7 +611,7 @@ class TimeoutException(Exception):
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/18/2018/python &&django 第三方库推荐/" itemprop="url">未命名</a></h1>
+                <a class="post-title-link" href="/2019/06/12/2018/django 自定义查询函数/" itemprop="url">django 自定义查询器</a></h1>
         
 
         <div class="post-meta">
@@ -992,133 +623,8 @@ class TimeoutException(Exception):
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T14:39:15+08:00">
-                2019-01-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h2><ol>
-<li>django-mptt # mptt结构, 多级层次结构,例如可以实现多级菜单</li>
-<li>django-categories</li>
-</ol>
-<h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p>1.python-decouple （项目上线的安全措施方法）</p>
-<h2 id="文本内容生产markdown"><a href="#文本内容生产markdown" class="headerlink" title="文本内容生产markdown"></a>文本内容生产markdown</h2><p>def get_markdown(self):<br>    content = self.content<br>    markdown_text = markdown(content)<br>    return mark_safe(markdown_text)</p>
-<h3 id="PyAutoGui"><a href="#PyAutoGui" class="headerlink" title="PyAutoGui"></a>PyAutoGui</h3>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/18/2018/django keys already exists errors/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/18/2018/django keys already exists errors/" itemprop="url">并行世界的线程</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T14:20:13+08:00">
-                2019-01-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-12T15:16:00+08:00">
+                2019-06-12
               </time>
             
 
@@ -1179,26 +685,23 @@ class TimeoutException(Exception):
       
         
           
-            <h2 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h2><pre><code>ERROR: duplicate key value violates unique constraint &quot;table_pkey&quot; DETAIL: Key (id)=(25) already exists.
-</code></pre><h2 id="解决方式："><a href="#解决方式：" class="headerlink" title="解决方式："></a>解决方式：</h2><p>这用方式比较方便：</p>
-<pre><code>$ ./manage.py sqlsequencereset app_name
-</code></pre><h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>基类和子类，如何在基类得到子类的类</p>
-<pre><code>class A(object):
-   def __init__(self):
-       print &quot;A created&quot;
+            <h3 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h3><p>Django 提供了各种各样的 内置查询器 （例如exact 和 icontains）</p>
+<h3 id="创建-Not-Like-表达式"><a href="#创建-Not-Like-表达式" class="headerlink" title="创建 Not Like 表达式"></a>创建 Not Like 表达式</h3><pre><code>from django.db.models.fields import Field
+from django.db.models.lookups import IEndsWith
 
-   def a(self):
-       print (self.__class__.__name__)
-       print self.__class__.__bases__
+@Field.register_lookup
+class NotIEndsWith(IEndsWith):
+lookup_name = &apos;notiendswith&apos;
 
+def get_rhs_op(self, connection, rhs):
+  return &apos;NOT &apos; + connection.operators[&apos;iendswith&apos;] % rhs
+</code></pre><h3 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h3><pre><code>In [1]: import logging; logging.getLogger(&apos;django&apos;).setLevel(logging.DEBUG) # to see the output
+In [2]: from django.contrib.auth import models
+In [3]: models.User.objects.filter(email__notiendswith=&apos;@example.com&apos;)
+Out[3]: 03-06 12:13 django.db.backends DEBUG    (0.000) SELECT &quot;auth_user&quot;.&quot;id&quot;, &quot;auth_user&quot;.&quot;password&quot;, &quot;auth_user&quot;.&quot;last_login&quot;, &quot;auth_user&quot;.&quot;is_superuser&quot;, &quot;auth_user&quot;.&quot;username&quot;, &quot;auth_user&quot;.&quot;first_name&quot;, &quot;auth_user&quot;.&quot;last_name&quot;, &quot;auth_user&quot;.&quot;email&quot;, &quot;auth_user&quot;.&quot;is_staff&quot;, &quot;auth_user&quot;.&quot;is_active&quot;, &quot;auth_user&quot;.&quot;date_joined&quot; FROM &quot;auth_user&quot; WHERE &quot;auth_user&quot;.&quot;email&quot; NOT LIKE &apos;%@example.com&apos; ESCAPE &apos;\&apos; LIMIT 21; args=(u&apos;%@example.com&apos;,)
+&lt;QuerySet [&lt;User: someuser&gt;]&gt;
+</code></pre><p>官方文档参考[src] <a href="https://docs.djangoproject.com/zh-hans/2.2/howto/custom-lookups/" target="_blank" rel="noopener">https://docs.djangoproject.com/zh-hans/2.2/howto/custom-lookups/</a></p>
 
-class B(A):
-   def __init__(self):
-       pass
-       # print super((B), self).__init__
-       # print self.__class__.__name__
-       # print super(B,self).__class__.__name__
-</code></pre>
           
         
       
@@ -1246,7 +749,7 @@ class B(A):
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/18/2018/django queryset slice can't chain/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/07/2018/优秀代码/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -1265,7 +768,7 @@ class B(A):
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/18/2018/django queryset slice can't chain/" itemprop="url">并行世界的线程</a></h1>
+                <a class="post-title-link" href="/2019/06/07/2018/优秀代码/" itemprop="url">分享优秀代码</a></h1>
         
 
         <div class="post-meta">
@@ -1277,8 +780,8 @@ class B(A):
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T13:59:21+08:00">
-                2019-01-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-07T15:16:00+08:00">
+                2019-06-07
               </time>
             
 
@@ -1339,17 +842,124 @@ class B(A):
       
         
           
-            <h2 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h2><p>两个查询集是可以 | 和&amp; 操作的,但是如果查询集slice后, 就会：</p>
-<pre><code>queryset1 | queryset1 适合不是切片的情况 （or） 报错情况是：  &quot;Cannot combine queries once a slice has been taken.&quot;
-</code></pre><h2 id="解决方式："><a href="#解决方式：" class="headerlink" title="解决方式："></a>解决方式：</h2><p>使用itertools 库</p>
-<blockquote>
-<p>from itertools import chain</p>
-</blockquote>
-<pre><code>from itertools import chain
-  chain(qs1, qs[:4])
-</code></pre><p>##补充知识点<br>比较两者的区别：</p>
-<pre><code>.chain() #0 或多个参数
-.from_iterable() # 一个参数, 生成iterables对象
+            <h2 id="分享代码"><a href="#分享代码" class="headerlink" title="分享代码"></a>分享代码</h2><h2 id="1-val函数的使用"><a href="#1-val函数的使用" class="headerlink" title="1.val函数的使用"></a>1.val函数的使用</h2><p>转换字符串元组成元组类型,<br>知识点：正则match split（字符分割）</p>
+<pre><code>def strtotuple(s):
+  &apos;&apos;&apos;Convert a tuple string into a tuple
+  with some security checks. Designed to be used
+  with the eval() function::
+
+      a = (12, 54, 68)
+      b = str(a)         # return &apos;(12, 54, 68)&apos;
+      c = strtotuple(b)  # return (12, 54, 68)
+
+  &apos;&apos;&apos;
+  # security
+
+  if not match(&apos;^[,.0-9 ()\[\]]*$&apos;, s):
+      raise Exception(&apos;Invalid characters in string for tuple conversion&apos;)
+  # fast syntax check
+  if s.count(&apos;(&apos;) != s.count(&apos;)&apos;):
+      raise Exception(&apos;Invalid count of ( and )&apos;)
+  if s.count(&apos;[&apos;) != s.count(&apos;]&apos;):
+      raise Exception(&apos;Invalid count of [ and ]&apos;)
+
+  r = eval(s)
+
+  if type(r) not in (list, tuple):
+      raise Exception(&apos;Conversion failed&apos;)
+  return r
+</code></pre><h2 id="2-创建lazy惰性属性"><a href="#2-创建lazy惰性属性" class="headerlink" title="2. 创建lazy惰性属性"></a>2. 创建lazy惰性属性</h2><p>为了将装饰器定义成一个实例，你需要确保它实现了 <strong>call</strong>() 和 <strong>get</strong>() 方法</p>
+<p>你可以将它当做一个普通的装饰器来使用，在类里面或外面都可以：</p>
+<pre><code>@Profiled
+def add(x, y): # callack __call__
+    return x + y
+
+class Spam:
+    @Profiled
+    def bar(self, x): # callack __get__
+        print(self, x)
+</code></pre><p>实现 get 和 set 方法，称为 data descriptor。<br>仅有 get 方法的，称为 non-data descriptor。<br>get 对 owner_class、owner_instance 访问有效。<br>set、delete 仅对 owner_instance 访问有效。</p>
+<pre><code>class reify(object):
+&apos;&apos;&apos;
+Put the result of a method which uses this (non-data) descriptor decorator
+in the instance dict after the first call, effectively replacing the
+decorator with an instance variable.
+
+It acts like @property, except that the function is only ever called once;
+after that, the value is cached as a regular attribute. This gives you lazy
+attribute creation on objects that are meant to be immutable.
+
+Taken from the `Pyramid project &lt;https://pypi.python.org/pypi/pyramid/&gt;`_.
+
+To use this as a decorator::
+
+     @reify #
+     def lazy(self):
+          ...
+          return hard_to_compute_int
+     first_time = self.lazy   # lazy is reify obj, reify.__get__() runs
+     second_time = self.lazy  # lazy is hard_to_compute_int
+
+     # 等价于 lazy = reify(lazy)
+     # &gt;&gt;&gt; class E(object):
+     #    ...     def f(x):
+     #    ...         print(x)
+     #    ...     f = staticmethod(f)
+     #    ...
+     #    &gt;&gt;&gt; E.f(3) # __get__
+     #    3
+     #    &gt;&gt;&gt; E().f(3)
+     #    3
+&apos;&apos;&apos;
+
+  def __init__(self, func):
+      self.func = func
+      self.__doc__ = func.__doc__
+
+  def __get__(self, inst, cls):
+      if inst is None:
+          return self
+      retval = self.func(inst)
+      setattr(inst, self.func.__name__, retval)
+      return retval
+</code></pre><p>补充：<br>描述符更常见的调用场景是属性访问时描述符被自动调用，资料描述器总是比实例字典优先<br>obj.d 通常先去<strong>dict</strong> 查找，如果实现<strong>get</strong> 方法，会直接调用<strong>get</strong> 方法（优先级）</p>
+<p>对于 类, type.<strong>getattribute</strong>(), 将B.x 变成B.<strong>dict</strong>[‘x’].<strong>get</strong>(None, B)<br>形式；用简单的python实现方式是：</p>
+<pre><code>def __getattribute__(self, key):
+    &quot;Emulate type_getattro() in Objects/typeobject.c&quot;
+    v = object.__getattribute__(self, key)
+    if hasattr(v, &apos;__get__&apos;):
+        return v.__get__(None, self)
+    return v
+</code></pre><p>对于对象 object.<strong>getattribute</strong>() 将b.x 变成type(b).<strong>dict</strong>[‘x’].<strong>get</strong>(b, type(b))</p>
+<p>函数有<strong>get</strong>( )方法可以通过函数当作属性访问, 非数据描述符转化<br>obj.f(<em>args) call into f(obj, </em>args).<br>Calling klass.f(<em>args) becomes f(</em>args).</p>
+<p>回到上面的例子；</p>
+<h3 id="dict变体"><a href="#dict变体" class="headerlink" title="dict变体"></a>dict变体</h3><pre><code>class QueryDict(dict):
+&apos;&apos;&apos;QueryDict is a dict() that can be queried with dot.
+
+::
+
+    d = QueryDict()
+    # create a key named toto, with the value 1
+    d.toto = 1
+    # it&apos;s the same as
+    d[&apos;toto&apos;] = 1
+
+.. versionadded:: 1.0.4
+&apos;&apos;&apos;
+
+def __getattr__(self, attr):
+    try:
+        return self.__getitem__(attr)
+    except KeyError:
+        return super(QueryDict, self).__getattr__(attr)
+
+def __setattr__(self, attr, value):
+    self.__setitem__(attr, value)
+</code></pre><p>知识点 ：<strong>getattr</strong>   和 <strong>getattribute</strong></p>
+<p>1.object.<strong>getattr</strong>(self, name)<br>当一般位置找不到attribute的时候，会调用getattr，返回一个值或AttributeError异常。<br>如果在类中定义了<strong>getattr</strong>()这个方法，那么在对象查询属性时,如果这个属性在类中定义了，如一个已经实例化的对象x定义了属性name，那么在使用x.name时就不会调用<strong>getattr</strong>(name)；会直接返回name已经定义好的值。简单的说：<strong>getattr</strong>()会在对象中不存在这个属性时被调用。</p>
+<p>2.object.<strong>getattribute</strong>(self, name)<br>无条件被调用，通过实例访问属性。如果class中定义了<strong>getattr</strong>()，则<strong>getattr</strong>()不会被调用（除非显示调用或引发AttributeError异常）</p>
+<p>3.object.<strong>get</strong>(self, instance, owner)<br>如果class定义了它，则这个class就可以称为descriptor。owner是所有者的类，instance是访问descriptor的实例，如果不是通过实例访问，而是通过类访问的话，instance则为None。（descriptor的实例自己访问自己是不会触发<strong>get</strong>，而会触发<strong>call</strong>，只有descriptor作为其它类的属性才有意义。）（所以下文的d是作为C2的一个属性被调用）</p>
+<h3 id="4-any"><a href="#4-any" class="headerlink" title="4 any"></a>4 any</h3><pre><code>if any(&quot;__iter__&quot; in B.__dict__ for B in C.__mro__):
 </code></pre>
           
         
@@ -1398,7 +1008,7 @@ class B(A):
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/10/2018/requests Post数据注意事项/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/06/2018/operator内置方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -1417,7 +1027,7 @@ class B(A):
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/01/10/2018/requests Post数据注意事项/" itemprop="url">reqeusts post数据注意</a></h1>
+                <a class="post-title-link" href="/2019/06/06/2018/operator内置方法/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -1429,8 +1039,486 @@ class B(A):
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-10T10:37:00+08:00">
-                2019-01-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-06T11:25:04+08:00">
+                2019-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="opearator包"><a href="#opearator包" class="headerlink" title="opearator包"></a>opearator包</h2><p>operator 模块提供了一套与Python的内置运算符对应的高效率函数。<br>例如，operator.add(x, y) 与表达式 x+y 相同。 许多函数名与特殊方法名相同，只是没有双下划线。为了向后兼容性，也保留了许多包含双下划线的函数。为了表述清楚，建议使用没有双下划线的函数。<br>函数包含的种类有：对象的比较运算、逻辑运算、数学运算以及序列运算。</p>
+<h3 id="1-attrgetter"><a href="#1-attrgetter" class="headerlink" title="1.attrgetter"></a>1.attrgetter</h3><p> 创建一个可调用对象，获得属性</p>
+<ul>
+<li><p>After f = attrgetter(‘name’), the call f(b) returns b.name.</p>
+</li>
+<li><p>After f = attrgetter(‘name’, ‘date’), the call f(b) returns (b.name, b.date).</p>
+</li>
+<li><p>After f = attrgetter(‘name.first’, ‘name.last’), the call f(b) returns (b.name.first, b.name.last).</p>
+</li>
+</ul>
+<pre><code> def attrgetter(*items):
+    if any(not isinstance(item, str) for item in items):
+        raise TypeError(&apos;attribute name must be a string&apos;)
+    if len(items) == 1:
+        attr = items[0]
+        def g(obj):
+            return resolve_attr(obj, attr)
+    else:
+        def g(obj):
+            return tuple(resolve_attr(obj, attr) for attr in items)
+    return g
+
+def resolve_attr(obj, attr):
+    for name in attr.split(&quot;.&quot;):
+        obj = getattr(obj, name)
+    return obj
+</code></pre><p>演示：</p>
+<pre><code>&gt;&gt;&gt;class Test:
+  b  = None
+  c = 3
+
+&gt;&gt;&gt;t = Test()
+&gt;&gt;&gt;a = attrgetter(&apos;b&apos;)
+&gt;&gt;&gt;a(t) # return None
+
+&gt;&gt;&gt; a = attrgetter(&apos;c&apos;)
+&gt;&gt;&gt;a(t) # return 3
+3
+</code></pre><h3 id="2-itemgetter"><a href="#2-itemgetter" class="headerlink" title="2.itemgetter"></a>2.itemgetter</h3><p> 创建一个可调用对象(返回的也是可调用对象)<br> 官方的解释：</p>
+<pre><code>operator.itemgetter(item)
+operator.itemgetter(*items)
+Return a callable object that fetches item from its operand using the operand&apos;s __getitem__() method. If multiple items are specified, returns a tuple of lookup values. For example:
+
+After f = itemgetter(2), the call f(r) returns r[2].
+
+After g = itemgetter(2, 5, 3), the call g(r) returns (r[2], r[5], r[3]).
+</code></pre><p>也就等于:</p>
+<pre><code>def itemgetter(*items):
+    if len(items) == 1:
+        item = items[0]
+        def g(obj):
+            return obj[item]
+    else:
+        def g(obj):
+            return tuple(obj[item] for item in items)
+    return g
+</code></pre><p>用法：</p>
+<pre><code>&gt;&gt;&gt; itemgetter(1)(&apos;ABCDEFG&apos;)
+&apos;B&apos;
+&gt;&gt;&gt; itemgetter(1,3,5)(&apos;ABCDEFG&apos;)
+(&apos;B&apos;, &apos;D&apos;, &apos;F&apos;)
+&gt;&gt;&gt; itemgetter(slice(2,None))(&apos;ABCDEFG&apos;)
+&apos;CDEFG&apos;
+</code></pre><p>常用sourted 排序:</p>
+<pre><code>&gt;&gt;&gt; inventory = [(&apos;apple&apos;, 3), (&apos;banana&apos;, 2), (&apos;pear&apos;, 5), (&apos;orange&apos;, 1)]
+&gt;&gt;&gt; getcount = itemgetter(1)
+&gt;&gt;&gt; list(map(getcount, inventory))
+[3, 2, 5, 1]
+&gt;&gt;&gt; sorted(inventory, key=getcount)
+[(&apos;orange&apos;, 1), (&apos;banana&apos;, 2), (&apos;apple&apos;, 3), (&apos;pear&apos;, 5)]
+</code></pre><h3 id="3-methodcaller"><a href="#3-methodcaller" class="headerlink" title="3.methodcaller"></a>3.methodcaller</h3><p>创建一个可调用对象，并同时提供所有必要参数， 然后调用的时候只需要将实例对象传递给它即可<br>例如你有个问题：</p>
+<blockquote>
+<p>你有一个字符串形式的方法名称，想通过它调用某个对象的对应方法<br>使用getattr()方法：</p>
+</blockquote>
+<pre><code>import math
+
+class Point:
+def __init__(self, x, y):
+    self.x = x
+    self.y = y
+
+def __repr__(self):
+    return &apos;Point({!r:},{!r:})&apos;.format(self.x, self.y)
+
+def distance(self, x, y):
+    return math.hypot(self.x - x, self.y - y)
+
+
+p = Point(2, 3)
+d = getattr(p, &apos;distance&apos;)(0, 0)  # Calls p.distance(0, 0)
+</code></pre><p>另外一种方法是使用 operator.methodcaller() ，例如：</p>
+<pre><code>import operator
+operator.methodcaller(&apos;distance&apos;, 0, 0)(p)
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/30/2018/twisted 阅读/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/30/2018/twisted 阅读/" itemprop="url">未命名</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-30T15:48:23+08:00">
+                2019-05-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="twisted-学习笔记"><a href="#twisted-学习笔记" class="headerlink" title="twisted 学习笔记"></a>twisted 学习笔记</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>“””<br>transport: 表示一个TCP连接，每个客户端连进来都会有一个transport跟它对应。</p>
+<p>protocol: 表示连接上的协议，收到的数据应该怎么处理，实际上就是协议所要做的事情了。</p>
+<p>protocol factory: 产生协议的工厂，监听一个端口的话，每连进来一个客户端，就会生成一个协议实例，每个协议实例会指向一个transport实例，而protocol facotry就是管理所有这些连接的地方。<br>“””</p>
+<h3 id="reactor"><a href="#reactor" class="headerlink" title="reactor"></a>reactor</h3><p>reactor模式 事件循环核心,<br>reactor 根据使用的平台和环境(Gui)有多种实现模式,<br>比如select, epoll,poll，<br>如何使用：</p>
+<pre><code>  # poll 一般是macosx系统使用
+  from twisted.internet import pollreactor
+  pollreactor.install()
+
+  from twisted.internet import reactor
+
+# wxpython 使用twisted reactor
+from twisted.internet import wxreactor
+wxreactor.install()
+
+from twisted.internet import reactor
+</code></pre><p>reactor连接格式：</p>
+<blockquote>
+<p>reactor.XXXX # ####协议tcp upd  ssl 等<br>reactor.listenTCP<br>reactor.connectSSL<br>reactor.listenUDP<br>reactor.spawnProcess</p>
+<h3 id="Defer的逻辑流程"><a href="#Defer的逻辑流程" class="headerlink" title="Defer的逻辑流程"></a>Defer的逻辑流程</h3></blockquote>
+<p>下面的例子来自官方：<a href="https://twistedmatrix.com/documents/10.1.0/core/howto/deferredindepth.html#auto0" target="_blank" rel="noopener">https://twistedmatrix.com/documents/10.1.0/core/howto/deferredindepth.html#auto0</a></p>
+<pre><code>from twisted.internet import defer
+from twisted.python import failure, util
+
+&quot;&quot;&quot;
+Now we&apos;ll see what happens when you use &apos;addBoth&apos;.
+&quot;&quot;&quot;
+
+class Counter(object):
+    num = 0
+
+
+def handleFailure(f):
+    print &quot;errback&quot;
+    print &quot;we got an exception: %s&quot; % (f.getTraceback(),)
+    f.trap(RuntimeError)
+    return &quot;okay, continue on&quot;
+
+def handleResult(result):
+    Counter.num += 1
+    print &quot;callback %s&quot; % (Counter.num,)
+    print &quot;\tgot result: %s&quot; % (result,)
+    return &quot;yay! handleResult was successful!&quot;
+
+def failAtHandlingResult(result):
+    Counter.num += 1
+    print &quot;callback %s&quot; % (Counter.num,)
+    print &quot;\tgot result: %s&quot; % (result,)
+    print &quot;\tabout to raise exception&quot;
+    raise RuntimeError, &quot;whoops! we encountered an error&quot;
+
+def doThisNoMatterWhat(arg):
+    Counter.num += 1
+    print &quot;both %s&quot; % (Counter.num,)
+    print &quot;\tgot argument %r&quot; % (arg,)
+    print &quot;\tdoing something very important&quot;
+    # we pass the argument we received to the next phase here
+    return arg
+
+
+
+def behindTheScenes(result):
+    # equivalent to d.callback(result)
+
+    if not isinstance(result, failure.Failure): # ---- callback
+        try:
+            result = handleResult(result)
+        except:
+            result = failure.Failure()
+    else:                                       # ---- errback
+        pass
+
+
+    if not isinstance(result, failure.Failure): # ---- callback
+        try:
+            result = failAtHandlingResult(result)
+        except:
+            result = failure.Failure()
+    else:                                       # ---- errback
+        pass
+
+
+    # ---- this is equivalent to addBoth(doThisNoMatterWhat)
+
+    if not isinstance(result, failure.Failure):
+        try:
+            result = doThisNoMatterWhat(result)
+        except:
+            result = failure.Failure()
+    else:
+        try:
+            result = doThisNoMatterWhat(result)
+        except:
+            result = failure.Failure()
+
+
+    if not isinstance(result, failure.Failure): # ---- callback
+        pass
+    else:                                       # ---- errback
+        try:
+            result = handleFailure(result)
+        except:
+            result = failure.Failure()
+
+
+def deferredExample():
+    d = defer.Deferred()
+    d.addCallback(handleResult)
+    d.addCallback(failAtHandlingResult)
+    d.addBoth(doThisNoMatterWhat)
+    d.addErrback(handleFailure)
+
+    d.callback(&quot;success&quot;)
+
+
+if __name__ == &apos;__main__&apos;:
+    behindTheScenes(&quot;success&quot;)
+    print &quot;\n-------------------------------------------------\n&quot;
+    Counter.num = 0
+    deferredExample()
+</code></pre><p>d.addCallback(failAtHandlingResult)<br>d.addBoth(doThisNoMatterWhat)<br>d.addErrback(handleFailure)<br>calback(resut)作为起点, result 参数带入回调链作为第一参数<br>回调函数的结果作为参数传给下一个回调函数</p>
+<pre><code>callback-- failAtHandlingResult -- doThisNoMatterWhat --doThisNoMatterWhat
+(参数) result--- reuslt---              reuslt---            reuslt---           reuslt
+</code></pre><h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><ol>
+<li>addCallback(self, callback, <em>args, *</em>kw):<br>添加succss 回调函数</li>
+</ol>
+<p>  2。 addErrback(self, errback, <em>args, *</em>kw) 添加异常错误的回调函数</p>
+<p>  addCallback 和addErrback 内部都有addCallbacks方法。</p>
+<ol>
+<li><p>addBoth(self, callback, <em>args, *</em>kw)：<br>不管是否成功都执行回调函数</p>
+</li>
+<li><p>addCallbacks<br>基于先前返回的状态选择其中的一个回调函数</p>
+</li>
+</ol>
+<p>####</p>
+<ol>
+<li>defer 是有状态序列的，按照添加顺序执行,<br>2 先创建defer,然后callback</li>
+<li>Callbacks 可以返回deferreds（类似嵌套）</li>
+</ol>
+<h3 id="twisted-与数据库的互动"><a href="#twisted-与数据库的互动" class="headerlink" title="twisted 与数据库的互动"></a>twisted 与数据库的互动</h3><p>PostgreSQL 与Mysql 都有接口提供支持。</p>
+<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><p>在twisted 里面使用大量的封装接口, 接口在编程语言中指的是一个抽象类型，是抽象方法的集合；它的特点如下：</p>
+<p>1、类通过继承接口的方式，来继承接口的抽象方法；</p>
+<p>2、接口并不是类（虽然编写类和方法的方式很相似）；</p>
+<p>3、类描述对象的属性和方法（实现接口的类，必须实现接口内所描述的所有方法，否则必须声明为抽象类）；</p>
+<p>4、接口包含类要实现的方法（接口无法被实例化，但可以被实现）；</p>
+<p>接口无法被实例化，但是可以被实现。一个实现接口的类，必须实现接口内所描述的所有方法，<br>抽象类加抽象方法就等于面向对象编程中的接口，</p>
+<p>ABC，Abstract Base Class（抽象基类）相当于是Java中的接口, 都必须在实现类中 实现抽象类或接口的方法（所有的,必须的）</p>
+<p>python 没有接口, 可以使用第三方库Zope.interface 实现</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/22/2018/类中__call__魔法方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/22/2018/类中__call__魔法方法/" itemprop="url">类中的__call__ 魔法方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-22T10:16:00+08:00">
+                2019-05-22
               </time>
             
 
@@ -1491,15 +1579,171 @@ class B(A):
       
         
           
-            <h2 id="python-requests"><a href="#python-requests" class="headerlink" title="python requests"></a>python requests</h2><p>这位作者是python界的大妖, 如果想学习python及代码规范,请看这个库的源代码。</p>
-<p>###request利器推荐：</p>
-<blockquote>
-<p>Requests 模块</p>
-</blockquote>
-<h3 id="POST请求响应头注意事项："><a href="#POST请求响应头注意事项：" class="headerlink" title="POST请求响应头注意事项："></a>POST请求响应头注意事项：</h3><p>headers 有必要带着</p>
-<pre><code>headers = {&quot;Content-type&quot;: &quot;application/json&quot;, &quot;X-Auth-Token&quot;: &quot;c4c344d1eab54d9889713eb732fdd3de&quot;}
-</code></pre><h3 id="payload-遇到的坑"><a href="#payload-遇到的坑" class="headerlink" title="payload 遇到的坑"></a>payload 遇到的坑</h3><p>单引号和双引号的坑, 单引号python可以理解, 但是其他平台语言估计是理解不到位的，必须使用json规范来构建data, 必须使用<strong>双引号</strong></p>
-<pre><code>payload = {&quot;auciton&quot;: auciton, &quot;bookname&quot;: document_label}
+            <h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>Python中类的实例（对象）可以被当做函数对待操作.</p>
+<p>class X(object):<br>    def <strong>init</strong>(self, a, b):<br>        self.a = a<br>        self.b = b</p>
+<pre><code>def __call__(self, a, b):
+    self.a = a
+    self.b = b
+    print(&apos;调用（{}, {}）&apos;.format(a, b))
+
+
+x= X(1, 2)
+x(3,5) # xInstance.__call__(3,5)
+</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><strong>call</strong>()的作用是使实例能够像函数一样被调用，同时不影响实例本身的生命周期（<strong>call</strong>()不影响一个实例的构造和析构）。但是<strong>call</strong>()可以用来改变实例的内部成员的值</p>
+<p><strong>init</strong> 和 <strong>call</strong> 都可以传参.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/09/2018/docstring的理解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/05/09/2018/docstring的理解/" itemprop="url">python docstring的使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-09T10:16:00+08:00">
+                2019-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>###<br>docstring 分为模块、函数、类、三个作用域,<br>如果没有指定docstring的值，返回None</p>
+<pre><code>&quot;&quot;&quot;This is the module docstring.&quot;&quot;&quot;
+
+def f(x):
+    &quot;&quot;&quot;This is the function docstring.&quot;&quot;&quot;
+    return 2 * x
+</code></pre><p>效果如下:</p>
+<pre><code>&gt;&gt;&gt; import mymodule
+&gt;&gt;&gt; mymodule.__doc__
+&apos;This is the module docstring.&apos;
+&gt;&gt;&gt; mymodule.f.__doc__
+&apos;This is the function docstring.&apos;
 </code></pre>
           
         
@@ -1539,7 +1783,7 @@ class B(A):
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1585,7 +1829,7 @@ class B(A):
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">85</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1607,7 +1851,7 @@ class B(A):
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

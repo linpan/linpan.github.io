@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="twisted 学习笔记基本概念“””transport: 表示一个TCP连接，每个客户端连进来都会有一个transport跟它对应。 protocol: 表示连接上的协议，收到的数据应该怎么处理，实际上就是协议所要做的事情了。 protocol factory: 产生协议的工厂，监听一个端口的话，每连进来一个客户端，就会生成一个协议实例，每个协议实例会指向一个transport实例，而proto">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python">
+<meta property="og:url" content="http://yoursite.com/2019/05/30/2018/twisted 阅读/index.html">
+<meta property="og:site_name" content="python">
+<meta property="og:description" content="twisted 学习笔记基本概念“””transport: 表示一个TCP连接，每个客户端连进来都会有一个transport跟它对应。 protocol: 表示连接上的协议，收到的数据应该怎么处理，实际上就是协议所要做的事情了。 protocol factory: 产生协议的工厂，监听一个端口的话，每连进来一个客户端，就会生成一个协议实例，每个协议实例会指向一个transport实例，而proto">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-30T08:11:20.632Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python">
+<meta name="twitter:description" content="twisted 学习笔记基本概念“””transport: 表示一个TCP连接，每个客户端连进来都会有一个transport跟它对应。 protocol: 表示连接上的协议，收到的数据应该怎么处理，实际上就是协议所要做的事情了。 protocol factory: 产生协议的工厂，监听一个端口的话，每连进来一个客户端，就会生成一个协议实例，每个协议实例会指向一个transport实例，而proto">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/30/2018/twisted 阅读/"/>
+
+
+
+
+
+  <title> | python</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">python</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/30/2018/twisted 阅读/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-30T15:48:23+08:00">
+                2019-05-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="twisted-学习笔记"><a href="#twisted-学习笔记" class="headerlink" title="twisted 学习笔记"></a>twisted 学习笔记</h2><h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>“””<br>transport: 表示一个TCP连接，每个客户端连进来都会有一个transport跟它对应。</p>
+<p>protocol: 表示连接上的协议，收到的数据应该怎么处理，实际上就是协议所要做的事情了。</p>
+<p>protocol factory: 产生协议的工厂，监听一个端口的话，每连进来一个客户端，就会生成一个协议实例，每个协议实例会指向一个transport实例，而protocol facotry就是管理所有这些连接的地方。<br>“””</p>
+<h3 id="reactor"><a href="#reactor" class="headerlink" title="reactor"></a>reactor</h3><p>reactor模式 事件循环核心,<br>reactor 根据使用的平台和环境(Gui)有多种实现模式,<br>比如select, epoll,poll，<br>如何使用：</p>
+<pre><code>  # poll 一般是macosx系统使用
+  from twisted.internet import pollreactor
+  pollreactor.install()
+
+  from twisted.internet import reactor
+
+# wxpython 使用twisted reactor
+from twisted.internet import wxreactor
+wxreactor.install()
+
+from twisted.internet import reactor
+</code></pre><p>reactor连接格式：</p>
+<blockquote>
+<p>reactor.XXXX # ####协议tcp upd  ssl 等<br>reactor.listenTCP<br>reactor.connectSSL<br>reactor.listenUDP<br>reactor.spawnProcess</p>
+<h3 id="Defer的逻辑流程"><a href="#Defer的逻辑流程" class="headerlink" title="Defer的逻辑流程"></a>Defer的逻辑流程</h3></blockquote>
+<p>下面的例子来自官方：<a href="https://twistedmatrix.com/documents/10.1.0/core/howto/deferredindepth.html#auto0" target="_blank" rel="noopener">https://twistedmatrix.com/documents/10.1.0/core/howto/deferredindepth.html#auto0</a></p>
+<pre><code>from twisted.internet import defer
+from twisted.python import failure, util
+
+&quot;&quot;&quot;
+Now we&apos;ll see what happens when you use &apos;addBoth&apos;.
+&quot;&quot;&quot;
+
+class Counter(object):
+    num = 0
+
+
+def handleFailure(f):
+    print &quot;errback&quot;
+    print &quot;we got an exception: %s&quot; % (f.getTraceback(),)
+    f.trap(RuntimeError)
+    return &quot;okay, continue on&quot;
+
+def handleResult(result):
+    Counter.num += 1
+    print &quot;callback %s&quot; % (Counter.num,)
+    print &quot;\tgot result: %s&quot; % (result,)
+    return &quot;yay! handleResult was successful!&quot;
+
+def failAtHandlingResult(result):
+    Counter.num += 1
+    print &quot;callback %s&quot; % (Counter.num,)
+    print &quot;\tgot result: %s&quot; % (result,)
+    print &quot;\tabout to raise exception&quot;
+    raise RuntimeError, &quot;whoops! we encountered an error&quot;
+
+def doThisNoMatterWhat(arg):
+    Counter.num += 1
+    print &quot;both %s&quot; % (Counter.num,)
+    print &quot;\tgot argument %r&quot; % (arg,)
+    print &quot;\tdoing something very important&quot;
+    # we pass the argument we received to the next phase here
+    return arg
+
+
+
+def behindTheScenes(result):
+    # equivalent to d.callback(result)
+
+    if not isinstance(result, failure.Failure): # ---- callback
+        try:
+            result = handleResult(result)
+        except:
+            result = failure.Failure()
+    else:                                       # ---- errback
+        pass
+
+
+    if not isinstance(result, failure.Failure): # ---- callback
+        try:
+            result = failAtHandlingResult(result)
+        except:
+            result = failure.Failure()
+    else:                                       # ---- errback
+        pass
+
+
+    # ---- this is equivalent to addBoth(doThisNoMatterWhat)
+
+    if not isinstance(result, failure.Failure):
+        try:
+            result = doThisNoMatterWhat(result)
+        except:
+            result = failure.Failure()
+    else:
+        try:
+            result = doThisNoMatterWhat(result)
+        except:
+            result = failure.Failure()
+
+
+    if not isinstance(result, failure.Failure): # ---- callback
+        pass
+    else:                                       # ---- errback
+        try:
+            result = handleFailure(result)
+        except:
+            result = failure.Failure()
+
+
+def deferredExample():
+    d = defer.Deferred()
+    d.addCallback(handleResult)
+    d.addCallback(failAtHandlingResult)
+    d.addBoth(doThisNoMatterWhat)
+    d.addErrback(handleFailure)
+
+    d.callback(&quot;success&quot;)
+
+
+if __name__ == &apos;__main__&apos;:
+    behindTheScenes(&quot;success&quot;)
+    print &quot;\n-------------------------------------------------\n&quot;
+    Counter.num = 0
+    deferredExample()
+</code></pre><p>d.addCallback(failAtHandlingResult)<br>d.addBoth(doThisNoMatterWhat)<br>d.addErrback(handleFailure)<br>calback(resut)作为起点, result 参数带入回调链作为第一参数<br>回调函数的结果作为参数传给下一个回调函数</p>
+<pre><code>callback-- failAtHandlingResult -- doThisNoMatterWhat --doThisNoMatterWhat
+(参数) result--- reuslt---              reuslt---            reuslt---           reuslt
+</code></pre><h4 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h4><ol>
+<li>addCallback(self, callback, <em>args, *</em>kw):<br>添加succss 回调函数</li>
+</ol>
+<p>  2。 addErrback(self, errback, <em>args, *</em>kw) 添加异常错误的回调函数</p>
+<p>  addCallback 和addErrback 内部都有addCallbacks方法。</p>
+<ol>
+<li><p>addBoth(self, callback, <em>args, *</em>kw)：<br>不管是否成功都执行回调函数</p>
+</li>
+<li><p>addCallbacks<br>基于先前返回的状态选择其中的一个回调函数</p>
+</li>
+</ol>
+<p>####</p>
+<ol>
+<li>defer 是有状态序列的，按照添加顺序执行,<br>2 先创建defer,然后callback</li>
+<li>Callbacks 可以返回deferreds（类似嵌套）</li>
+</ol>
+<h3 id="twisted-与数据库的互动"><a href="#twisted-与数据库的互动" class="headerlink" title="twisted 与数据库的互动"></a>twisted 与数据库的互动</h3><p>PostgreSQL 与Mysql 都有接口提供支持。</p>
+<h3 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h3><p>在twisted 里面使用大量的封装接口, 接口在编程语言中指的是一个抽象类型，是抽象方法的集合；它的特点如下：</p>
+<p>1、类通过继承接口的方式，来继承接口的抽象方法；</p>
+<p>2、接口并不是类（虽然编写类和方法的方式很相似）；</p>
+<p>3、类描述对象的属性和方法（实现接口的类，必须实现接口内所描述的所有方法，否则必须声明为抽象类）；</p>
+<p>4、接口包含类要实现的方法（接口无法被实例化，但可以被实现）；</p>
+<p>接口无法被实例化，但是可以被实现。一个实现接口的类，必须实现接口内所描述的所有方法，<br>抽象类加抽象方法就等于面向对象编程中的接口，</p>
+<p>ABC，Abstract Base Class（抽象基类）相当于是Java中的接口, 都必须在实现类中 实现抽象类或接口的方法（所有的,必须的）</p>
+<p>python 没有接口, 可以使用第三方库Zope.interface 实现</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/22/2018/类中__call__魔法方法/" rel="next" title="类中的__call__ 魔法方法">
+                <i class="fa fa-chevron-left"></i> 类中的__call__ 魔法方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/06/2018/operator内置方法/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Hiro</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.zuopiezi.org" title="zuopiezi" target="_blank">zuopiezi</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#twisted-学习笔记"><span class="nav-number">1.</span> <span class="nav-text">twisted 学习笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基本概念"><span class="nav-number">1.1.</span> <span class="nav-text">基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reactor"><span class="nav-number">1.2.</span> <span class="nav-text">reactor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Defer的逻辑流程"><span class="nav-number">1.3.</span> <span class="nav-text">Defer的逻辑流程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#方法"><span class="nav-number">1.3.1.</span> <span class="nav-text">方法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#twisted-与数据库的互动"><span class="nav-number">1.4.</span> <span class="nav-text">twisted 与数据库的互动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#接口"><span class="nav-number">1.5.</span> <span class="nav-text">接口</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hiro</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

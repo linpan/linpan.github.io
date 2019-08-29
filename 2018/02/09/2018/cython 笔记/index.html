@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,cython," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="cythhon 语法使用cdef  定义变量、结构体、常量cdef int i, *j, k[100]  cdef struct node:     int key     float value  cdef enum:     const = 1 或者block 一起： cdef: cdef struct node:     int key     float value int i, *j,">
+<meta name="keywords" content="python,cython">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cython文档笔记">
+<meta property="og:url" content="http://yoursite.com/2018/02/09/2018/cython 笔记/index.html">
+<meta property="og:site_name" content="python">
+<meta property="og:description" content="cythhon 语法使用cdef  定义变量、结构体、常量cdef int i, *j, k[100]  cdef struct node:     int key     float value  cdef enum:     const = 1 或者block 一起： cdef: cdef struct node:     int key     float value int i, *j,">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-05-24T04:22:35.667Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="cython文档笔记">
+<meta name="twitter:description" content="cythhon 语法使用cdef  定义变量、结构体、常量cdef int i, *j, k[100]  cdef struct node:     int key     float value  cdef enum:     const = 1 或者block 一起： cdef: cdef struct node:     int key     float value int i, *j,">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/09/2018/cython 笔记/"/>
+
+
+
+
+
+  <title>cython文档笔记 | python</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">python</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/cython 笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">cython文档笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T10:16:00+08:00">
+                2018-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="cythhon-语法"><a href="#cythhon-语法" class="headerlink" title="cythhon 语法"></a>cythhon 语法</h3><h4 id="使用cdef-定义变量、结构体、常量"><a href="#使用cdef-定义变量、结构体、常量" class="headerlink" title="使用cdef  定义变量、结构体、常量"></a>使用cdef  定义变量、结构体、常量</h4><pre><code>cdef int i, *j, k[100]
+
+cdef struct node:
+    int key
+    float value
+
+cdef enum:
+    const = 1
+</code></pre><p>或者block 一起：</p>
+<pre><code>cdef:
+cdef struct node:
+    int key
+    float value
+int i, *j, k[100]
+</code></pre><p>或者使用ctypedef来定义类型名称</p>
+<pre><code>ctypedef double real
+real num # double类型
+</code></pre><h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p>在Cython中有3种函数定义:</p>
+<ul>
+<li>def: 传入python对象，返回python对象，直接调用</li>
+<li>cdef: 传入python对象或C/C++值，返回python对象或C/C++值，不可直接调用, 可以使用指针</li>
+<li><p>cpdef: 以上两者的混合,Python, Cython 都可以调用，不能使用指针</p>
+</li>
+<li><p>类中的 cdef 定义C方法，而 cpdef 可以同时定义C方法和Python方法<br>只有def和cpdef定义的函数在编译后可以在python代码中直接调用（run-time），cdef定义的函数则不能import 使用。 不过你可以使用def来对外封装</p>
+</li>
+</ul>
+<h2 id="参数转换"><a href="#参数转换" class="headerlink" title="参数转换"></a>参数转换</h2><p>如上所示，传递一个值是很简单的，只要稍稍注意一下它的类型。在python和C/C++之间有一些自动的类型转换:<br>struct 和python 字典类似；char* 代表 字符指针类</p>
+<pre><code>+-------------------------------------------------------------------------------------------+
+|                C types                          |  From Python types  |  To Python types  |
+| [unsigned] char [unsigned] short int, long      |  int, long          |    int            |
+| unsigned int unsigned long [unsigned] long long |  int, long          |    long           |
+| float, double, long double                      |  int, long, float   |    float          |
+| char*   char* 代表 字符指针类                     |  str/bytes          |    str/bytes      |
+| struct                                          |                     |    dict           |
++-------------------------------------------------------------------------------------------+
+</code></pre><h3 id="直接使用C-C-代码"><a href="#直接使用C-C-代码" class="headerlink" title="直接使用C/C++代码"></a>直接使用C/C++代码</h3><p>如果只是一些C的函数需要封装进来<br>使用cdef extern可以把C代码中的函数声明到cython中:</p>
+<pre><code>cdef extern int add(int x, int y)
+
+def add_py(int x, int y):
+    return add(x, y)
+</code></pre><h3 id="python-对象作为参数"><a href="#python-对象作为参数" class="headerlink" title="python 对象作为参数"></a>python 对象作为参数</h3><pre><code>cdef ftang(object int):
+    print (3)
+    return 2
+# 在pyton 中不能导入使用, 可以使用def wrapper 它, 再使用
+
+
+def c():
+    a = int(3)
+
+    print(ftang(a))
+</code></pre><h4 id="结构体使用"><a href="#结构体使用" class="headerlink" title="结构体使用"></a>结构体使用</h4><pre><code>from __future__ import print_function
+
+# 定义结构体
+cdef struct Grail:
+    int age
+    float volume
+
+cdef class Shrubbery:
+    cdef int width, height
+
+
+
+    def __init__(self, w, h):
+        self.width = w
+        self.height = h
+
+    def describe(self):
+        print(&quot;This shrubbery is&quot;, self.width,
+              &quot;by&quot;, self.height, &quot;cubits.&quot;)
+
+        cdef Grail mm #mm 类型是结构体
+        mm.age =3 # {&apos;real&apos;: 3.1415, &apos;imag&apos;: -1.0}
+        mm.volume =5.4
+
+        print (mm.age,mm.volume) #.访问属性
+
+
+def c():
+    s = Shrubbery(3,5)
+
+
+    s.describe()
+</code></pre><h3 id="类型声明"><a href="#类型声明" class="headerlink" title="类型声明"></a>类型声明</h3><p> 可以使用c的类型，也可以使用python 的类型</p>
+<pre><code>cdef list foo = []
+
+cdef (double, int) bar # 返回类型可以使用元组
+</code></pre><p>python参数转c参数类型：</p>
+<pre><code>def spam(python_i, python_s):
+cdef int i = python_i
+cdef char* s = python_s
+
+return i, s
+
+
+spam(2, b&apos;abc&apos;) # b&apos;&apos;字符串，不然报错
+</code></pre><h4 id="动态添加属性"><a href="#动态添加属性" class="headerlink" title="动态添加属性"></a>动态添加属性</h4><p> 有两种方式：</p>
+<pre><code>cdef class Animal:
+
+cdef int number_of_legs
+cdef dict __dict__
+
+def __cinit__(self, int number_of_legs):
+    self.number_of_legs = number_of_legs
+
+
+dog = Animal(4)
+dog.has_tail = True
+
+# 属性存在dict里
+&gt;&gt;&gt; area.dog.__dict__
+{&apos;has_tail&apos;: True}
+</code></pre><p>或者：</p>
+<pre><code>cdef class Animal:
+
+cdef int number_of_legs
+
+def __cinit__(self, int number_of_legs):
+    self.number_of_legs = number_of_legs
+
+
+class ExtendableAnimal(Animal):  # Note that we use class, not cdef class
+    pass
+
+
+dog = ExtendableAnimal(4)
+dog.has_tail = True
+</code></pre><p>###导入库</p>
+<p>   使用cimport 关键词 ,查看标准库位置Cython/Includes/libc</p>
+<pre><code>from libc.math cimport sin # c file #include &lt;math.h&gt;
+
+或者*
+cdef extern from &quot;math.h&quot;:
+     double sin(double x)
+</code></pre><h4 id="cpython-导入"><a href="#cpython-导入" class="headerlink" title="cpython 导入"></a>cpython 导入</h4><p>格式声明：</p>
+<pre><code>cimport module [, module...]
+
+from module cimport name [as name] [, name [as name] ...]
+</code></pre><p>模块定义在.pxd文件, 在pyx 导入</p>
+<pre><code>dishes.pxd:
+
+cdef enum otherstuff:
+    sausage, eggs, lettuce
+
+cdef struct spamdish:
+    int oz_of_spam
+    otherstuff filler
+restaurant.pyx:
+
+from __future__ import print_function
+cimport dishes
+from dishes cimport spamdish
+
+cdef void prepare(spamdish *d):
+    d.oz_of_spam = 42
+    d.filler = dishes.sausage
+
+def serve():
+    cdef spamdish d
+    prepare(&amp;d) #  取地址,因为形参是结构体指针, （* 取值） 传地址到 形参
+    # 恶补c :array[20] &amp;array是整个数组array的首地址，array是数组首元素的首地址（和&amp;array[0]一样）
+    print(f&apos;{d.oz_of_spam} oz spam, filler no. {d.filler}&apos;)
+</code></pre><p>当然还有其他的方式实现:</p>
+<ul>
+<li>共享c函数</li>
+</ul>
+<p>  volume.pxd:</p>
+<pre><code>cdef float cube(float)
+</code></pre><p>  volume.pyx:</p>
+<pre><code>cdef float cube(float x):
+    return x * x * x
+</code></pre><p>  spammery.pyx:</p>
+<pre><code>from __future__ import print_function
+
+from volume cimport cube
+
+def menu(description, size):
+    print(description, &quot;:&quot;, cube(size),
+          &quot;cubic metres of spam&quot;)
+
+menu(&quot;Entree&quot;, 1)
+menu(&quot;Main course&quot;, 3)
+menu(&quot;Dessert&quot;, 2)
+</code></pre><ul>
+<li><p>共享扩展类型</p>
+<p>shrubbing.pxd:</p>
+<pre><code>cdef class Shrubbery:
+    cdef int width
+    cdef int length
+</code></pre><p>shrubbing.pyx:</p>
+<pre><code>cdef class Shrubbery:
+    def __cinit__(self, int w, int l):
+        self.width = w
+        self.length = l
+
+def standard_shrubbery():
+    return Shrubbery(3, 7)
+</code></pre><p>landscaping.pyx:</p>
+<pre><code>cimport shrubbing
+import shrubbing
+
+def main():
+    cdef shrubbing.Shrubbery sh
+    sh = shrubbing.standard_shrubbery()
+    print(&quot;Shrubbery size is&quot;, sh.width, &apos;x&apos;, sh.length)
+</code></pre><p>注意点： Shrubbing.standard_shrubbery() 访问需要 import shrubbing (standard_shrubbery 是python函数）</p>
+<h4 id="扩展类型"><a href="#扩展类型" class="headerlink" title="扩展类型"></a>扩展类型</h4><p>cython 允许以 python types，作为扩展类型，但是必须使用 cdef class 声明。</p>
+<pre><code>from __future__ import print_function
+
+ cdef class Shrubbery:
+     cdef int width, height
+
+     def __init__(self, w, h):
+         self.width = w
+         self.height = h
+
+     def describe(self):
+         print(&quot;This shrubbery is&quot;, self.width,
+               &quot;by&quot;, self.height, &quot;cubits.&quot;)
+</code></pre></li>
+</ul>
+<h3 id="其他Py-ssize-t"><a href="#其他Py-ssize-t" class="headerlink" title="其他Py_ssize_t"></a>其他Py_ssize_t</h3><p>Py_ssize_t 是python C API的定义类型</p>
+<pre><code>Py_ssize_t allocated;  # 是数据类型（比int大），Py_ssize_t 有符号long类型, 长度参数的类型(整型或者 Py_ssize_t)在包含
+</code></pre><p>Python.h 官方解释如下</p>
+<blockquote>
+<p>对Python的C API进行广泛的更改，使用新的 Py_ssize_t类型定义而不是int，将允许解释器在64位平台上处理更多数据。此更改不会影响Python在32位平台上的容量</p>
+</blockquote>
+<p>C语言忘的差不多了…….</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/cython/" rel="tag"># cython</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题0/" rel="next" title="python操作数据库的规范问题">
+                <i class="fa fa-chevron-left"></i> python操作数据库的规范问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/09/2018/2018-02-09-并行世界的线程/" rel="prev" title="并行世界的线程">
+                并行世界的线程 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Hiro</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.zuopiezi.org" title="zuopiezi" target="_blank">zuopiezi</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#cythhon-语法"><span class="nav-number">1.</span> <span class="nav-text">cythhon 语法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用cdef-定义变量、结构体、常量"><span class="nav-number">1.1.</span> <span class="nav-text">使用cdef  定义变量、结构体、常量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#函数"><span class="nav-number">2.</span> <span class="nav-text">函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参数转换"><span class="nav-number"></span> <span class="nav-text">参数转换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接使用C-C-代码"><span class="nav-number">1.</span> <span class="nav-text">直接使用C/C++代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#python-对象作为参数"><span class="nav-number">2.</span> <span class="nav-text">python 对象作为参数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#结构体使用"><span class="nav-number">2.1.</span> <span class="nav-text">结构体使用</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类型声明"><span class="nav-number">3.</span> <span class="nav-text">类型声明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#动态添加属性"><span class="nav-number">3.1.</span> <span class="nav-text">动态添加属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cpython-导入"><span class="nav-number">3.2.</span> <span class="nav-text">cpython 导入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#扩展类型"><span class="nav-number">3.3.</span> <span class="nav-text">扩展类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他Py-ssize-t"><span class="nav-number">4.</span> <span class="nav-text">其他Py_ssize_t</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hiro</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

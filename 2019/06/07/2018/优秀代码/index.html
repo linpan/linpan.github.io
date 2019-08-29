@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,源码," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="分享代码1.val函数的使用转换字符串元组成元组类型,知识点：正则match split（字符分割） def strtotuple(s):   &amp;apos;&amp;apos;&amp;apos;Convert a tuple string into a tuple   with some security checks. Designed to be used   with the eval() functio">
+<meta name="keywords" content="python,源码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分享优秀代码">
+<meta property="og:url" content="http://yoursite.com/2019/06/07/2018/优秀代码/index.html">
+<meta property="og:site_name" content="python">
+<meta property="og:description" content="分享代码1.val函数的使用转换字符串元组成元组类型,知识点：正则match split（字符分割） def strtotuple(s):   &amp;apos;&amp;apos;&amp;apos;Convert a tuple string into a tuple   with some security checks. Designed to be used   with the eval() functio">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-19T02:37:39.289Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分享优秀代码">
+<meta name="twitter:description" content="分享代码1.val函数的使用转换字符串元组成元组类型,知识点：正则match split（字符分割） def strtotuple(s):   &amp;apos;&amp;apos;&amp;apos;Convert a tuple string into a tuple   with some security checks. Designed to be used   with the eval() functio">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/06/07/2018/优秀代码/"/>
+
+
+
+
+
+  <title>分享优秀代码 | python</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">python</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/07/2018/优秀代码/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">分享优秀代码</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-07T15:16:00+08:00">
+                2019-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="分享代码"><a href="#分享代码" class="headerlink" title="分享代码"></a>分享代码</h2><h2 id="1-val函数的使用"><a href="#1-val函数的使用" class="headerlink" title="1.val函数的使用"></a>1.val函数的使用</h2><p>转换字符串元组成元组类型,<br>知识点：正则match split（字符分割）</p>
+<pre><code>def strtotuple(s):
+  &apos;&apos;&apos;Convert a tuple string into a tuple
+  with some security checks. Designed to be used
+  with the eval() function::
+
+      a = (12, 54, 68)
+      b = str(a)         # return &apos;(12, 54, 68)&apos;
+      c = strtotuple(b)  # return (12, 54, 68)
+
+  &apos;&apos;&apos;
+  # security
+
+  if not match(&apos;^[,.0-9 ()\[\]]*$&apos;, s):
+      raise Exception(&apos;Invalid characters in string for tuple conversion&apos;)
+  # fast syntax check
+  if s.count(&apos;(&apos;) != s.count(&apos;)&apos;):
+      raise Exception(&apos;Invalid count of ( and )&apos;)
+  if s.count(&apos;[&apos;) != s.count(&apos;]&apos;):
+      raise Exception(&apos;Invalid count of [ and ]&apos;)
+
+  r = eval(s)
+
+  if type(r) not in (list, tuple):
+      raise Exception(&apos;Conversion failed&apos;)
+  return r
+</code></pre><h2 id="2-创建lazy惰性属性"><a href="#2-创建lazy惰性属性" class="headerlink" title="2. 创建lazy惰性属性"></a>2. 创建lazy惰性属性</h2><p>为了将装饰器定义成一个实例，你需要确保它实现了 <strong>call</strong>() 和 <strong>get</strong>() 方法</p>
+<p>你可以将它当做一个普通的装饰器来使用，在类里面或外面都可以：</p>
+<pre><code>@Profiled
+def add(x, y): # callack __call__
+    return x + y
+
+class Spam:
+    @Profiled
+    def bar(self, x): # callack __get__
+        print(self, x)
+</code></pre><p>实现 get 和 set 方法，称为 data descriptor。<br>仅有 get 方法的，称为 non-data descriptor。<br>get 对 owner_class、owner_instance 访问有效。<br>set、delete 仅对 owner_instance 访问有效。</p>
+<pre><code>class reify(object):
+&apos;&apos;&apos;
+Put the result of a method which uses this (non-data) descriptor decorator
+in the instance dict after the first call, effectively replacing the
+decorator with an instance variable.
+
+It acts like @property, except that the function is only ever called once;
+after that, the value is cached as a regular attribute. This gives you lazy
+attribute creation on objects that are meant to be immutable.
+
+Taken from the `Pyramid project &lt;https://pypi.python.org/pypi/pyramid/&gt;`_.
+
+To use this as a decorator::
+
+     @reify #
+     def lazy(self):
+          ...
+          return hard_to_compute_int
+     first_time = self.lazy   # lazy is reify obj, reify.__get__() runs
+     second_time = self.lazy  # lazy is hard_to_compute_int
+
+     # 等价于 lazy = reify(lazy)
+     # &gt;&gt;&gt; class E(object):
+     #    ...     def f(x):
+     #    ...         print(x)
+     #    ...     f = staticmethod(f)
+     #    ...
+     #    &gt;&gt;&gt; E.f(3) # __get__
+     #    3
+     #    &gt;&gt;&gt; E().f(3)
+     #    3
+&apos;&apos;&apos;
+
+  def __init__(self, func):
+      self.func = func
+      self.__doc__ = func.__doc__
+
+  def __get__(self, inst, cls):
+      if inst is None:
+          return self
+      retval = self.func(inst)
+      setattr(inst, self.func.__name__, retval)
+      return retval
+</code></pre><p>补充：<br>描述符更常见的调用场景是属性访问时描述符被自动调用，资料描述器总是比实例字典优先<br>obj.d 通常先去<strong>dict</strong> 查找，如果实现<strong>get</strong> 方法，会直接调用<strong>get</strong> 方法（优先级）</p>
+<p>对于 类, type.<strong>getattribute</strong>(), 将B.x 变成B.<strong>dict</strong>[‘x’].<strong>get</strong>(None, B)<br>形式；用简单的python实现方式是：</p>
+<pre><code>def __getattribute__(self, key):
+    &quot;Emulate type_getattro() in Objects/typeobject.c&quot;
+    v = object.__getattribute__(self, key)
+    if hasattr(v, &apos;__get__&apos;):
+        return v.__get__(None, self)
+    return v
+</code></pre><p>对于对象 object.<strong>getattribute</strong>() 将b.x 变成type(b).<strong>dict</strong>[‘x’].<strong>get</strong>(b, type(b))</p>
+<p>函数有<strong>get</strong>( )方法可以通过函数当作属性访问, 非数据描述符转化<br>obj.f(<em>args) call into f(obj, </em>args).<br>Calling klass.f(<em>args) becomes f(</em>args).</p>
+<p>回到上面的例子；</p>
+<h3 id="dict变体"><a href="#dict变体" class="headerlink" title="dict变体"></a>dict变体</h3><pre><code>class QueryDict(dict):
+&apos;&apos;&apos;QueryDict is a dict() that can be queried with dot.
+
+::
+
+    d = QueryDict()
+    # create a key named toto, with the value 1
+    d.toto = 1
+    # it&apos;s the same as
+    d[&apos;toto&apos;] = 1
+
+.. versionadded:: 1.0.4
+&apos;&apos;&apos;
+
+def __getattr__(self, attr):
+    try:
+        return self.__getitem__(attr)
+    except KeyError:
+        return super(QueryDict, self).__getattr__(attr)
+
+def __setattr__(self, attr, value):
+    self.__setitem__(attr, value)
+</code></pre><p>知识点 ：<strong>getattr</strong>   和 <strong>getattribute</strong></p>
+<p>1.object.<strong>getattr</strong>(self, name)<br>当一般位置找不到attribute的时候，会调用getattr，返回一个值或AttributeError异常。<br>如果在类中定义了<strong>getattr</strong>()这个方法，那么在对象查询属性时,如果这个属性在类中定义了，如一个已经实例化的对象x定义了属性name，那么在使用x.name时就不会调用<strong>getattr</strong>(name)；会直接返回name已经定义好的值。简单的说：<strong>getattr</strong>()会在对象中不存在这个属性时被调用。</p>
+<p>2.object.<strong>getattribute</strong>(self, name)<br>无条件被调用，通过实例访问属性。如果class中定义了<strong>getattr</strong>()，则<strong>getattr</strong>()不会被调用（除非显示调用或引发AttributeError异常）</p>
+<p>3.object.<strong>get</strong>(self, instance, owner)<br>如果class定义了它，则这个class就可以称为descriptor。owner是所有者的类，instance是访问descriptor的实例，如果不是通过实例访问，而是通过类访问的话，instance则为None。（descriptor的实例自己访问自己是不会触发<strong>get</strong>，而会触发<strong>call</strong>，只有descriptor作为其它类的属性才有意义。）（所以下文的d是作为C2的一个属性被调用）</p>
+<h3 id="4-any"><a href="#4-any" class="headerlink" title="4 any"></a>4 any</h3><pre><code>if any(&quot;__iter__&quot; in B.__dict__ for B in C.__mro__):
+</code></pre>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/源码/" rel="tag"># 源码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/06/2018/operator内置方法/" rel="next" title="">
+                <i class="fa fa-chevron-left"></i> 
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/06/12/2018/django 自定义查询函数/" rel="prev" title="django 自定义查询器">
+                django 自定义查询器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Hiro</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.zuopiezi.org" title="zuopiezi" target="_blank">zuopiezi</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#分享代码"><span class="nav-number">1.</span> <span class="nav-text">分享代码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-val函数的使用"><span class="nav-number">2.</span> <span class="nav-text">1.val函数的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-创建lazy惰性属性"><span class="nav-number">3.</span> <span class="nav-text">2. 创建lazy惰性属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dict变体"><span class="nav-number">3.1.</span> <span class="nav-text">dict变体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-any"><span class="nav-number">3.2.</span> <span class="nav-text">4 any</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hiro</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

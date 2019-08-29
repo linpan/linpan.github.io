@@ -259,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/03/2018/2018-08-03-django-drf-视图/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/09/2018/Context Managers/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -278,7 +278,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/03/2018/2018-08-03-django-drf-视图/" itemprop="url">django DRF 视图</a></h1>
+                <a class="post-title-link" href="/2019/05/09/2018/Context Managers/" itemprop="url">python 上下午管理器</a></h1>
         
 
         <div class="post-meta">
@@ -290,8 +290,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-03T11:53:00+08:00">
-                2018-08-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-09T10:16:00+08:00">
+                2019-05-09
               </time>
             
 
@@ -300,6 +300,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -330,183 +352,88 @@
       
         
           
-            <p>目前有4种方法创建api:</p>
-<ul>
-<li>Pure Django views</li>
-<li>APIView subclasses 自由程度比较高，适合定制</li>
-<li>generics.* subclasses 封装一些</li>
-<li>viewsets.ModelViewSet  高级封装</li>
-</ul>
-<p>选择哪个方法, 基本原则是：</p>
-<ul>
-<li>Use viewsets.ModelViewSet when you are goin to allow all or most of CRUD operations on a model.</li>
-<li>Use generics.* when you only want to allow some operations on a model</li>
-<li>Use APIView when you want to completely customize the behaviour.</li>
-</ul>
-<p>翻译：</p>
-<ul>
-<li>viewsets.ModelViewSet  适合对模型的大多数的CRUD操作</li>
-<li>generics.* 适合一些操作</li>
-<li>APIView 可以完全定义经典行为特性。</li>
-</ul>
-<h3 id="django普通视图-实现api"><a href="#django普通视图-实现api" class="headerlink" title="django普通视图 实现api"></a>django普通视图 实现api</h3><p>JsonResponse返回json<br>        from django.shortcuts import render, get_object_or_404<br>        from django.http import JsonResponse</p>
-<pre><code>from .models import Poll
+            <h3 id="上下午管理器api"><a href="#上下午管理器api" class="headerlink" title="上下午管理器api"></a>上下午管理器api</h3><p>每个上下文管理器都允许使用 with 语句来执行，在写的时候也要包含两个必须的方法。 <strong>enter</strong>() 方法是 with 进入代码时所执行的方法，一般要返回一个对象以让处在代码块中的代码使用。 离开 with 代码块后，上下文管理器中的 <strong>exit</strong>() 方法就会被调用以清理一些用过的资源</p>
+<pre><code>class WithinContext:
 
-def polls_list(request):
-    MAX_OBJECTS = 20
-    polls = Poll.objects.all()[:20]
-    data = {&quot;results&quot;: list(polls.values(&quot;question&quot;, &quot;created_by__username&quot;, &quot;pub_date&quot;))}
-    return JsonResponse(data)
+    def __init__(self, context):
+        print(&apos;WithinContext.__init__({})&apos;.format(context))
 
+    def do_something(self):
+        print(&apos;WithinContext.do_something()&apos;)
 
-def polls_detail(request, pk):
-    poll = get_object_or_404(Poll, pk=pk)
-    data = {&quot;results&quot;: {
-        &quot;question&quot;: poll.question,
-        &quot;created_by&quot;: poll.created_by.username,
-        &quot;pub_date&quot;: poll.pub_date
-    }}
-    return JsonResponse(data)
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
+    def __del__(self):
+        print(&apos;WithinContext.__del__&apos;)
 
-    
+class Context:
 
-    
+    def __init__(self):
+        print(&apos;Context.__init__()&apos;)
 
-    
+    def __enter__(self):
+        print(&apos;Context.__enter__()&apos;)
+        return WithinContext(self)
 
-    <footer class="post-footer">
-      
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(&apos;Context.__exit__()&apos;)
 
-      
+with Context() as c:
+    c.do_something()
+</code></pre><p><strong>enter</strong>() 方法可以返回任意对象，它返回的任何对象都会被赋给 with 语句中的 as 所指向的变量。本例中可以看到 Context 返回了一个在之后使用的对象</p>
+<h3 id="函数装饰器方式的上下文管理器"><a href="#函数装饰器方式的上下文管理器" class="headerlink" title="函数装饰器方式的上下文管理器"></a>函数装饰器方式的上下文管理器</h3><pre><code>import contextlib
 
-      
+class Context(contextlib.ContextDecorator):
 
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
+    def __init__(self, how_used):
+        self.how_used = how_used
+        print(&apos;__init__({})&apos;.format(how_used))
 
+    def __enter__(self):
+        print(&apos;__enter__({})&apos;.format(self.how_used))
+        return self
 
-    
-      
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        print(&apos;__exit__({})&apos;.format(self.how_used))
 
-  
+@Context(&apos;as decorator&apos;)
+def func(message):
+    print(message)
 
-  
-  
-  
+print()
+with Context(&apos;as context manager&apos;):
+    print(&apos;Doing work in the context&apos;)
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/03/2018/2018-08-03-python之-call-魔法函数/">
+print()
+func(&apos;Doing work in the wrapped function&apos;)
+</code></pre><p>把上下文管理器作为函数装饰器使用的不同之处在于 <strong>enter</strong>() 所返回的值无法在被装饰的函数中使用，不能像 with 和 as 一样。被装饰后的函数的参数仍像之前一样传递</p>
+<h3 id="从生成器到上下文管理器"><a href="#从生成器到上下文管理器" class="headerlink" title="从生成器到上下文管理器"></a>从生成器到上下文管理器</h3><p>创建一个上下文管理器的传统方式是写一个类，然后写它的 <strong>enter</strong>() 和 <strong>exit</strong>() 方法，这并不难写，不过有时候把所有的东西都写全并没有必要。在这种情况下，可以使用 contextmanager() 装饰器将一个生成器函数变成一个上下文管理器。</p>
+<pre><code>import contextlib
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
+@contextlib.contextmanager
+def make_context():
+    print(&apos;  entering&apos;)
+    try:
+        yield {}
+    except RuntimeError as err:
+        print(&apos;  ERROR:&apos;, err)
+    finally:
+        print(&apos;  exiting&apos;)
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
+print(&apos;Normal:&apos;)
+with make_context() as value:
+    print(&apos;  inside with statement:&apos;, value)
 
-    
-      <header class="post-header">
+print(&apos;\nHandled error:&apos;)
+with make_context() as value:
+    raise RuntimeError(&apos;showing example of handling an error&apos;)
 
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/03/2018/2018-08-03-python之-call-魔法函数/" itemprop="url">python之 __call__魔法函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-03T10:56:00+08:00">
-                2018-08-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="可调用对象"><a href="#可调用对象" class="headerlink" title="可调用对象"></a>可调用对象</h3><p>python中所有的东西都被称为对象，对象分为可以被调用和不可以被调用<br>可调用对象：许多Python对象都是我们所说的可调用的，即是任何通过函数操作符()来调用的对象</p>
-<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p>函数是对象，也可以别调用</p>
-<pre><code>def foo(x):
-  retuen x
-
-a=foo(3) #a被调用
-</code></pre><h3 id="类"><a href="#类" class="headerlink" title="类"></a>类</h3><p>Python给类提供了名为<strong>call</strong>的特别方法，该方法允许程序员创建可调用的对象(实例)。默认情况下，<strong>call</strong>方法是没有实现的，这意味着大多数情况下实例是不可调用的。</p>
-<p>我们知道类中的方法是可调用的，其实实例也是可以被调用的，我们只需要实现<strong>call</strong>：</p>
-<pre><code>class Circle(object):
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-    def __call__(self, x, y):
-        self.x = x
-        self.y = y
-c = Circle(10, 20)    # __init__
-print c.x, c.y    # 10 20
-c(100, 200)    # 调用实例(),触发__call__
-print c.x, c.y    # 100 200
-</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>拥有<code>__call__</code>方法的对象可以把对象当做一个函数调用<br>首先实例化这个类，触发<strong>init</strong>，然后通过实例调用触发<strong>call</strong> ，修改了实例变量。</p>
-<p>此方法常见用于用类实现一个装饰器、元类等场景中。</p>
+print(&apos;\nUnhandled error:&apos;)
+with make_context() as value:
+    raise ValueError(&apos;this exception is not handled&apos;)
+</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li>普通with as结构的上下文；可以使用<strong>enter</strong>的返回值，</li>
+<li>装饰器上下文contextlib.ContextDecorator, 类装饰器，不可使用<strong>enter</strong>的返回值，</li>
+<li>函数装饰器变成一个上下文管理器（快捷方式）@contextlib.contextmanager</li>
+</ol>
 
           
         
@@ -555,7 +482,7 @@ print c.x, c.y    # 100 200
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/02/2018/2018-08-02-django-开发需要登录的中间件/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/29/2018/python: 两种创建字典的区别dict() vs {}/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -574,7 +501,7 @@ print c.x, c.y    # 100 200
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/02/2018/2018-08-02-django-开发需要登录的中间件/" itemprop="url">django 开发需要登录的中间件</a></h1>
+                <a class="post-title-link" href="/2019/04/29/2018/python: 两种创建字典的区别dict() vs {}/" itemprop="url">dict vs {} 的比较分析</a></h1>
         
 
         <div class="post-meta">
@@ -586,8 +513,8 @@ print c.x, c.y    # 100 200
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-02T14:16:00+08:00">
-                2018-08-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-29T09:37:00+08:00">
+                2019-04-29
               </time>
             
 
@@ -596,6 +523,28 @@ print c.x, c.y    # 100 200
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -626,62 +575,35 @@ print c.x, c.y    # 100 200
       
         
           
-            <h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>当前用户请求是否被认证,如果没创建用户</p>
-<h3 id="例子"><a href="#例子" class="headerlink" title="例子"></a>例子</h3><pre><code>from django.conf import settings
-from django.contrib.auth import login
-from django.contrib.auth.models import User
-from django.core.exceptions import ImproperlyConfigured
+            <h2 id="1-字典创建的方式"><a href="#1-字典创建的方式" class="headerlink" title="1. 字典创建的方式"></a>1. 字典创建的方式</h2><pre><code>1. vars = dict()
+2. vars = {}
+</code></pre><h3 id="1-1值的比较"><a href="#1-1值的比较" class="headerlink" title="1.1值的比较"></a>1.1值的比较</h3><pre><code>dict() == {} #Reture true
+</code></pre><h3 id="1-2-性能比较"><a href="#1-2-性能比较" class="headerlink" title="1.2 性能比较"></a>1.2 性能比较</h3><p>我们使用timeit 模块比较时间</p>
+<pre><code>$ python
+&gt;&gt; from timeit import timeit
+</code></pre><p>分析空字典：</p>
+<pre><code>&gt;&gt;&gt; timeit(&quot;d = dict()&quot;)
+0.11915296099778061
+&gt;&gt;&gt; timeit(&quot;d = {}&quot;)
+0.034184868832198845
+</code></pre><p>{} 竟然比dict() 快3.x倍。现在我们使用带有书籍的字典来比较。</p>
+<pre><code>&gt;&gt;&gt; timeit(&quot;d = dict(one=&apos;one&apos;,two=&apos;two&apos;,three=&apos;three&apos;,four=&apos;four&apos;,five=&apos;five&apos;,six=&apos;six&apos;)&quot;)
+0.5600968430762805
 
-try:
-    from django.utils.deprecation import MiddlewareMixin
-except ImportError:
-    MiddlewareMixin = object
+&gt;&gt;&gt; timeit(&quot;d = {&apos;one&apos;:&apos;one&apos;,&apos;two&apos;:&apos;two&apos;,&apos;three&apos;:&apos;three&apos;,&apos;four&apos;:&apos;four&apos;,&apos;five&apos;:&apos;five&apos;,&apos;six&apos;:&apos;six&apos;}&quot;)
+0.1884483945050306
+</code></pre><p>无论是空值还是有值的情况下，{}确实很快。</p>
+<h3 id="1-3-反汇编角度分析"><a href="#1-3-反汇编角度分析" class="headerlink" title="1.3 反汇编角度分析"></a>1.3 反汇编角度分析</h3><p>dis 模块包括用于反编译 Python 字节码将其拆解为更易于阅读的形式的函数。 查看解释器正在执行的字节码是手动调整紧密循环和执行其他类型优化的好方法。 它对于在多线程应用程序中查找竞争条件也很有用，因为它可用于估计代码中线程控制可能切换的点。</p>
+<pre><code>&gt;&gt;&gt; from dis import dis
+&gt;&gt;&gt; dis(&apos;{}&apos;)
+            0 BUILD_MAP                0
+            2 RETURN_VALUE
+&gt;&gt;&gt; dis(&apos;dict()&apos;)
+1           0 LOAD_NAME                0 (dict)
+            2 CALL_FUNCTION            0
+            4 RETURN_VALUE
+</code></pre><p>多了一操作码：CALL_FUNCTION的步骤。</p>
 
-
-class AlwaysAuthenticatedMiddleware(MiddlewareMixin):
-    &quot;&quot;&quot;
-    Ensures that the request has an authenticated user.
-
-    If the request doesn&apos;t have an authenticated user, it logs in a default
-    user. If the default user doesn&apos;t exist, it is created.
-
-    Will raise an ImproperlyConfiguredException when DEBUG=False, unless
-    ALWAYS_AUTHENTICATED_DEBUG_ONLY is set to False.
-
-    This middleware reads these settings:
-    * ALWAYS_AUTHENTICATED_USERNAME (string):
-      the name of the default user, defaults to `&apos;user&apos;`.
-    * ALWAYS_AUTHENTICATED_USER_DEFAULTS (dict):
-      additional default values to set when creating the user.
-    * ALWAYS_AUTHENTICATED_DEBUG_ONLY:
-      Set to `False` to allow running with DEBUG=False.
-    &quot;&quot;&quot;
-    def __init__(self, *args, **kwargs):
-
-        self.username = getattr(settings,
-                                &apos;ALWAYS_AUTHENTICATED_USERNAME&apos;,
-                                &apos;user&apos;)
-        self.defaults = getattr(settings,
-                                &apos;ALWAYS_AUTHENTICATED_USER_DEFAULTS&apos;,
-                                {})
-        if (not settings.DEBUG and
-                getattr(settings,&apos;ALWAYS_AUTHENTICATED_DEBUG_ONLY&apos;, True)):
-            raise ImproperlyConfigured(
-                &apos;DEBUG=%s, but AlwaysAuthenticatedMiddleware is configured to &apos;
-                &apos;only run in debug mode.\n&apos;
-                &apos;Remove AlwaysAuthenticatedMiddleware from &apos;
-                &apos;MIDDLEWARE/MIDDLEWARE_CLASSES or set &apos;
-                &apos;ALWAYS_AUTHENTICATED_DEBUG_ONLY to False.&apos; % settings.DEBUG)
-        super(AlwaysAuthenticatedMiddleware, self).__init__(*args, **kwargs)
-
-    def process_request(self, request):
-        if not request.user.is_authenticated():
-            user, created = User.objects.get_or_create(username=self.username,
-                                                       defaults=self.defaults)
-
-            user.backend = settings.AUTHENTICATION_BACKENDS[0]
-            login(request, user)
-</code></pre>
           
         
       
@@ -729,7 +651,7 @@ class AlwaysAuthenticatedMiddleware(MiddlewareMixin):
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/02/2018/2018-08-02-django/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/19/2018/抽象类ABC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -748,7 +670,7 @@ class AlwaysAuthenticatedMiddleware(MiddlewareMixin):
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/02/2018/2018-08-02-django/" itemprop="url">django</a></h1>
+                <a class="post-title-link" href="/2019/04/19/2018/抽象类ABC/" itemprop="url">抽象类ABC</a></h1>
         
 
         <div class="post-meta">
@@ -760,8 +682,8 @@ class AlwaysAuthenticatedMiddleware(MiddlewareMixin):
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-02T14:15:00+08:00">
-                2018-08-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-19T19:37:00+08:00">
+                2019-04-19
               </time>
             
 
@@ -770,6 +692,28 @@ class AlwaysAuthenticatedMiddleware(MiddlewareMixin):
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -800,314 +744,244 @@ class AlwaysAuthenticatedMiddleware(MiddlewareMixin):
       
         
           
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/02/2018/2018-08-02-django-编写path匹配规则函数/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/02/2018/2018-08-02-django-编写path匹配规则函数/" itemprop="url">django 编写path匹配规则函数 </a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-02T11:43:00+08:00">
-                2018-08-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="url-to-path"><a href="#url-to-path" class="headerlink" title="url to path"></a>url to path</h3><p>自django2.0 以前, 利用url函数的正则匹配获得URL中的参数。</p>
-<pre><code>url(r&apos;^posts/(?P&lt;post_id&gt;[0-9]+)/$&apos;, post_detail_view)
-</code></pre><p>在django2.0后 path 路径转换。</p>
-<pre><code>path(&apos;posts/&lt;int:post_id/&gt;/&apos;, post_detail_view)
-</code></pre><h4 id="内置转换器函数"><a href="#内置转换器函数" class="headerlink" title="内置转换器函数"></a>内置转换器函数</h4><ul>
-<li>str<br>Matches any non-empty string, excluding the path separator, ‘/’. This is the default if a converter isn’t included in the expression.<br>Example: ‘best_product_ever!-123.html’<br>Returns a string ( <code>str</code>).<br>Equivalent regular expression: <code>[^/]+</code></li>
-<li><p>int<br>Matches zero or any positive integer.<br>Example: ‘1234’<br>Returns an integer (<code>int</code>).<br>Equivalent regular expression: <code>[0-9]+</code></p>
-</li>
-<li><p>slug<br>Matches any slug string consisting of ASCII letters or numbers, plus the hyphen and underscore characters.<br>Returns a string (<code>str</code>).<br>Example: ‘building-your-1st-django-site’<br>Equivalent regular expression: <code>[-a-zA-Z0-9_]+</code></p>
-</li>
-<li><p>uuid<br>Matches a formatted UUID. To prevent multiple URLs from mapping to the same page, dashes must be included and letters must be lowercase.<br>Returns a UUID instance (uuid.UUID).<br>Example: ‘075194d3-6885-417e-a8a8-6c931e272f00’<br>Equivalent regular expression:  <code>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}</code></p>
-</li>
-<li><p>path<br>Matches any non-empty string, including the path separator, ‘/’. This allows you to match against a complete URL path rather than just a segment of a URL path as with str.<br>Example: ‘/path/to/file’<br>Returns a string (<code>str</code>).<br>Equivalent regular expression: <code>&#39;.+&#39;</code></p>
-</li>
-</ul>
-<h3 id="注册自定义-Path-Converter"><a href="#注册自定义-Path-Converter" class="headerlink" title="注册自定义 Path Converter"></a>注册自定义 Path Converter</h3><p>当默认的 Path Converter 不能满足需求时，Django2.0 支持用户注册自定义的 Path Converter。</p>
-<p>Path Converter 是一个类，定义 Converter 类需要包含下面的属性或方法：</p>
-<p>regex 属性，字符串类型<br>to_python(self, value) 方法，它处理将匹配的字符串转换为应该传递给 view 函数的类型。 如果它不能转换给定的值，它应该抛出 ValueError。<br>to_url(self, value) 方法，和 to_python 相反，它会将 Python 类型转换为在 URL 中使用的字符串。</p>
-<p>作者：zxd<br>链接：<a href="https://hacpai.com/article/1520431728425" target="_blank" rel="noopener">https://hacpai.com/article/1520431728425</a><br>来源：黑客派<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。<br>最基本的写法：</p>
-<pre><code>from django.urls import path, register_converter
-from django.urls.converters import IntConverter
-
-from . import views
-from .models import Question
-
-class QuestionConverter(IntConverter):
-
-    def to_python(self, value):
-        try:
-            return Question.objects.get(id=int(value))
-        except Question.DoesNotExist:
-            raise ValueError
-
-    def to_url(self, obj):
-        return str(obj.pk)
-
-register_converter(QuestionConverter, &apos;question&apos;)
-
-path(&apos;&amp;lt question:question &amp;gt/vote/&apos;, views.vote, name=&apos;vote&apos;),
-
-def vote(request, question):
-</code></pre><p>使用register_converter()注册 Converter 到 url 配置里.<br>我们可以灵活地写个工厂函数,适合每个类生产转换器。</p>
-<pre><code>class ModelConverter:
-
-    def to_python(self, value):
-        try:
-            return self.model.objects.get(pk=int(value))
-        except self.model.DoesNotExist:
-            raise ValueError
-
-    def to_url(self, obj):
-        return str(obj.pk)
-
-
-def register_model_converter(model):
-    converter_name = &apos;{}Converter&apos;.format(name.capitalize())
-    converter_class = type(converter_name, (ModelConverter,), {&apos;model&apos;: model})
-
-    register_converter(converter_class, name)
-</code></pre><p>现在我们可以注册quesiton路径转换器</p>
-<pre><code>register_model_converter(Question, &apos;question&apos;)
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-给模型添加属性方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-给模型添加属性方法/" itemprop="url">django 给模型添加属性方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T17:25:00+08:00">
-                2018-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="给类添加属性"><a href="#给类添加属性" class="headerlink" title="给类添加属性"></a>给类添加属性</h4><p>引用：</p>
+            <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>python中并没有提供抽象类与抽象方法，但是提供了内置模块abc(abstract base class)来模拟实现抽象类(类似接口)。</p>
 <blockquote>
-<p>ModelBase.add_to_class</p>
+<p>抽象方法是父类的一个方法, 父类没有实现这个方法, 父类是不可以实例化的. 子类继承父类, 子类必须实现父类定义的抽象方法, 子类才可以被实例化. Python中的abc提供了@abstractmethod装饰器实现抽象方法的定义。</p>
 </blockquote>
-<p>例子：</p>
-<pre><code>Document.add_to_class(
-      &apos;attached_tags&apos;,
-      lambda document: DocumentTag.objects.filter(documents=document)
-  )
+<p>子类必须实现父类定义的抽象方法, 确保子类实现了某些特定的方法, 实现类型检查</p>
+<pre><code>import abc
+
+class PluginBase(metaclass= abc.ABCMeta):
+  #__metaclass__ = abc.ABCMeta
+
+  @abc.abstractmethod
+  def load(self, input):
+    &quot;&quot;&quot;Retrieve data from the input source and return an object.&quot;&quot;&quot;
+    return
+
+  @abc.abstractmethod
+  def save(self, output, data):
+    &quot;&quot;&quot;Save the data object to the output.&quot;&quot;&quot;
+    return
+
+class SubclassImplementation(PluginBase):
+
+  def load(self, input): # 子类必须有实现抽象类的抽象方法
+    return input.read()
+
+  def save(self, output, data): #子类必须有实现抽象类的抽象方法
+    return output.write(data)
+
+if __name__ == &apos;__main__&apos;:
+print &apos;Subclass:&apos;, issubclass(SubclassImplementation, PluginBase)
+print &apos;Instance:&apos;, isinstance(SubclassImplementation(), PluginBase)
+# 除非子类实现抽象基类的抽象方法，否则子类不能实例化
+</code></pre><h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>具体化抽象类可以有两种方式，一种通过注册（register），另外一种通过继承。</li>
+<li>子类必须实现抽象类的方法，否则不能实例化。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/09/2018/django 高性能方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/04/09/2018/django 高性能方法/" itemprop="url">django 高性能</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-09T19:37:00+08:00">
+                2019-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/django/" itemprop="url" rel="index">
+                    <span itemprop="name">django</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/django/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="剖析应用"><a href="#剖析应用" class="headerlink" title="剖析应用"></a>剖析应用</h3><p>查询内容和查询耗时</p>
+<h4 id="数据库优化"><a href="#数据库优化" class="headerlink" title="数据库优化"></a>数据库优化</h4><ol>
+<li>建索引 Field.db_index or Meta.index_together</li>
+<li>使用filter, exclude, order by 等方法</li>
+<li>避免查询内容没有使用的字段的存在</li>
+</ol>
+<pre><code>select * from User
+User.object.all()
+</code></pre><p>比较合适的方法是：</p>
+<pre><code># select first_name from registration_user
+User.objects.all().values_list(&apos;first_name&apos;)
+User.objects.all().values(&apos;first_name&apos;)
+</code></pre><ol>
+<li><p>批量插入<br>对于插入文件对象，可能触发too many files open</p>
+<pre><code># Instead of hitting database various times like:
+User.objects.create(first_name=&apos;Sanyam&apos;)
+User.objects.create(first_name=&apos;Amit&apos;)
+...
+</code></pre></li>
+</ol>
+<pre><code># Use bulk_create ( just 1 query )
+User.objects.bulk_create([
+User(first_name=&apos;Sanyam&apos;),
+User(first_name=&apos;Amit&apos;),
+])
+</code></pre><ol>
+<li><p>多对多</p>
+<pre><code>sanyam = User.objects.get(first_name=&quot;sanyam&quot;)
+amit = User.objects.get(first_name=&quot;amit&quot;)
+
+# Instead of using
+PyDelhi.members.add(sanyam)
+PyDelhi.members.add(amit)
+
+# Add multiple at once
+PyDelhi.members.add(sanyam, amit)
+</code></pre></li>
+<li><p>直接使用外键值</p>
+<pre><code># Instead of  不要使用
+user.post.id
+# Use values directly like:
+user.post_id
+</code></pre></li>
+</ol>
+<h3 id="架构角度优化"><a href="#架构角度优化" class="headerlink" title="架构角度优化"></a>架构角度优化</h3><p>自上而下的组件：</p>
+<pre><code>1. Load Balancer       (HAProxy)
+2. Web Accelerator     (VArnish/nginx)
+3. Application(django) (gunicorn)
+4. Cache               (redis)
+5. Database             (pg)
 </code></pre>
           
         
@@ -1156,7 +1030,7 @@ def register_model_converter(model):
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-modelform-factory/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/08/2018/python 模块 signal/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -1175,7 +1049,7 @@ def register_model_converter(model):
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-modelform-factory/" itemprop="url">django modelform_factory </a></h1>
+                <a class="post-title-link" href="/2019/03/08/2018/python 模块 signal/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -1187,8 +1061,8 @@ def register_model_converter(model):
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T16:54:00+08:00">
-                2018-08-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-08T14:52:36+08:00">
+                2019-03-08
               </time>
             
 
@@ -1227,16 +1101,41 @@ def register_model_converter(model):
       
         
           
-            <h3 id="ModelForm的工厂函数"><a href="#ModelForm的工厂函数" class="headerlink" title="ModelForm的工厂函数"></a>ModelForm的工厂函数</h3><p><strong>模型表单的快捷方式,不需要在forms.py定义模型表单</strong></p>
-<p>您可以不使用类定义，而是使用独立函数 modelform_factory() 来创建给定模型的表单。如果您没有很多自定义设置，这可能会更方便。</p>
-<pre><code>&gt;&gt;&gt; from django.forms import modelform_factory
-&gt;&gt;&gt; from myapp.models import Book
-&gt;&gt;&gt; BookForm = modelform_factory(Book, fields=(&quot;author&quot;, &quot;title&quot;))
-</code></pre><p>这也可以用来对已有表单进行简单的修改，例如给某个字段指定使用组件：</p>
-<pre><code>&gt;&gt;&gt; from django.forms import Textarea
-&gt;&gt;&gt; Form = modelform_factory(Book, form=BookForm,
-...                          widgets={&quot;title&quot;: Textarea()})
-</code></pre><p>参考文档:<a href="https://docs.djangoproject.com/zh-hans/2.0/topics/forms/modelforms/" target="_blank" rel="noopener">https://docs.djangoproject.com/zh-hans/2.0/topics/forms/modelforms/</a></p>
+            <h1 id="模块知识："><a href="#模块知识：" class="headerlink" title="模块知识："></a>模块知识：</h1><p>import lib<br>signal<br>collections.abc<br>compat</p>
+<p>exec</p>
+<p>import signal, os</p>
+<pre><code># 定义一个信号处理函数，该函数打印收到的信号，然后raise IOError
+def handler(signum, frame):
+    print &apos;Signal handler called with signal&apos;, signum
+    raise IOError(&quot;Couldn&apos;t open device!&quot;)
+
+# 对SIGALRM(终止)设置处理的handler, 然后设置定时器，5秒后触发SIGALRM信号
+signal.signal(signal.SIGALRM, handler)
+signal.alarm(5)
+
+# This open() may hang indefinitely
+fd = os.open(&apos;/dev/ttyS0&apos;, os.O_RDWR)
+
+signal.alarm(0)          # 关闭定时器
+
+import signal
+
+class TimeoutException(Exception):
+    def __init__(self, error=&apos;Timeout waiting for response from Cloud&apos;):
+        Exception.__init__(self, error)
+</code></pre><p>这是一个实现控制函数运行超时的装饰器。如果超时，则会抛出超时异常。</p>
+<pre><code>def timeout_limit(timeout_time):
+    def wraps(func):
+        def handler(signum, frame):
+            raise TimeoutException()
+
+        def deco(*args, **kwargs):
+            signal.signal(signal.SIGALRM, handler)
+            signal.alarm(timeout_time)
+            func(*args, **kwargs)
+            signal.alarm(0)
+        return dec
+</code></pre><p>这个示例来源于这里。 需求是动态加载python导入的模块，也就是说，当导入的模块代码更新时，希望可以立即更新引用的代码。示例如下：<br><a href="http://engineerwithoutacause.com/easy-signal-handling-for-python-daemons.html" target="_blank" rel="noopener">http://engineerwithoutacause.com/easy-signal-handling-for-python-daemons.html</a></p>
 
           
         
@@ -1285,7 +1184,7 @@ def register_model_converter(model):
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-实现搜索/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/18/2018/python &&django 第三方库推荐/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -1304,7 +1203,7 @@ def register_model_converter(model):
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-实现搜索/" itemprop="url">django 实现搜索</a></h1>
+                <a class="post-title-link" href="/2019/01/18/2018/python &&django 第三方库推荐/" itemprop="url">未命名</a></h1>
         
 
         <div class="post-meta">
@@ -1316,8 +1215,8 @@ def register_model_converter(model):
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T16:17:00+08:00">
-                2018-08-01
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T14:39:15+08:00">
+                2019-01-18
               </time>
             
 
@@ -1356,61 +1255,325 @@ def register_model_converter(model):
       
         
           
-            <h3 id="多字段搜索"><a href="#多字段搜索" class="headerlink" title="多字段搜索"></a>多字段搜索</h3><pre><code>def normalize_query(query_string,
-    findterms=re.compile(r&apos;&quot;([^&quot;]+)&quot;|(\S+)&apos;).findall,
-    normspace=re.compile(r&apos;\s{2,}&apos;).sub):
+            <h2 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h2><ol>
+<li>django-mptt # mptt结构, 多级层次结构,例如可以实现多级菜单</li>
+<li>django-categories</li>
+</ol>
+<h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><p>1.python-decouple （项目上线的安全措施方法）</p>
+<h2 id="文本内容生产markdown"><a href="#文本内容生产markdown" class="headerlink" title="文本内容生产markdown"></a>文本内容生产markdown</h2><p>def get_markdown(self):<br>    content = self.content<br>    markdown_text = markdown(content)<br>    return mark_safe(markdown_text)</p>
+<h3 id="PyAutoGui"><a href="#PyAutoGui" class="headerlink" title="PyAutoGui"></a>PyAutoGui</h3>
+          
+        
+      
+    </div>
+    
+    
+    
 
-    &apos;&apos;&apos;
-    Splits the query string in invidual keywords, getting rid of unecessary spaces and grouping quoted words together.
-    Example:
-    &gt;&gt;&gt; normalize_query(&apos;  some random  words &quot;with   quotes  &quot; and   spaces&apos;)
-        [&apos;some&apos;, &apos;random&apos;, &apos;words&apos;, &apos;with quotes&apos;, &apos;and&apos;, &apos;spaces&apos;]
-    &apos;&apos;&apos;
+    
 
-    return [normspace(&apos;&apos;,(t[0] or t[1]).strip()) for t in findterms(query_string)]
+    
 
-def get_query(query_string, search_fields):
+    
 
-    &apos;&apos;&apos;
-    Returns a query, that is a combination of Q objects.
-    That combination aims to search keywords within a model by testing the given search fields.
-    &apos;&apos;&apos;
+    <footer class="post-footer">
+      
 
-    query = None # Query to search for every search term
-    terms = normalize_query(query_string)
-    for term in terms:
-        or_query = None # Query to search for a given term in each field
-        for field_name in search_fields:
-            q = Q(**{&quot;%s__icontains&quot; % field_name: term})
-            if or_query is None:
-                or_query = q
-            else:
-                or_query = or_query | q
-        if query is None:
-            query = or_query
-        else:
-            query = query &amp; or_query
+      
 
-def search_for_something(request):
-   query_string = &apos;&apos;
-   found_entries = None
-   if (&apos;q&apos; in request.GET) and request.GET[&apos;q&apos;].strip():
-       query_string = request.GET[&apos;q&apos;]
-       entry_query = get_query(query_string, [&apos;field1&apos;, &apos;field2&apos;, &apos;field3&apos;])
-       found_entries = Model.objects.filter(entry_query).order_by(&apos;-something&apos;)
+      
 
-   return render_to_response(&apos;app/template-result.html&apos;,
-           { &apos;query_string&apos;: query_string, &apos;found_entries&apos;: found_entries },
-           context_instance=RequestContext(request)
-</code></pre><h3 id="优化搜索"><a href="#优化搜索" class="headerlink" title="优化搜索"></a>优化搜索</h3><pre><code>from operator import and_, or_
-li = [&apos;keith&apos;, &apos;s&apos;, &apos;thompson&apos;]
-# and
-#reduce 把结果继续和序列的下一个元素and运算
-Profile.objects.filter(reduce(and_, [Q(full_name__icontains=q) for q in li]))
-# or
-Profile.objects.filter(reduce(or_, [Q(full_name__icontains=q) for q in li]))
-</code></pre><p>注明：在 Python3 中，reduce() 函数已经被从全局名字空间里移除了，它现在被放置在 fucntools 模块里，如果想要使用它，则需要通过引入 functools 模块来调用 reduce() 函数.</p>
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
 
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/18/2018/django keys already exists errors/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/18/2018/django keys already exists errors/" itemprop="url">并行世界的线程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T14:20:13+08:00">
+                2019-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/django/" itemprop="url" rel="index">
+                    <span itemprop="name">django</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="问题描述："><a href="#问题描述：" class="headerlink" title="问题描述："></a>问题描述：</h2><pre><code>ERROR: duplicate key value violates unique constraint &quot;table_pkey&quot; DETAIL: Key (id)=(25) already exists.
+</code></pre><h2 id="解决方式："><a href="#解决方式：" class="headerlink" title="解决方式："></a>解决方式：</h2><p>这用方式比较方便：</p>
+<pre><code>$ ./manage.py sqlsequencereset app_name
+</code></pre><h2 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h2><p>基类和子类，如何在基类得到子类的类</p>
+<pre><code>class A(object):
+   def __init__(self):
+       print &quot;A created&quot;
+
+   def a(self):
+       print (self.__class__.__name__)
+       print self.__class__.__bases__
+
+
+class B(A):
+   def __init__(self):
+       pass
+       # print super((B), self).__init__
+       # print self.__class__.__name__
+       # print super(B,self).__class__.__name__
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/18/2018/django queryset slice can't chain/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/18/2018/django queryset slice can't chain/" itemprop="url">并行世界的线程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-18T13:59:21+08:00">
+                2019-01-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="场景描述"><a href="#场景描述" class="headerlink" title="场景描述"></a>场景描述</h2><p>两个查询集是可以 | 和&amp; 操作的,但是如果查询集slice后, 就会：</p>
+<pre><code>queryset1 | queryset1 适合不是切片的情况 （or） 报错情况是：  &quot;Cannot combine queries once a slice has been taken.&quot;
+</code></pre><h2 id="解决方式："><a href="#解决方式：" class="headerlink" title="解决方式："></a>解决方式：</h2><p>使用itertools 库</p>
+<blockquote>
+<p>from itertools import chain</p>
+</blockquote>
+<pre><code>from itertools import chain
+  chain(qs1, qs[:4])
+</code></pre><p>##补充知识点<br>比较两者的区别：</p>
+<pre><code>.chain() #0 或多个参数
+.from_iterable() # 一个参数, 生成iterables对象
+</code></pre>
           
         
       
@@ -1449,7 +1612,7 @@ Profile.objects.filter(reduce(or_, [Q(full_name__icontains=q) for q in li]))
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1495,7 +1658,7 @@ Profile.objects.filter(reduce(or_, [Q(full_name__icontains=q) for q in li]))
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">85</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1517,7 +1680,7 @@ Profile.objects.filter(reduce(or_, [Q(full_name__icontains=q) for q in li]))
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

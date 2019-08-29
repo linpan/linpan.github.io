@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="python">
 <meta property="og:description" content="1. Return Super  class BaseAdder(object):      def add(self, a, b):          return a + b   class NonReturningAdder(BaseAdder):      def add(self, a, b):          super(NonReturningAdder, self).add(a,">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-02T10:15:32.829Z">
+<meta property="og:updated_time" content="2019-04-29T09:21:39.116Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python super&amp; mixin论道">
 <meta name="twitter:description" content="1. Return Super  class BaseAdder(object):      def add(self, a, b):          return a + b   class NonReturningAdder(BaseAdder):      def add(self, a, b):          super(NonReturningAdder, self).add(a,">
@@ -410,14 +410,22 @@ class MyClass(MyMixin, Parent):
     def test(self):
         super(MyClass, self).test()
         print(&quot;self&quot;)
+    def test(self):
+      Mixin1.test(self)
 
 if __name__ == &quot;__main__&quot;:
     my_obj = MyClass()
     my_obj.test()
 </code></pre><p>MRO的顺序是</p>
 <blockquote>
-<p> <class '__main__.myclass'="">, <class '__main__.mymixin'="">, <class '__main__.parent'="">, <type 'object'=""></type></class></class></class></p>
+<p> <class '__main__.myclass'="">, <class '__main__.mymixin'="">, <class '__main__.parent'="">, <type 'object'=""><br>如何访问及重写mixinx类？</type></class></class></class></p>
 </blockquote>
+<pre><code>Mixin1.test(self)
+</code></pre><p>注意2点事项：</p>
+<ol>
+<li>Mixin1类直接使用, 没有Mixin1（）实例化</li>
+<li>参数必须是self. 不然报错。</li>
+</ol>
 <p>总结补充：</p>
 
       
@@ -532,7 +540,7 @@ if __name__ == &quot;__main__&quot;:
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">73</span>
+                  <span class="site-state-item-count">85</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -554,7 +562,7 @@ if __name__ == &quot;__main__&quot;:
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">36</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>
