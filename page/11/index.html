@@ -259,6 +259,170 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/python min lambda/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/09/2018/python min lambda/" itemprop="url">min与max排序</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T19:37:00+08:00">
+                2018-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="问题来源"><a href="#问题来源" class="headerlink" title="问题来源"></a>问题来源</h2><pre><code>current_node = min(next_destinations, key=lambda k: next_destinations[k][1])
+</code></pre><h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>先来min源代码：</p>
+<pre><code>def min(*args, key=None): # known special case of min
+  &quot;&quot;&quot;
+  min(iterable, *[, default=obj, key=func]) -&gt; value
+  min(arg1, arg2, *args, *[, key=func]) -&gt; value
+
+  With a single iterable argument, return its smallest item. The
+  default keyword-only argument specifies an object to return if
+  the provided iterable is empty.
+  With two or more arguments, return the smallest argument.
+  &quot;&quot;&quot;
+  pass
+</code></pre><h4 id="迭代对象为参数"><a href="#迭代对象为参数" class="headerlink" title="迭代对象为参数"></a>迭代对象为参数</h4><blockquote>
+<p>min(iterable, *[, default=obj, key=func]) -&gt; value<br>接受迭代对象，key是指定某个值为比较对象</p>
+</blockquote>
+<pre><code>lis = [(1,&apos;a&apos;), (3,&apos;c&apos;), (4,&apos;e&apos;), (-1,&apos;z&apos;)]
+max(lis, key = lambda x: x[1])
+ # 结果(1, &apos;a&apos;)
+</code></pre><h4 id="多值为参数"><a href="#多值为参数" class="headerlink" title="多值为参数"></a>多值为参数</h4><p>最常用的方式</p>
+<blockquote>
+<p> min(arg1, arg2, <em>args, </em>[, key=func]) -&gt; value</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-并行世界的线程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -991,7 +1155,7 @@ def main():
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-python操作数据库的规范问题1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -1010,7 +1174,7 @@ def main():
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/" itemprop="url">python操作数据库的规范问题</a></h1>
+                <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题1/" itemprop="url">python操作数据库的规范问题</a></h1>
         
 
         <div class="post-meta">
@@ -1184,7 +1348,7 @@ def main():
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-python操作数据库的规范问题1/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -1203,7 +1367,7 @@ def main():
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题1/" itemprop="url">python操作数据库的规范问题</a></h1>
+                <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/" itemprop="url">python操作数据库的规范问题</a></h1>
         
 
         <div class="post-meta">
@@ -1414,7 +1578,7 @@ def main():
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

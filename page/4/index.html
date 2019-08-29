@@ -259,6 +259,135 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-modelform-factory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-modelform-factory/" itemprop="url">django modelform_factory </a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T16:54:00+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="ModelForm的工厂函数"><a href="#ModelForm的工厂函数" class="headerlink" title="ModelForm的工厂函数"></a>ModelForm的工厂函数</h3><p><strong>模型表单的快捷方式,不需要在forms.py定义模型表单</strong></p>
+<p>您可以不使用类定义，而是使用独立函数 modelform_factory() 来创建给定模型的表单。如果您没有很多自定义设置，这可能会更方便。</p>
+<pre><code>&gt;&gt;&gt; from django.forms import modelform_factory
+&gt;&gt;&gt; from myapp.models import Book
+&gt;&gt;&gt; BookForm = modelform_factory(Book, fields=(&quot;author&quot;, &quot;title&quot;))
+</code></pre><p>这也可以用来对已有表单进行简单的修改，例如给某个字段指定使用组件：</p>
+<pre><code>&gt;&gt;&gt; from django.forms import Textarea
+&gt;&gt;&gt; Form = modelform_factory(Book, form=BookForm,
+...                          widgets={&quot;title&quot;: Textarea()})
+</code></pre><p>参考文档:<a href="https://docs.djangoproject.com/zh-hans/2.0/topics/forms/modelforms/" target="_blank" rel="noopener">https://docs.djangoproject.com/zh-hans/2.0/topics/forms/modelforms/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-实现搜索/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1286,168 +1415,6 @@ linebreaks(&apos;convert\ninto html paragraphs\ntest&apos;)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-07-31-python-字典参数-的总结/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/01/2018/2018-07-31-python-字典参数-的总结/" itemprop="url">python 字典参数**的总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T08:29:00+08:00">
-                2018-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="函数字典参数"><a href="#函数字典参数" class="headerlink" title="函数字典参数"></a>函数字典参数</h3><ol>
-<li><p>在函数传参中经常遇到**kwargs,现在总结常用的用法：</p>
-<pre><code>def foo(x, y):
-    print(x, y)
-
-&gt; d = {&apos;x&apos;:1, &apos;y&apos;:2}
-&gt; foo(**d)
-# 1 2
-</code></pre></li>
-<li><p>在py3.5后,也可以嵌套</p>
-<pre><code>&gt;d = {&apos;a&apos;: 1}
-&gt;{&apos;b&apos;: 2, **d}
-{&apos;b&apos;: 2, &apos;a&apos;: 1}
-</code></pre></li>
-<li><p>python3 参数带<em><br>根据PEP 3102的定义描述：<br>星号可以以一个参数的形式出现在函数声明中的参数列表中，但星号之后的所有参数都必须有关键字（keyword），这样在函数调用时，星号</em>之后的所有参数都必须以keyword=value的形式调用，而不能以位置顺序调用。</p>
-<pre><code>def func(arg1, arg2, arg3, *, k1, k2):
-    pass
-#使用方法 func(1,2,3,k1=&apos;key&apos;,k2=&apos;key2&apos;)
-</code></pre></li>
-</ol>
-<p>星号分开位置参数和强制关键字参数分界表示,使用函数时,星号没有实际意义,不需要给星号参数.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1498,7 +1465,7 @@ linebreaks(&apos;convert\ninto html paragraphs\ntest&apos;)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">85</span>
+                  <span class="site-state-item-count">86</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
