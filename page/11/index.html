@@ -594,7 +594,7 @@ max(lis, key = lambda x: x[1])
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-python操作数据库的规范问题1/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -613,7 +613,7 @@ max(lis, key = lambda x: x[1])
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题1/" itemprop="url">python操作数据库的规范问题</a></h1>
+                <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/" itemprop="url">python操作数据库的规范问题</a></h1>
         
 
         <div class="post-meta">
@@ -739,6 +739,316 @@ max(lis, key = lambda x: x[1])
    &quot;hero&apos;&apos;s pens&quot;
 </code></pre><p>如果遇到单个引号，字符串要用双引号，你也会明白python 有单引号、双引号存在的意义了。</p>
 <h3 id="性能优化"><a href="#性能优化" class="headerlink" title="性能优化"></a>性能优化</h3><p>conn.commit() 最好插入、更新多条再提交 </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/sqlalchemy笔记整理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/09/2018/sqlalchemy笔记整理/" itemprop="url">python操作数据库的规范问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T10:16:00+08:00">
+                2018-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h3><p>和django model 有点类似, 但是又不同。至少queryset方法基本不通用。在python世界使用的比较多,<br>例如airflow。</p>
+<h3 id="model模型"><a href="#model模型" class="headerlink" title="model模型"></a>model模型</h3><p>类似djangomodel, 可以在model定义方法和属性</p>
+<h3 id="基本查询"><a href="#基本查询" class="headerlink" title="基本查询"></a>基本查询</h3><p>query的 参数控制返回<br>创建数据：<br>        from sqlalchemy.orm import sessionmaker<br>      Session = sessionmaker(bind=engine)</p>
+<pre><code>#创建完session就可以添加数据了
+ed_user = User(&apos;ed&apos;,&apos;Ed jone&apos;,&apos;edpasswd&apos;)
+session.add(ed_user)
+
+#也可以使用session.add_all()添加多个对象
+#session.add_all([user1,user2,user3])
+
+print ed_user in session  # True
+session.rollback()
+print ed_user in session # False
+</code></pre><p>如果跟的是模型类，那返回的就是这个这个类的实例或是列表。如:</p>
+<pre><code>session.query(User)
+</code></pre><p>如果都给了表字段，那结果是元祖列表,如:</p>
+<pre><code>session.query(User.name, User.fullname)
+</code></pre><p>如果同时给了模型类和表字段，那返回的是named tuples,如:</p>
+<pre><code>session.query(User, User.name)
+</code></pre><p>你可以 label 方法控制列返回的名称。如:</p>
+<pre><code>session.query(User.name.label(&apos;name_label&apos;))
+</code></pre><p>你可以用aliased方法控制类返回的名称，如:</p>
+<pre><code>session.query(aliased(User, name=&apos;user_alias&apos;))
+</code></pre><p>可以用 limit,offset来控制返回的条数。如:</p>
+<pre><code>session.query(User).limit(10)，
+session.query(User).offset(1,20) # offset跟list的切片效果类似。
+</code></pre><p>过滤数据使用 filter_by,filter<br>filter_by 参数为关键字参数，这种过滤功能有限 如:</p>
+<pre><code>filter_by(id=1)
+</code></pre><p>filter 的参数是更像python的操作符，过滤功能很强大,如:</p>
+<pre><code>filter(User.id.in_([1,2]))
+</code></pre><p>可以有多个过滤，也就是可以多个filter或是filter_by连着写。如:</p>
+<pre><code>session.query(User).filter(type=1).filter_by(User.id.in_([1,2,3]))
+</code></pre><h3 id="基本的操作符"><a href="#基本的操作符" class="headerlink" title="基本的操作符"></a>基本的操作符</h3><ul>
+<li>等于:</li>
+</ul>
+<pre><code>query.filter(User.name == &apos;ed&apos;)
+</code></pre><ul>
+<li>不等于:</li>
+</ul>
+<pre><code>query.filter(User.name != &apos;ed&apos;)`
+</code></pre><ul>
+<li><p>like:</p>
+<pre><code>query.filter(User.name.like(&apos;%ed&apos;))
+</code></pre></li>
+<li><p>in:</p>
+<pre><code>query.filter(User.id.in_([1,2,3]))
+</code></pre></li>
+<li><p>not in:</p>
+<pre><code>query.filter(User.id.notin_([1,2,3]))
+</code></pre></li>
+<li><p>is NULL:</p>
+<pre><code>query.filter(User.name == None)
+query.filter(User.name.is_(None))
+</code></pre></li>
+<li><p>is not NULL:</p>
+<pre><code>query.filter(User.name != None)
+query.filter(User.name.isnot(None))
+</code></pre></li>
+<li><p>and:</p>
+<pre><code>from sqlalchemy import and_
+
+query.filter(and_(User.name == &apos;ed&apos;, User.fullname == &apos;Ed Jones&apos;))
+query.filter(User.name == &apos;ed&apos;, User.fullname == &apos;Ed Jones&apos;)
+query.filter(User.name == &apos;ed&apos;).filter(User.fullname == &apos;Ed Jones&apos;)
+or:
+
+from sqlalchemy import or_
+query.filter(or_(User.name == &apos;ed&apos;, User.name == &apos;wendy&apos;))
+</code></pre></li>
+<li><p>match or contains:</p>
+<pre><code>query.filter(User.name.match(&apos;wendy&apos;))
+</code></pre></li>
+<li><p>order_by</p>
+</li>
+</ul>
+<pre><code>query.filter(User.name.match(&apos;wendy&apos;)).order_by(User.id)
+query.filter(User.name.match(&apos;wendy&apos;)).order_by(&apos;id desc&apos;)
+</code></pre><p>或者导入方法实现</p>
+<pre><code>from sqlalchemy import desc
+query.filter(User.name.match(&apos;wendy&apos;)).order_by(desc(User.id))
+</code></pre><ul>
+<li><p>JOIN or OUTER JOIN<br>多表查询：</p>
+<pre><code>session.query(User, Address).filter(User.id==Address.user_id).\
+          filter(Address.email_address==&apos;jack@google.com&apos;).\
+          all()
+</code></pre></li>
+</ul>
+<p>或者使用JOin关键词</p>
+<pre><code>  session.query(User).join(Address).\
+filter(Address.email_address==&apos;jack@google.com&apos;).all()
+</code></pre><ul>
+<li><p>exists</p>
+<pre><code>from sqlalchemy.sql import exists
+</code></pre><p>  stmt = exists().where(Address.user_id==User.id)<br>  session.query(User.name).filter(stmt)</p>
+</li>
+</ul>
+<h3 id="聚累函数"><a href="#聚累函数" class="headerlink" title="聚累函数"></a>聚累函数</h3><p>下面统计每个user_id 有多少个地址:</p>
+<pre><code>from sqlalchemy import func
+query(Address.user_id, func.count(&apos;*&apos;)).group_by(Address.user_id)
+</code></pre><p>having 过滤统计数据，必须和 goup_by 一起使用，下面返回了user 地址大于1的user:</p>
+<pre><code>from sqlalchemy import func
+query(Address.user_id, func.count(&apos;*&apos;)).group_by(Address.user_id).having(func.count(&apos;*&apos;))
+</code></pre><h3 id="高级操作："><a href="#高级操作：" class="headerlink" title="高级操作："></a>高级操作：</h3><ul>
+<li><p>更新<br>三种方法,常用1和2,</p>
+<pre><code>1) user.no_of_logins += 1
+ session.commit()
+
+2) session.query().\
+       filter(User.username == form.username.data).\
+       update({&quot;no_of_logins&quot;: (User.no_of_logins +1)})
+   session.commit()
+
+3) conn = engine.connect()
+   stmt = User.update().\
+       values(no_of_logins=(User.no_of_logins + 1)).\
+       where(User.username == form.username.data)
+   conn.execute(stmt)
+</code></pre></li>
+</ul>
+<p>-any()<br>使用 any() 方法，用于 一对多/多对多 关系，可在前面加 ~ 号表示 not exists:</p>
+<pre><code>session.query(User.name).filter(User.addresses.any(Address.email_address.like(&apos;%google%&apos;)))
+</code></pre><p>-has()<br>使用 has() 方法，用于 多对一，同样可在前面加 ~ 号表示 not exists:</p>
+<pre><code>session.query(Address).filter(~Address.user.has(User.name==&apos;jack&apos;)).all()
+</code></pre><p>-contains</p>
+<p>使用 contains() 方法，用于 一对多 关系:</p>
+<pre><code>session.query.filter(User.addresses.contains(someaddress_object))
+</code></pre><p>-with_parent()<br>使用 with_parent() 方法，可用于 任何关系</p>
+<pre><code>session.query(Address).with_parent(someuser, ‘addresses’)
+</code></pre><p>-subqueryload()<br>当查询的表有关联的表时，它是关联的表的字段缓一步加载，也就是分两次查询一个query的数据，多和 first() limit() offset() order_by() 一起使用。<br>这对于数据量大的表来说很有用:</p>
+<pre><code>session.query(User).\
+            options(subqueryload(User.addresses)).\
+            filter_by(name=&apos;jack&apos;).one()
+</code></pre><h3 id="返回结果方法"><a href="#返回结果方法" class="headerlink" title="返回结果方法"></a>返回结果方法</h3><p>sqlalchemy的方法没有Django丰富.</p>
+<pre><code>all() 返回所有
+first() 查询并返回第一条,没有数据为空
+one() 查询所有并严格返回一条数据，如果查询到多条数据或没有数据，都会报错
+one_or_none 同 one，没有数据会返回None，不会报错，其他一样。
+scalar 同 one，但是只返回那条数据的第一个字段。
+</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li><p>所有的操作后必须提交</p>
+<pre><code>session.commit()
+</code></pre></li>
+</ol>
+<ol>
+<li>sqlalchemy 可以执行原始sql(raw sql), 这一点也和django 类似</li>
+<li>可以指定instance查询，（和Django有点类似）</li>
+<li><p>通过child 字段获得Child模型的内容(和Django类似)</p>
+<pre><code>class Parent(Base):
+  __tablename__ = &apos;parent&apos;
+  id = Column(Integer, primary_key=True)
+  child = relationship(&quot;Child&quot;, uselist=False, backref=&quot;parent&quot;)
+
+class Child(Base):
+    __tablename__ = &apos;child&apos;
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(Integer, ForeignKey(&apos;parent.id&apos;))
+</code></pre></li>
+</ol>
 
           
         
@@ -980,7 +1290,7 @@ max(lis, key = lambda x: x[1])
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/2018-02-09-python操作数据库的规范问题1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -999,7 +1309,7 @@ max(lis, key = lambda x: x[1])
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/" itemprop="url">python操作数据库的规范问题</a></h1>
+                <a class="post-title-link" href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题1/" itemprop="url">python操作数据库的规范问题</a></h1>
         
 
         <div class="post-meta">
@@ -1578,7 +1888,7 @@ def main():
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">86</span>
+                  <span class="site-state-item-count">87</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1589,7 +1899,7 @@ def main():
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">8</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1600,7 +1910,7 @@ def main():
               
               <div class="site-state-item site-state-tags">
                 
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">标签</span>
                 
               </div>

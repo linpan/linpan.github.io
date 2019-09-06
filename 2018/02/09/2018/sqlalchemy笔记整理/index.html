@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="python,sqlalchemy," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="感悟和django model 有点类似, 但是又不同。至少queryset方法基本不通用。在python世界使用的比较多,例如airflow。 model模型类似djangomodel, 可以在model定义方法和属性 基本查询query的 参数控制返回创建数据：        from sqlalchemy.orm import sessionmaker      Session = sess">
+<meta name="keywords" content="python,sqlalchemy">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python操作数据库的规范问题">
+<meta property="og:url" content="http://yoursite.com/2018/02/09/2018/sqlalchemy笔记整理/index.html">
+<meta property="og:site_name" content="python">
+<meta property="og:description" content="感悟和django model 有点类似, 但是又不同。至少queryset方法基本不通用。在python世界使用的比较多,例如airflow。 model模型类似djangomodel, 可以在model定义方法和属性 基本查询query的 参数控制返回创建数据：        from sqlalchemy.orm import sessionmaker      Session = sess">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-08-30T02:54:59.497Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python操作数据库的规范问题">
+<meta name="twitter:description" content="感悟和django model 有点类似, 但是又不同。至少queryset方法基本不通用。在python世界使用的比较多,例如airflow。 model模型类似djangomodel, 可以在model定义方法和属性 基本查询query的 参数控制返回创建数据：        from sqlalchemy.orm import sessionmaker      Session = sess">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/09/2018/sqlalchemy笔记整理/"/>
+
+
+
+
+
+  <title>python操作数据库的规范问题 | python</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">python</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/09/2018/sqlalchemy笔记整理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">python操作数据库的规范问题</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-09T10:16:00+08:00">
+                2018-02-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/数据库/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h3><p>和django model 有点类似, 但是又不同。至少queryset方法基本不通用。在python世界使用的比较多,<br>例如airflow。</p>
+<h3 id="model模型"><a href="#model模型" class="headerlink" title="model模型"></a>model模型</h3><p>类似djangomodel, 可以在model定义方法和属性</p>
+<h3 id="基本查询"><a href="#基本查询" class="headerlink" title="基本查询"></a>基本查询</h3><p>query的 参数控制返回<br>创建数据：<br>        from sqlalchemy.orm import sessionmaker<br>      Session = sessionmaker(bind=engine)</p>
+<pre><code>#创建完session就可以添加数据了
+ed_user = User(&apos;ed&apos;,&apos;Ed jone&apos;,&apos;edpasswd&apos;)
+session.add(ed_user)
+
+#也可以使用session.add_all()添加多个对象
+#session.add_all([user1,user2,user3])
+
+print ed_user in session  # True
+session.rollback()
+print ed_user in session # False
+</code></pre><p>如果跟的是模型类，那返回的就是这个这个类的实例或是列表。如:</p>
+<pre><code>session.query(User)
+</code></pre><p>如果都给了表字段，那结果是元祖列表,如:</p>
+<pre><code>session.query(User.name, User.fullname)
+</code></pre><p>如果同时给了模型类和表字段，那返回的是named tuples,如:</p>
+<pre><code>session.query(User, User.name)
+</code></pre><p>你可以 label 方法控制列返回的名称。如:</p>
+<pre><code>session.query(User.name.label(&apos;name_label&apos;))
+</code></pre><p>你可以用aliased方法控制类返回的名称，如:</p>
+<pre><code>session.query(aliased(User, name=&apos;user_alias&apos;))
+</code></pre><p>可以用 limit,offset来控制返回的条数。如:</p>
+<pre><code>session.query(User).limit(10)，
+session.query(User).offset(1,20) # offset跟list的切片效果类似。
+</code></pre><p>过滤数据使用 filter_by,filter<br>filter_by 参数为关键字参数，这种过滤功能有限 如:</p>
+<pre><code>filter_by(id=1)
+</code></pre><p>filter 的参数是更像python的操作符，过滤功能很强大,如:</p>
+<pre><code>filter(User.id.in_([1,2]))
+</code></pre><p>可以有多个过滤，也就是可以多个filter或是filter_by连着写。如:</p>
+<pre><code>session.query(User).filter(type=1).filter_by(User.id.in_([1,2,3]))
+</code></pre><h3 id="基本的操作符"><a href="#基本的操作符" class="headerlink" title="基本的操作符"></a>基本的操作符</h3><ul>
+<li>等于:</li>
+</ul>
+<pre><code>query.filter(User.name == &apos;ed&apos;)
+</code></pre><ul>
+<li>不等于:</li>
+</ul>
+<pre><code>query.filter(User.name != &apos;ed&apos;)`
+</code></pre><ul>
+<li><p>like:</p>
+<pre><code>query.filter(User.name.like(&apos;%ed&apos;))
+</code></pre></li>
+<li><p>in:</p>
+<pre><code>query.filter(User.id.in_([1,2,3]))
+</code></pre></li>
+<li><p>not in:</p>
+<pre><code>query.filter(User.id.notin_([1,2,3]))
+</code></pre></li>
+<li><p>is NULL:</p>
+<pre><code>query.filter(User.name == None)
+query.filter(User.name.is_(None))
+</code></pre></li>
+<li><p>is not NULL:</p>
+<pre><code>query.filter(User.name != None)
+query.filter(User.name.isnot(None))
+</code></pre></li>
+<li><p>and:</p>
+<pre><code>from sqlalchemy import and_
+
+query.filter(and_(User.name == &apos;ed&apos;, User.fullname == &apos;Ed Jones&apos;))
+query.filter(User.name == &apos;ed&apos;, User.fullname == &apos;Ed Jones&apos;)
+query.filter(User.name == &apos;ed&apos;).filter(User.fullname == &apos;Ed Jones&apos;)
+or:
+
+from sqlalchemy import or_
+query.filter(or_(User.name == &apos;ed&apos;, User.name == &apos;wendy&apos;))
+</code></pre></li>
+<li><p>match or contains:</p>
+<pre><code>query.filter(User.name.match(&apos;wendy&apos;))
+</code></pre></li>
+<li><p>order_by</p>
+</li>
+</ul>
+<pre><code>query.filter(User.name.match(&apos;wendy&apos;)).order_by(User.id)
+query.filter(User.name.match(&apos;wendy&apos;)).order_by(&apos;id desc&apos;)
+</code></pre><p>或者导入方法实现</p>
+<pre><code>from sqlalchemy import desc
+query.filter(User.name.match(&apos;wendy&apos;)).order_by(desc(User.id))
+</code></pre><ul>
+<li><p>JOIN or OUTER JOIN<br>多表查询：</p>
+<pre><code>session.query(User, Address).filter(User.id==Address.user_id).\
+          filter(Address.email_address==&apos;jack@google.com&apos;).\
+          all()
+</code></pre></li>
+</ul>
+<p>或者使用JOin关键词</p>
+<pre><code>  session.query(User).join(Address).\
+filter(Address.email_address==&apos;jack@google.com&apos;).all()
+</code></pre><ul>
+<li><p>exists</p>
+<pre><code>from sqlalchemy.sql import exists
+</code></pre><p>  stmt = exists().where(Address.user_id==User.id)<br>  session.query(User.name).filter(stmt)</p>
+</li>
+</ul>
+<h3 id="聚累函数"><a href="#聚累函数" class="headerlink" title="聚累函数"></a>聚累函数</h3><p>下面统计每个user_id 有多少个地址:</p>
+<pre><code>from sqlalchemy import func
+query(Address.user_id, func.count(&apos;*&apos;)).group_by(Address.user_id)
+</code></pre><p>having 过滤统计数据，必须和 goup_by 一起使用，下面返回了user 地址大于1的user:</p>
+<pre><code>from sqlalchemy import func
+query(Address.user_id, func.count(&apos;*&apos;)).group_by(Address.user_id).having(func.count(&apos;*&apos;))
+</code></pre><h3 id="高级操作："><a href="#高级操作：" class="headerlink" title="高级操作："></a>高级操作：</h3><ul>
+<li><p>更新<br>三种方法,常用1和2,</p>
+<pre><code>1) user.no_of_logins += 1
+ session.commit()
+
+2) session.query().\
+       filter(User.username == form.username.data).\
+       update({&quot;no_of_logins&quot;: (User.no_of_logins +1)})
+   session.commit()
+
+3) conn = engine.connect()
+   stmt = User.update().\
+       values(no_of_logins=(User.no_of_logins + 1)).\
+       where(User.username == form.username.data)
+   conn.execute(stmt)
+</code></pre></li>
+</ul>
+<p>-any()<br>使用 any() 方法，用于 一对多/多对多 关系，可在前面加 ~ 号表示 not exists:</p>
+<pre><code>session.query(User.name).filter(User.addresses.any(Address.email_address.like(&apos;%google%&apos;)))
+</code></pre><p>-has()<br>使用 has() 方法，用于 多对一，同样可在前面加 ~ 号表示 not exists:</p>
+<pre><code>session.query(Address).filter(~Address.user.has(User.name==&apos;jack&apos;)).all()
+</code></pre><p>-contains</p>
+<p>使用 contains() 方法，用于 一对多 关系:</p>
+<pre><code>session.query.filter(User.addresses.contains(someaddress_object))
+</code></pre><p>-with_parent()<br>使用 with_parent() 方法，可用于 任何关系</p>
+<pre><code>session.query(Address).with_parent(someuser, ‘addresses’)
+</code></pre><p>-subqueryload()<br>当查询的表有关联的表时，它是关联的表的字段缓一步加载，也就是分两次查询一个query的数据，多和 first() limit() offset() order_by() 一起使用。<br>这对于数据量大的表来说很有用:</p>
+<pre><code>session.query(User).\
+            options(subqueryload(User.addresses)).\
+            filter_by(name=&apos;jack&apos;).one()
+</code></pre><h3 id="返回结果方法"><a href="#返回结果方法" class="headerlink" title="返回结果方法"></a>返回结果方法</h3><p>sqlalchemy的方法没有Django丰富.</p>
+<pre><code>all() 返回所有
+first() 查询并返回第一条,没有数据为空
+one() 查询所有并严格返回一条数据，如果查询到多条数据或没有数据，都会报错
+one_or_none 同 one，没有数据会返回None，不会报错，其他一样。
+scalar 同 one，但是只返回那条数据的第一个字段。
+</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ol>
+<li><p>所有的操作后必须提交</p>
+<pre><code>session.commit()
+</code></pre></li>
+</ol>
+<ol>
+<li>sqlalchemy 可以执行原始sql(raw sql), 这一点也和django 类似</li>
+<li>可以指定instance查询，（和Django有点类似）</li>
+<li><p>通过child 字段获得Child模型的内容(和Django类似)</p>
+<pre><code>class Parent(Base):
+  __tablename__ = &apos;parent&apos;
+  id = Column(Integer, primary_key=True)
+  child = relationship(&quot;Child&quot;, uselist=False, backref=&quot;parent&quot;)
+
+class Child(Base):
+    __tablename__ = &apos;child&apos;
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(Integer, ForeignKey(&apos;parent.id&apos;))
+</code></pre></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+            <a href="/tags/sqlalchemy/" rel="tag"># sqlalchemy</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题0/" rel="next" title="python操作数据库的规范问题">
+                <i class="fa fa-chevron-left"></i> python操作数据库的规范问题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/09/2018/2018-02-09-python操作数据库的规范问题/" rel="prev" title="python操作数据库的规范问题">
+                python操作数据库的规范问题 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Hiro</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-block">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://www.zuopiezi.org" title="zuopiezi" target="_blank">zuopiezi</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#感悟"><span class="nav-number">1.</span> <span class="nav-text">感悟</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#model模型"><span class="nav-number">2.</span> <span class="nav-text">model模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本查询"><span class="nav-number">3.</span> <span class="nav-text">基本查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本的操作符"><span class="nav-number">4.</span> <span class="nav-text">基本的操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#聚累函数"><span class="nav-number">5.</span> <span class="nav-text">聚累函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高级操作："><span class="nav-number">6.</span> <span class="nav-text">高级操作：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#返回结果方法"><span class="nav-number">7.</span> <span class="nav-text">返回结果方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Hiro</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
