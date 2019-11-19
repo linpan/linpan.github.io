@@ -259,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/29/2018/python36 冷知识: 省略号Ellipsis的/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/05/2019/eval的高级用法.md/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Hiro">
@@ -278,7 +278,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/08/29/2018/python36 冷知识: 省略号Ellipsis的/" itemprop="url">python36 省略号的使用</a></h1>
+                <a class="post-title-link" href="/2019/11/05/2019/eval的高级用法.md/" itemprop="url">eval的高级用法.md</a></h1>
         
 
         <div class="post-meta">
@@ -290,8 +290,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-29T10:16:00+08:00">
-                2019-08-29
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-05T18:01:00+08:00">
+                2019-11-05
               </time>
             
 
@@ -300,28 +300,6 @@
             
           </span>
 
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
           
 
           
@@ -352,30 +330,7 @@
       
         
           
-            <h3 id="解释Ellipsis"><a href="#解释Ellipsis" class="headerlink" title="解释Ellipsis"></a>解释Ellipsis</h3><ol>
-<li>Ellipsis单词的含义是 <code>省略号</code>, 本质上是：</li>
-</ol>
-<blockquote>
-<p>python 内置常量</p>
-</blockquote>
-<ol>
-<li>Ellipsis对象, 常用语切片语法中</li>
-</ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; ...</span><br><span class="line">Ellipsis</span><br></pre></td></tr></table></figure>
-<p>场景1：<br>就是一个对象而已:</p>
-<pre><code>def func(p1,p2):
-  return p1, p2
-
-# func(..., p2)
-p1 = Ellipsis, 没有实际意义, 但是是存在的。
-</code></pre><p>场景2:<br>  切片语法（很少用）</p>
-<pre><code>&gt;&gt;&gt; class C(object):
-...  def __getitem__(self, item):
-...   return item
-...
-&gt;&gt;&gt; C()[1:2, ..., 3]
-(slice(1, 2, None), Ellipsis, 3)
-</code></pre>
+            
           
         
       
@@ -521,6 +476,170 @@ p1 = Ellipsis, 没有实际意义, 但是是存在的。
 每个Actor有一个可以从 其它Actor接收消息的收件箱。Actor内部的主循环遍历它收到的消息，并 根据它期望的行为来采取行动。
 </code></pre><p>Gevent没有原生的Actor类型，但在一个子类化的Greenlet内使用队列， 我们可以定义一个非常简单的。</p>
 
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/08/29/2018/python36 冷知识: 省略号Ellipsis的/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/08/29/2018/python36 冷知识: 省略号Ellipsis的/" itemprop="url">python36 省略号的使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-08-29T10:16:00+08:00">
+                2019-08-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="解释Ellipsis"><a href="#解释Ellipsis" class="headerlink" title="解释Ellipsis"></a>解释Ellipsis</h3><ol>
+<li>Ellipsis单词的含义是 <code>省略号</code>, 本质上是：</li>
+</ol>
+<blockquote>
+<p>python 内置常量</p>
+</blockquote>
+<ol>
+<li>Ellipsis对象, 常用语切片语法中</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; ...</span><br><span class="line">Ellipsis</span><br></pre></td></tr></table></figure>
+<p>场景1：<br>就是一个对象而已:</p>
+<pre><code>def func(p1,p2):
+  return p1, p2
+
+# func(..., p2)
+p1 = Ellipsis, 没有实际意义, 但是是存在的。
+</code></pre><p>场景2:<br>  切片语法（很少用）</p>
+<pre><code>&gt;&gt;&gt; class C(object):
+...  def __getitem__(self, item):
+...   return item
+...
+&gt;&gt;&gt; C()[1:2, ..., 3]
+(slice(1, 2, None), Ellipsis, 3)
+</code></pre>
           
         
       
@@ -1646,159 +1765,6 @@ if __name__ == &apos;__main__&apos;:
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/22/2018/类中__call__魔法方法/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/22/2018/类中__call__魔法方法/" itemprop="url">类中的__call__ 魔法方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-05-22T10:16:00+08:00">
-                2019-05-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>Python中类的实例（对象）可以被当做函数对待操作.</p>
-<p>class X(object):<br>    def <strong>init</strong>(self, a, b):<br>        self.a = a<br>        self.b = b</p>
-<pre><code>def __call__(self, a, b):
-    self.a = a
-    self.b = b
-    print(&apos;调用（{}, {}）&apos;.format(a, b))
-
-
-x= X(1, 2)
-x(3,5) # xInstance.__call__(3,5)
-</code></pre><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><strong>call</strong>()的作用是使实例能够像函数一样被调用，同时不影响实例本身的生命周期（<strong>call</strong>()不影响一个实例的构造和析构）。但是<strong>call</strong>()可以用来改变实例的内部成员的值</p>
-<p><strong>init</strong> 和 <strong>call</strong> 都可以传参.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1849,7 +1815,7 @@ x(3,5) # xInstance.__call__(3,5)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">88</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

@@ -259,6 +259,212 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/02/2018/2018-05-02-kivy语言：if-else/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/02/2018/2018-05-02-kivy语言：if-else/" itemprop="url">kivy语言：if-else</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-02T19:46:00+08:00">
+                2018-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <pre><code>from kivy.config import Config
+Config.set(&apos;graphics&apos;,&apos;width&apos;,&apos;400&apos;)
+Config.set(&apos;graphics&apos;, &apos;width&apos;, &apos;300&apos;)
+
+from kivy.lang import Builder
+from kivy.uix.widget import Widget
+from kivy.uix.boxlayout import BoxLayout
+from kivy.properties import BooleanProperty, NumericProperty
+from kivy.clock import Clock
+from kivy.app import App
+
+
+Builder.load_string(&apos;&apos;&apos;
+#:kivy 1.8.0
+
+&lt;KivyTimer&gt;:
+    BoxLayout:
+        orientation: &apos;vertical&apos;
+        pos: root.pos
+        size: root.size
+
+        Label:
+            text: str(root.left_time)
+            font_size: 100
+
+        BoxLayout:
+            orientation: &apos;horizontal&apos;
+            size_hint: 1.0, 0.3
+
+            Button:
+                text: &apos;+1 minute&apos;
+                font_size: 16
+                on_press: root.on_command(&apos;+1 minute&apos;)
+
+            Button:
+                text: &apos;Stop&apos; if root.is_countdown else &apos;Start&apos;
+                font_size: 16
+                on_press: root.on_command(&apos;start/stop&apos;)
+
+            Button:
+                text: &apos;Reset&apos;
+                font_size: 16
+                on_press: root.on_command(&apos;reset&apos;)
+&apos;&apos;&apos;)
+
+
+
+class KivyTimer(Widget):
+    is_countdown = BooleanProperty(False)
+    left_time = NumericProperty(0)
+
+    def on_command(self, command):
+        if command == &apos;+1 minute&apos;:
+            self.left_time += 60
+        elif command == &apos;start/stop&apos;:
+            if self.is_countdown:
+                self.stop_timer()
+            elif self.left_time &gt; 0:
+                self.start_timer()
+        elif command == &apos;reset&apos;:
+            self.stop_timer()
+            self.left_time = 0
+
+    def on_countdown(self, dt):
+        self.left_time -= 1
+        if self.left_time == 0:
+            self.is_countdown = False
+            return False
+
+    def start_timer(self):
+        self.is_countdown = False
+        Clock.schedule_interval(self.on_countdown, 1.0)
+
+    def stop_timer(self):
+        self.is_countdown = False
+
+        Clock.unschedule(self.on_countdown)
+
+
+class KivyTimerApp(App):
+    def build(self):
+        return KivyTimer()
+
+
+
+if __name__ == &apos;__main__&apos;:
+    KivyTimerApp().run()
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/28/2018/2018-04-28-docker-基本操作/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1548,127 +1754,6 @@ sys.path.append(&apos;..&apos;)
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/28/2018/2018-03-28-python-dunder-method/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/28/2018/2018-03-28-python-dunder-method/" itemprop="url">python:Dunder method 特殊函数</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-28T11:57:00+08:00">
-                2018-03-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p> dunder method</p>
-<p> An alias for double underscore, “<strong>“. Specially useful in the Python computer language, in which names like “</strong>init__” are common. Coined as a speech shorthand.</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1719,7 +1804,7 @@ sys.path.append(&apos;..&apos;)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">88</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

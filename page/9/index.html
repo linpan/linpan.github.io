@@ -259,6 +259,127 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/28/2018/2018-03-28-python-dunder-method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/28/2018/2018-03-28-python-dunder-method/" itemprop="url">python:Dunder method 特殊函数</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-28T11:57:00+08:00">
+                2018-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p> dunder method</p>
+<p> An alias for double underscore, “<strong>“. Specially useful in the Python computer language, in which names like “</strong>init__” are common. Coined as a speech shorthand.</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/23/2018/2018-03-23-pyhtontips-re-sub-高级用法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1272,216 +1393,6 @@ with open(&quot;out.txt&quot;,&quot;wt&quot;) as file_out:
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/15/2018/2018-03-15-python-函数中定义类/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/15/2018/2018-03-15-python-函数中定义类/" itemprop="url">python 函数中定义类/python class definition in function</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-15T17:15:00+08:00">
-                2018-03-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/" itemprop="url" rel="index">
-                    <span itemprop="name">python</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python/源码阅读/" itemprop="url" rel="index">
-                    <span itemprop="name">源码阅读</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="阅读get-pip"><a href="#阅读get-pip" class="headerlink" title="阅读get-pip"></a>阅读get-pip</h3><p>近日,在安装pip包,无意发现类定义在函数中,决定了解如何使用这一技能</p>
-<pre><code>def bootstrap(tmpdir=None):
-    # Import pip so we can use it to install pip and maybe setuptools too
-    import pip
-    from pip.commands.install import InstallCommand
-    from pip.req import InstallRequirement
-
-    # Wrapper to provide default certificate with the lowest priority
-    class CertInstallCommand(InstallCommand):
-        def parse_args(self, args):
-            # If cert isn&apos;t specified in config or environment, we provide our
-            # own certificate through defaults.
-            # This allows user to specify custom cert anywhere one likes:
-            # config, environment variable or argv.
-            if not self.parser.get_default_values().cert:
-                self.parser.defaults[&quot;cert&quot;] = cert_path  # calculated below
-            return super(CertInstallCommand, self).parse_args(args)
-
-    pip.commands_dict[&quot;install&quot;] = CertInstallCommand
-</code></pre><p>写个简单一个简单的例子：<br>返回一个类实例</p>
-<pre><code> def func(**args):
-   class BindArgs(object):
-       foo = args[&apos;foo&apos;]
-       print &apos;foo is &apos;, foo
-       def __init__(self,args):
-          print &quot; hello i am here&quot;
-   return BindArgs(args) #return an instance of the class
-
-f = func(foo=3)
-</code></pre><p>用到再实例化,当实例化事,init才真正的执行。</p>
-<pre><code>def func(**args):
-   class BindArgs(object):
-       foo = args[&apos;foo&apos;]
-       print &apos;foo is &apos;, foo
-       def __init__(self,args):
-          print &quot; hello i am here&quot;
-   return BindArgs
-
-f = func(foo=3)
-
-f(args=&quot;yellow&quot;)
-</code></pre><h4 id="类中类"><a href="#类中类" class="headerlink" title="类中类"></a>类中类</h4><pre><code>#!/usr/bin/env python
-
-class Human:
-
-   def __init__(self):
-      self.name = &apos;Guido&apos;
-      self.head = self.Head()
-
-   class Head:
-      def talk(self):
-      return &apos;talking...&apos;
-
-if __name__ == &apos;__main__&apos;:
-    guido = Human()
-    print guido.name
-    print guido.head.talk()
-</code></pre><p>  太简单类, 不解释。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1532,7 +1443,7 @@ if __name__ == &apos;__main__&apos;:
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">88</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

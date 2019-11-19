@@ -259,6 +259,134 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-给模型添加属性方法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Hiro">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="python">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-给模型添加属性方法/" itemprop="url">django 给模型添加属性方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T17:25:00+08:00">
+                2018-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="给类添加属性"><a href="#给类添加属性" class="headerlink" title="给类添加属性"></a>给类添加属性</h4><p>引用：</p>
+<blockquote>
+<p>ModelBase.add_to_class</p>
+</blockquote>
+<p>例子：</p>
+<pre><code>Document.add_to_class(
+      &apos;attached_tags&apos;,
+      lambda document: DocumentTag.objects.filter(documents=document)
+  )
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-modelform-factory/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1277,144 +1405,6 @@ obj.drive()
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/01/2018/2018-08-01-django-utils探索html转义问题/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Hiro">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="python">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/01/2018/2018-08-01-django-utils探索html转义问题/" itemprop="url">django.utils探索html转义问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-01T11:08:00+08:00">
-                2018-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="HTML"><a href="#HTML" class="headerlink" title="HTML"></a>HTML</h3><p>模块位置: <code>django.utils.html</code></p>
-<h4 id="escape-转义"><a href="#escape-转义" class="headerlink" title="escape 转义"></a>escape 转义</h4><p>带有html标签符合的文本转义</p>
-<pre><code>from django.utils.html import escape
-
-escape(&quot;&lt;strong style=&apos;font-size: 12px&apos;&gt;escaped html&lt;/strong&gt;&quot;)
-</code></pre><p>如果再次escaped，会被再次转义。</p>
-<pre><code>escaped_html = escape(&quot;&lt;strong&gt;escaped html&lt;/strong&gt;&quot;)
-escape(escaped_html)
-</code></pre><p>为了避免二次转义,可以使用<code>conditional_escape</code></p>
-<h4 id="conditional-escape"><a href="#conditional-escape" class="headerlink" title="conditional_escape"></a>conditional_escape</h4><p>escaped_html = conditional_escape(“<strong>escaped html</strong>“)</p>
-<h4 id="format-html"><a href="#format-html" class="headerlink" title="format_html"></a>format_html</h4><p>格式化html</p>
-<pre><code>from django.utils.html import format_html
-
-format_html(&apos;&lt;div class=&quot;alert \{\}&quot;&gt;{}&lt;/&gt;&apos;, &apos;warning&apos;, &apos;Watch out!&apos;)
-</code></pre><h4 id="format-html-join"><a href="#format-html-join" class="headerlink" title="format_html_join"></a>format_html_join</h4><pre><code>format_html_join(&apos;\n&apos;, &apos;\&lt;p\&gt;\{\}\&lt;\/p\&gt;&apos;, [&apos;a&apos;, &apos;b&apos;, &apos;c&apos;])
-</code></pre><h4 id="linebreaks-换行"><a href="#linebreaks-换行" class="headerlink" title="linebreaks 换行"></a>linebreaks 换行</h4><pre><code>from django.utils.html import linebreaks
-
-linebreaks(&apos;convert\ninto html paragraphs\ntest&apos;)
-</code></pre><h4 id="strip-tags"><a href="#strip-tags" class="headerlink" title="strip_tags"></a>strip_tags</h4><p>移除字符串中的html 带有&lt;>符号的标签</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1465,7 +1455,7 @@ linebreaks(&apos;convert\ninto html paragraphs\ntest&apos;)
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">87</span>
+                  <span class="site-state-item-count">88</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
