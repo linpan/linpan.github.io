@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="python," />
 
 
 
@@ -79,14 +79,18 @@
 
 
 
+<meta name="description" content="eval 的语法eval 执行一字符串表达式,并返回表达式的值。 1eval(expression[, globals[, locals]]) 有三个参数，表达式字符串，globals变量作用域，locals变量作用域。 globals:  a dict locals: a mapping object. Dictionary is the standard and commonly used m">
+<meta name="keywords" content="python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="eval的高级用法.md">
+<meta property="og:title" content="eval和exec 的高级用法.md">
 <meta property="og:url" content="http://yoursite.com/2019/11/05/2019/eval的高级用法.md/index.html">
 <meta property="og:site_name" content="python">
+<meta property="og:description" content="eval 的语法eval 执行一字符串表达式,并返回表达式的值。 1eval(expression[, globals[, locals]]) 有三个参数，表达式字符串，globals变量作用域，locals变量作用域。 globals:  a dict locals: a mapping object. Dictionary is the standard and commonly used m">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-05T10:02:13.227Z">
+<meta property="og:updated_time" content="2019-11-19T08:28:58.946Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="eval的高级用法.md">
+<meta name="twitter:title" content="eval和exec 的高级用法.md">
+<meta name="twitter:description" content="eval 的语法eval 执行一字符串表达式,并返回表达式的值。 1eval(expression[, globals[, locals]]) 有三个参数，表达式字符串，globals变量作用域，locals变量作用域。 globals:  a dict locals: a mapping object. Dictionary is the standard and commonly used m">
 
 
 
@@ -122,7 +126,7 @@
 
 
 
-  <title>eval的高级用法.md | python</title>
+  <title>eval和exec 的高级用法.md | python</title>
   
 
 
@@ -276,7 +280,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">eval的高级用法.md</h1>
+          <h1 class="post-title" itemprop="name headline">eval和exec 的高级用法.md</h1>
         
 
         <div class="post-meta">
@@ -298,6 +302,28 @@
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -326,7 +352,69 @@
       
 
       
-        
+        <h2 id="eval-的语法"><a href="#eval-的语法" class="headerlink" title="eval 的语法"></a>eval 的语法</h2><p>eval 执行一字符串表达式,并返回表达式的值。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eval(expression[, globals[, locals]])</span><br></pre></td></tr></table></figure>
+<p>有三个参数，表达式字符串，globals变量作用域，locals变量作用域。</p>
+<pre><code>globals:  a dict
+locals: a mapping object. Dictionary is the standard and commonly used mapping type in Python.
+</code></pre><p>其中第二个和第三个参数是可选的。如果忽略后面两个参数，则 eval  在当前作用域执行。</p>
+<pre><code>&gt;&gt;&gt;  a = 1
+&gt;&gt;&gt;  eval(&quot;a + 1&quot;)
+2
+&gt;&gt;&gt;  eval(&quot;a = 2&quot;)
+Traceback (most recent call last):
+</code></pre><p>如果指定globals参数:</p>
+<pre><code>&gt;&gt;&gt;  a = 1
+&gt;&gt;&gt;  g = {&apos;a&apos;:10}
+&gt;&gt;&gt;  eval(&quot;a + 1&quot;, g)
+11
+</code></pre><p>如果指定locals 参数:</p>
+<pre><code>&gt;&gt;&gt;  a = 10
+&gt;&gt;&gt;  b = 20
+&gt;&gt;&gt;  c = 30
+&gt;&gt;&gt;  g = {&apos;a&apos;:1, &apos;b&apos;:2}
+&gt;&gt;&gt;  l = {&apos;b&apos;:200, &apos;c &apos;:300}
+&gt;&gt;&gt;  eval(&apos;a+b+c&apos;, g, l)  // a来自global作用域; b, c来自local作用域
+501
+</code></pre><p><strong>eval  给我带来了极大的灵活性，同时也带来了隐含的危险性，当我们使用它们的时候应该总是记得详细指定其执行的作用域</strong></p>
+<h2 id="eval-的语法-1"><a href="#eval-的语法-1" class="headerlink" title="eval 的语法"></a>eval 的语法</h2><blockquote>
+<p>exec_stmt : “exec” expression [“in” expression [“,” expression]]</p>
+</blockquote>
+<p>注意： <strong>exec是一个语法声明，不是一个函数.也就是说和if, for一样</strong></p>
+<p>exec 的第一个表达式可以是：</p>
+<pre><code>*  代码字符串
+*  文件对象
+*  代码对象
+*  tuple
+</code></pre><p>如果在表达式之后使用  in  选项指定一个  dict，它将作为global和local变量作用域:</p>
+<pre><code>&gt;&gt;&gt;  a = 10
+&gt;&gt;&gt;  b = 20
+&gt;&gt;&gt;  g = {&apos;a&apos;:6, &apos;b&apos;:8}
+&gt;&gt;&gt;  exec &quot;global a; print a,b&quot; in g  // g同时代表global与local变量作用域
+6 8
+&gt;&gt;&gt;  exec &quot;print a,b&quot; in g
+6 8
+</code></pre><p>如果  in  后详指定两个表达式，它们将分别用作global和local变量作用域:</p>
+<pre><code>&gt;&gt;&gt;  a = 1
+&gt;&gt;&gt;  b = 2
+&gt;&gt;&gt;  c = 3
+&gt;&gt;&gt;  g = {&apos;a&apos;:10, &apos;b&apos;:20}
+&gt;&gt;&gt;  l = {&apos;a&apos;:100, &apos;b &apos;:200, &apos;c&apos;:300}
+&gt;&gt;&gt;  exec &quot;global a; print a,b,c&quot; in g,l  // a是从global作用域
+10 200 300
+&gt;&gt;&gt;  exec &quot;print a,b, c&quot; in g,l  // a是来自local作用域
+100 200 300
+</code></pre><p>现在说下tuple的情况，这也是导致很多人误以为 exec 是一个函数的原因( 在3.x版 exec已经是函数.)。如果第一个表达式是tuple:</p>
+<pre><code>#  exec(expr, globals)  //它等效与exec expr in globals
+#  exec(expr, globals, locals)  //它等效与exec expr in globals,locals
+</code></pre><h2 id="两者比较"><a href="#两者比较" class="headerlink" title="两者比较"></a>两者比较</h2><ul>
+<li><p>eval 和 exec 都变成函数.</p>
+</li>
+<li><p>eval 只接受表达式, 而exec就比较丰富了,例如代码段,</p>
+</li>
+<li>eval 有返回值,而exec 返回None.</li>
+</ul>
+
       
     </div>
     
@@ -340,6 +428,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/python/" rel="tag"># python</a>
+          
+        </div>
       
 
       
@@ -410,8 +504,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -485,6 +588,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#eval-的语法"><span class="nav-number">1.</span> <span class="nav-text">eval 的语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#eval-的语法-1"><span class="nav-number">2.</span> <span class="nav-text">eval 的语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两者比较"><span class="nav-number">3.</span> <span class="nav-text">两者比较</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
